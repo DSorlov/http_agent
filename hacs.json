@@ -1,0 +1,7 @@
+{
+  "name": "HTTP Agent",
+  "hacs": "1.6.0",
+  "domains": ["httpagent"],
+  "iot_class": "Local Polling",
+  "homeassistant": "2023.9.0"
+}

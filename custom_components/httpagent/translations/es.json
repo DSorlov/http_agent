@@ -1,0 +1,121 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configuración HTTP Agent",
+        "description": "Configurar la integración HTTP Agent",
+        "data": {
+          "name": "Nombre de la integración"
+        }
+      },
+      "sensors": {
+        "title": "Configurar Sensores",
+        "description": "Sensores actuales:\n{sensor_list}\n\n¿Desea añadir más sensores?",
+        "data": {
+          "add_sensor": "Añadir un sensor"
+        }
+      },
+      "add_sensor": {
+        "title": "Añadir Sensor HTTP",
+        "description": "Configurar un nuevo sensor HTTP",
+        "data": {
+          "name": "Nombre del sensor",
+          "url": "URL",
+          "method": "Método HTTP",
+          "interval": "Intervalo de actualización (segundos)",
+          "timeout": "Tiempo de espera de solicitud (segundos)",
+          "ssl_verify": "Verificar certificado SSL",
+          "enabled": "Habilitado",
+          "payload": "Contenido de la solicitud (opcional)",
+          "querystring": "Parámetros de consulta (opcional)"
+        }
+      }
+    },
+    "error": {
+      "invalid_sensor": "Configuración de sensor inválida"
+    },
+    "abort": {
+      "already_configured": "HTTP Agent ya está configurado"
+    }
+  },
+  "options": {
+    "step": {
+      "sensors_menu": {
+        "title": "Administrar Sensores",
+        "description": "Sensores actuales:\n{sensor_list}",
+        "data": {
+          "action": "Acción"
+        }
+      },
+      "add_sensor": {
+        "title": "Añadir Sensor HTTP",
+        "description": "Configurar un nuevo sensor HTTP",
+        "data": {
+          "name": "Nombre del sensor",
+          "url": "URL",
+          "method": "Método HTTP",
+          "interval": "Intervalo de actualización (segundos)",
+          "timeout": "Tiempo de espera de solicitud (segundos)",
+          "ssl_verify": "Verificar certificado SSL",
+          "enabled": "Habilitado",
+          "payload": "Contenido de la solicitud (opcional)",
+          "querystring": "Parámetros de consulta (opcional)"
+        }
+      },
+      "select_sensor": {
+        "title": "Seleccionar Sensor",
+        "description": "Elija el sensor a editar",
+        "data": {
+          "sensor": "Sensor"
+        }
+      },
+      "edit_sensor": {
+        "title": "Editar Sensor HTTP",
+        "description": "Actualizar configuración del sensor",
+        "data": {
+          "name": "Nombre del sensor",
+          "url": "URL",
+          "method": "Método HTTP",
+          "interval": "Intervalo de actualización (segundos)",
+          "timeout": "Tiempo de espera de solicitud (segundos)",
+          "ssl_verify": "Verificar certificado SSL",
+          "enabled": "Habilitado",
+          "payload": "Contenido de la solicitud (opcional)",
+          "querystring": "Parámetros de consulta (opcional)"
+        }
+      },
+      "delete_sensor": {
+        "title": "Eliminar Sensor",
+        "description": "Seleccione el sensor a eliminar",
+        "data": {
+          "sensor": "Sensor"
+        }
+      }
+    },
+    "error": {
+      "invalid_sensor": "Configuración de sensor inválida"
+    }
+  },
+  "services": {
+    "http_request": {
+      "name": "Solicitud HTTP",
+      "description": "Realizar una solicitud HTTP a la URL especificada"
+    },
+    "http_get": {
+      "name": "HTTP GET",
+      "description": "Realizar una solicitud HTTP GET"
+    },
+    "http_post": {
+      "name": "HTTP POST",
+      "description": "Realizar una solicitud HTTP POST"
+    },
+    "http_put": {
+      "name": "HTTP PUT",
+      "description": "Realizar una solicitud HTTP PUT"
+    },
+    "http_delete": {
+      "name": "HTTP DELETE",
+      "description": "Realizar una solicitud HTTP DELETE"
+    }
+  }
+}

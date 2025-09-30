@@ -1,0 +1,121 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "HTTP Agent Opsætning",
+        "description": "Konfigurer HTTP Agent integrationen",
+        "data": {
+          "name": "Integrationsnavn"
+        }
+      },
+      "sensors": {
+        "title": "Konfigurer Sensorer",
+        "description": "Nuværende sensorer:\n{sensor_list}\n\nVil du tilføje flere sensorer?",
+        "data": {
+          "add_sensor": "Tilføj en sensor"
+        }
+      },
+      "add_sensor": {
+        "title": "Tilføj HTTP Sensor",
+        "description": "Konfigurer en ny HTTP sensor",
+        "data": {
+          "name": "Sensornavn",
+          "url": "URL",
+          "method": "HTTP Metode",
+          "interval": "Opdateringsinterval (sekunder)",
+          "timeout": "Anmodning timeout (sekunder)",
+          "ssl_verify": "Verificer SSL Certifikat",
+          "enabled": "Aktiveret",
+          "payload": "Anmodningsindhold (valgfrit)",
+          "querystring": "Forespørgselsparametre (valgfrit)"
+        }
+      }
+    },
+    "error": {
+      "invalid_sensor": "Ugyldig sensorkonfiguration"
+    },
+    "abort": {
+      "already_configured": "HTTP Agent er allerede konfigureret"
+    }
+  },
+  "options": {
+    "step": {
+      "sensors_menu": {
+        "title": "Administrer Sensorer",
+        "description": "Nuværende sensorer:\n{sensor_list}",
+        "data": {
+          "action": "Handling"
+        }
+      },
+      "add_sensor": {
+        "title": "Tilføj HTTP Sensor",
+        "description": "Konfigurer en ny HTTP sensor",
+        "data": {
+          "name": "Sensornavn",
+          "url": "URL",
+          "method": "HTTP Metode",
+          "interval": "Opdateringsinterval (sekunder)",
+          "timeout": "Anmodning timeout (sekunder)",
+          "ssl_verify": "Verificer SSL Certifikat",
+          "enabled": "Aktiveret",
+          "payload": "Anmodningsindhold (valgfrit)",
+          "querystring": "Forespørgselsparametre (valgfrit)"
+        }
+      },
+      "select_sensor": {
+        "title": "Vælg Sensor",
+        "description": "Vælg sensoren der skal redigeres",
+        "data": {
+          "sensor": "Sensor"
+        }
+      },
+      "edit_sensor": {
+        "title": "Rediger HTTP Sensor",
+        "description": "Opdater sensorkonfiguration",
+        "data": {
+          "name": "Sensornavn",
+          "url": "URL",
+          "method": "HTTP Metode",
+          "interval": "Opdateringsinterval (sekunder)",
+          "timeout": "Anmodning timeout (sekunder)",
+          "ssl_verify": "Verificer SSL Certifikat",
+          "enabled": "Aktiveret",
+          "payload": "Anmodningsindhold (valgfrit)",
+          "querystring": "Forespørgselsparametre (valgfrit)"
+        }
+      },
+      "delete_sensor": {
+        "title": "Slet Sensor",
+        "description": "Vælg sensoren der skal slettes",
+        "data": {
+          "sensor": "Sensor"
+        }
+      }
+    },
+    "error": {
+      "invalid_sensor": "Ugyldig sensorkonfiguration"
+    }
+  },
+  "services": {
+    "http_request": {
+      "name": "HTTP Anmodning",
+      "description": "Lav en HTTP anmodning til den angivne URL"
+    },
+    "http_get": {
+      "name": "HTTP GET",
+      "description": "Lav en HTTP GET anmodning"
+    },
+    "http_post": {
+      "name": "HTTP POST",
+      "description": "Lav en HTTP POST anmodning"
+    },
+    "http_put": {
+      "name": "HTTP PUT",
+      "description": "Lav en HTTP PUT anmodning"
+    },
+    "http_delete": {
+      "name": "HTTP DELETE",
+      "description": "Lav en HTTP DELETE anmodning"
+    }
+  }
+}

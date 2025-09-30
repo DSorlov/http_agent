@@ -1,0 +1,223 @@
+http_request:
+  name: HTTP Request
+  description: Make a HTTP request to the specified URL
+  fields:
+    url:
+      name: URL
+      description: The URL to make the request to (supports templates)
+      required: true
+      example: "http://{{ states('sensor.server_ip') }}:8080/api/endpoint"
+      selector:
+        text:
+    method:
+      name: HTTP Method
+      description: The HTTP method to use
+      default: "GET"
+      selector:
+        select:
+          options:
+            - "GET"
+            - "POST"
+            - "PUT"
+            - "DELETE"
+            - "PATCH"
+            - "HEAD"
+    payload:
+      name: Payload
+      description: The request payload/body (supports templates)
+      example: '{"key": "{{ states("sensor.value") }}"}'
+      selector:
+        text:
+          multiline: true
+    headers:
+      name: Headers
+      description: HTTP headers to include in the request
+      example: '{"Authorization": "Bearer token", "Content-Type": "application/json"}'
+      selector:
+        object:
+    querystring:
+      name: Query String
+      description: URL query parameters (supports templates)
+      example: "param1={{ states('sensor.param') }}&param2=value"
+      selector:
+        text:
+    timeout:
+      name: Timeout
+      description: Request timeout in seconds
+      default: 10
+      selector:
+        number:
+          min: 1
+          max: 300
+    ssl_verify:
+      name: SSL Verification
+      description: Whether to verify SSL certificates
+      default: true
+      selector:
+        boolean:
+
+http_get:
+  name: HTTP GET
+  description: Make a HTTP GET request to the specified URL
+  fields:
+    url:
+      name: URL
+      description: The URL to make the request to (supports templates)
+      required: true
+      example: "http://{{ states('sensor.server_ip') }}:8080/api/data"
+      selector:
+        text:
+    querystring:
+      name: Query String
+      description: URL query parameters (supports templates)
+      example: "id={{ states('sensor.device_id') }}&format=json"
+      selector:
+        text:
+    headers:
+      name: Headers
+      description: HTTP headers to include in the request
+      example: '{"Authorization": "Bearer token"}'
+      selector:
+        object:
+    timeout:
+      name: Timeout
+      description: Request timeout in seconds
+      default: 10
+      selector:
+        number:
+          min: 1
+          max: 300
+    ssl_verify:
+      name: SSL Verification
+      description: Whether to verify SSL certificates
+      default: true
+      selector:
+        boolean:
+
+http_post:
+  name: HTTP POST
+  description: Make a HTTP POST request to the specified URL
+  fields:
+    url:
+      name: URL
+      description: The URL to make the request to (supports templates)
+      required: true
+      example: "http://{{ states('sensor.server_ip') }}:8080/api/create"
+      selector:
+        text:
+    payload:
+      name: Payload
+      description: The request payload/body (supports templates)
+      required: true
+      example: '{"name": "{{ states("input_text.device_name") }}", "value": {{ states("sensor.current_value") }}}'
+      selector:
+        text:
+          multiline: true
+    headers:
+      name: Headers
+      description: HTTP headers to include in the request
+      example: '{"Authorization": "Bearer token", "Content-Type": "application/json"}'
+      selector:
+        object:
+    querystring:
+      name: Query String
+      description: URL query parameters (supports templates)
+      example: "mode=create&user={{ user }}"
+      selector:
+        text:
+    timeout:
+      name: Timeout
+      description: Request timeout in seconds
+      default: 10
+      selector:
+        number:
+          min: 1
+          max: 300
+    ssl_verify:
+      name: SSL Verification
+      description: Whether to verify SSL certificates
+      default: true
+      selector:
+        boolean:
+
+http_put:
+  name: HTTP PUT
+  description: Make a HTTP PUT request to the specified URL
+  fields:
+    url:
+      name: URL
+      description: The URL to make the request to (supports templates)
+      required: true
+      example: "http://{{ states('sensor.server_ip') }}:8080/api/update/{{ states('sensor.device_id') }}"
+      selector:
+        text:
+    payload:
+      name: Payload
+      description: The request payload/body (supports templates)
+      required: true
+      example: '{"status": "{{ states("input_select.device_status") }}", "updated": "{{ now() }}"}'
+      selector:
+        text:
+          multiline: true
+    headers:
+      name: Headers
+      description: HTTP headers to include in the request
+      example: '{"Authorization": "Bearer token", "Content-Type": "application/json"}'
+      selector:
+        object:
+    querystring:
+      name: Query String
+      description: URL query parameters (supports templates)
+      selector:
+        text:
+    timeout:
+      name: Timeout
+      description: Request timeout in seconds
+      default: 10
+      selector:
+        number:
+          min: 1
+          max: 300
+    ssl_verify:
+      name: SSL Verification
+      description: Whether to verify SSL certificates
+      default: true
+      selector:
+        boolean:
+
+http_delete:
+  name: HTTP DELETE
+  description: Make a HTTP DELETE request to the specified URL
+  fields:
+    url:
+      name: URL
+      description: The URL to make the request to (supports templates)
+      required: true
+      example: "http://{{ states('sensor.server_ip') }}:8080/api/delete/{{ states('sensor.device_id') }}"
+      selector:
+        text:
+    headers:
+      name: Headers
+      description: HTTP headers to include in the request
+      example: '{"Authorization": "Bearer token"}'
+      selector:
+        object:
+    querystring:
+      name: Query String
+      description: URL query parameters (supports templates)
+      selector:
+        text:
+    timeout:
+      name: Timeout
+      description: Request timeout in seconds
+      default: 10
+      selector:
+        number:
+          min: 1
+          max: 300
+    ssl_verify:
+      name: SSL Verification
+      description: Whether to verify SSL certificates
+      default: true
+      selector:
+        boolean:

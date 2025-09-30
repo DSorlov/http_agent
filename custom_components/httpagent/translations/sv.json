@@ -1,0 +1,121 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "HTTP Agent Inställning",
+        "description": "Konfigurera HTTP Agent-integrationen",
+        "data": {
+          "name": "Integrationsnamn"
+        }
+      },
+      "sensors": {
+        "title": "Konfigurera Sensorer",
+        "description": "Nuvarande sensorer:\n{sensor_list}\n\nVill du lägga till fler sensorer?",
+        "data": {
+          "add_sensor": "Lägg till en sensor"
+        }
+      },
+      "add_sensor": {
+        "title": "Lägg till HTTP Sensor",
+        "description": "Konfigurera en ny HTTP sensor",
+        "data": {
+          "name": "Sensornamn",
+          "url": "URL",
+          "method": "HTTP Metod",
+          "interval": "Uppdateringsintervall (sekunder)",
+          "timeout": "Begäran timeout (sekunder)",
+          "ssl_verify": "Verifiera SSL Certifikat",
+          "enabled": "Aktiverad",
+          "payload": "Begärandeinnehåll (valfritt)",
+          "querystring": "Frågeparametrar (valfritt)"
+        }
+      }
+    },
+    "error": {
+      "invalid_sensor": "Ogiltig sensorkonfiguration"
+    },
+    "abort": {
+      "already_configured": "HTTP Agent är redan konfigurerad"
+    }
+  },
+  "options": {
+    "step": {
+      "sensors_menu": {
+        "title": "Hantera Sensorer",
+        "description": "Nuvarande sensorer:\n{sensor_list}",
+        "data": {
+          "action": "Åtgärd"
+        }
+      },
+      "add_sensor": {
+        "title": "Lägg till HTTP Sensor",
+        "description": "Konfigurera en ny HTTP sensor",
+        "data": {
+          "name": "Sensornamn",
+          "url": "URL",
+          "method": "HTTP Metod",
+          "interval": "Uppdateringsintervall (sekunder)",
+          "timeout": "Begäran timeout (sekunder)",
+          "ssl_verify": "Verifiera SSL Certifikat",
+          "enabled": "Aktiverad",
+          "payload": "Begärandeinnehåll (valfritt)",
+          "querystring": "Frågeparametrar (valfritt)"
+        }
+      },
+      "select_sensor": {
+        "title": "Välj Sensor",
+        "description": "Välj sensorn att redigera",
+        "data": {
+          "sensor": "Sensor"
+        }
+      },
+      "edit_sensor": {
+        "title": "Redigera HTTP Sensor",
+        "description": "Uppdatera sensorkonfiguration",
+        "data": {
+          "name": "Sensornamn",
+          "url": "URL",
+          "method": "HTTP Metod",
+          "interval": "Uppdateringsintervall (sekunder)",
+          "timeout": "Begäran timeout (sekunder)",
+          "ssl_verify": "Verifiera SSL Certifikat",
+          "enabled": "Aktiverad",
+          "payload": "Begärandeinnehåll (valfritt)",
+          "querystring": "Frågeparametrar (valfritt)"
+        }
+      },
+      "delete_sensor": {
+        "title": "Ta bort Sensor",
+        "description": "Välj sensorn att ta bort",
+        "data": {
+          "sensor": "Sensor"
+        }
+      }
+    },
+    "error": {
+      "invalid_sensor": "Ogiltig sensorkonfiguration"
+    }
+  },
+  "services": {
+    "http_request": {
+      "name": "HTTP Förfrågan",
+      "description": "Gör en HTTP förfrågan till angiven URL"
+    },
+    "http_get": {
+      "name": "HTTP GET",
+      "description": "Gör en HTTP GET förfrågan"
+    },
+    "http_post": {
+      "name": "HTTP POST",
+      "description": "Gör en HTTP POST förfrågan"
+    },
+    "http_put": {
+      "name": "HTTP PUT",
+      "description": "Gör en HTTP PUT förfrågan"
+    },
+    "http_delete": {
+      "name": "HTTP DELETE",
+      "description": "Gör en HTTP DELETE förfrågan"
+    }
+  }
+}

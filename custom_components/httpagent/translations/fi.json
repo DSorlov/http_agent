@@ -1,0 +1,121 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "HTTP Agent Asennus",
+        "description": "Määritä HTTP Agent integraatio",
+        "data": {
+          "name": "Integraation nimi"
+        }
+      },
+      "sensors": {
+        "title": "Määritä Anturit",
+        "description": "Nykyiset anturit:\n{sensor_list}\n\nHaluatko lisätä lisää antureita?",
+        "data": {
+          "add_sensor": "Lisää anturi"
+        }
+      },
+      "add_sensor": {
+        "title": "Lisää HTTP Anturi",
+        "description": "Määritä uusi HTTP anturi",
+        "data": {
+          "name": "Anturin nimi",
+          "url": "URL",
+          "method": "HTTP Menetelmä",
+          "interval": "Päivitysväli (sekuntia)",
+          "timeout": "Pyynnön aikakatkaisu (sekuntia)",
+          "ssl_verify": "Vahvista SSL Sertifikaatti",
+          "enabled": "Käytössä",
+          "payload": "Pyynnön sisältö (valinnainen)",
+          "querystring": "Kyselyparametrit (valinnainen)"
+        }
+      }
+    },
+    "error": {
+      "invalid_sensor": "Virheellinen anturin konfiguraatio"
+    },
+    "abort": {
+      "already_configured": "HTTP Agent on jo määritetty"
+    }
+  },
+  "options": {
+    "step": {
+      "sensors_menu": {
+        "title": "Hallitse Antureita",
+        "description": "Nykyiset anturit:\n{sensor_list}",
+        "data": {
+          "action": "Toiminto"
+        }
+      },
+      "add_sensor": {
+        "title": "Lisää HTTP Anturi",
+        "description": "Määritä uusi HTTP anturi",
+        "data": {
+          "name": "Anturin nimi",
+          "url": "URL",
+          "method": "HTTP Menetelmä",
+          "interval": "Päivitysväli (sekuntia)",
+          "timeout": "Pyynnön aikakatkaisu (sekuntia)",
+          "ssl_verify": "Vahvista SSL Sertifikaatti",
+          "enabled": "Käytössä",
+          "payload": "Pyynnön sisältö (valinnainen)",
+          "querystring": "Kyselyparametrit (valinnainen)"
+        }
+      },
+      "select_sensor": {
+        "title": "Valitse Anturi",
+        "description": "Valitse muokattava anturi",
+        "data": {
+          "sensor": "Anturi"
+        }
+      },
+      "edit_sensor": {
+        "title": "Muokkaa HTTP Anturia",
+        "description": "Päivitä anturin konfiguraatio",
+        "data": {
+          "name": "Anturin nimi",
+          "url": "URL",
+          "method": "HTTP Menetelmä",
+          "interval": "Päivitysväli (sekuntia)",
+          "timeout": "Pyynnön aikakatkaisu (sekuntia)",
+          "ssl_verify": "Vahvista SSL Sertifikaatti",
+          "enabled": "Käytössä",
+          "payload": "Pyynnön sisältö (valinnainen)",
+          "querystring": "Kyselyparametrit (valinnainen)"
+        }
+      },
+      "delete_sensor": {
+        "title": "Poista Anturi",
+        "description": "Valitse poistettava anturi",
+        "data": {
+          "sensor": "Anturi"
+        }
+      }
+    },
+    "error": {
+      "invalid_sensor": "Virheellinen anturin konfiguraatio"
+    }
+  },
+  "services": {
+    "http_request": {
+      "name": "HTTP Pyyntö",
+      "description": "Tee HTTP pyyntö määritettyyn URL:iin"
+    },
+    "http_get": {
+      "name": "HTTP GET",
+      "description": "Tee HTTP GET pyyntö"
+    },
+    "http_post": {
+      "name": "HTTP POST",
+      "description": "Tee HTTP POST pyyntö"
+    },
+    "http_put": {
+      "name": "HTTP PUT",
+      "description": "Tee HTTP PUT pyyntö"
+    },
+    "http_delete": {
+      "name": "HTTP DELETE",
+      "description": "Tee HTTP DELETE pyyntö"
+    }
+  }
+}

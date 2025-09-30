@@ -1,0 +1,110 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "HTTP Agent Setup",
+        "description": "Set up the HTTP Agent integration to make HTTP requests and create sensors.",
+        "data": {
+          "name": "Integration Name"
+        }
+      },
+      "sensors": {
+        "title": "Configure Sensors",
+        "description": "Configure HTTP sensors that will automatically poll endpoints.\n\nCurrent sensors:\n{sensor_list}\n\nWould you like to add sensors?",
+        "data": {
+          "add_sensor": "Add a sensor"
+        }
+      },
+      "add_sensor": {
+        "title": "Add HTTP Sensor",
+        "description": "Configure a new HTTP sensor that will poll an endpoint at regular intervals.",
+        "data": {
+          "name": "Sensor Name",
+          "url": "URL (supports templates)",
+          "method": "HTTP Method",
+          "interval": "Update Interval (seconds)",
+          "timeout": "Request Timeout (seconds)",
+          "ssl_verify": "Verify SSL Certificate",
+          "enabled": "Enabled",
+          "payload": "Request Payload (optional, supports templates)",
+          "querystring": "Query Parameters (optional, supports templates)"
+        }
+      }
+    },
+    "error": {
+      "invalid_sensor": "Invalid sensor configuration. Please check your settings.",
+      "invalid_url": "Invalid URL format.",
+      "invalid_interval": "Update interval must be between 5 and 86400 seconds.",
+      "invalid_timeout": "Timeout must be between 1 and 300 seconds."
+    },
+    "abort": {
+      "already_configured": "HTTP Agent is already configured for this Home Assistant instance."
+    }
+  },
+  "options": {
+    "step": {
+      "sensors_menu": {
+        "title": "Manage HTTP Sensors",
+        "description": "Add, edit, or remove HTTP sensors.\n\nCurrent sensors:\n{sensor_list}",
+        "data": {
+          "action": {
+            "add": "Add new sensor",
+            "edit": "Edit existing sensor", 
+            "delete": "Delete sensor",
+            "done": "Save and exit"
+          }
+        }
+      },
+      "add_sensor": {
+        "title": "Add HTTP Sensor",
+        "description": "Configure a new HTTP sensor that will poll an endpoint at regular intervals.",
+        "data": {
+          "name": "Sensor Name",
+          "url": "URL (supports templates)",
+          "method": "HTTP Method",
+          "interval": "Update Interval (seconds)",
+          "timeout": "Request Timeout (seconds)",
+          "ssl_verify": "Verify SSL Certificate",
+          "enabled": "Enabled",
+          "payload": "Request Payload (optional, supports templates)",
+          "querystring": "Query Parameters (optional, supports templates)"
+        }
+      },
+      "select_sensor": {
+        "title": "Select Sensor to Edit",
+        "description": "Choose which sensor you want to modify.",
+        "data": {
+          "sensor": "Sensor"
+        }
+      },
+      "edit_sensor": {
+        "title": "Edit HTTP Sensor",
+        "description": "Update the configuration for this HTTP sensor.",
+        "data": {
+          "name": "Sensor Name",
+          "url": "URL (supports templates)",
+          "method": "HTTP Method",
+          "interval": "Update Interval (seconds)",
+          "timeout": "Request Timeout (seconds)",
+          "ssl_verify": "Verify SSL Certificate",
+          "enabled": "Enabled",
+          "payload": "Request Payload (optional, supports templates)",
+          "querystring": "Query Parameters (optional, supports templates)"
+        }
+      },
+      "delete_sensor": {
+        "title": "Delete Sensor",
+        "description": "Select the sensor you want to permanently remove.",
+        "data": {
+          "sensor": "Sensor to Delete"
+        }
+      }
+    },
+    "error": {
+      "invalid_sensor": "Invalid sensor configuration. Please check your settings.",
+      "invalid_url": "Invalid URL format.",
+      "invalid_interval": "Update interval must be between 5 and 86400 seconds.",
+      "invalid_timeout": "Timeout must be between 1 and 300 seconds."
+    }
+  }
+}
