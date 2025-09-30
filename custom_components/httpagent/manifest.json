@@ -7,7 +7,7 @@
   "integration_type": "hub",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/dsorlov/httpAgent/issues",
+  "loggers": ["custom_components.httpagent"],
   "requirements": ["aiohttp>=3.8.0"],
-  "version": "1.0.0",
-  "loggers": ["custom_components.httpagent"]
+  "version": "1.0.0"
 }

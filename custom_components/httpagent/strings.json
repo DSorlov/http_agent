@@ -47,12 +47,7 @@
         "title": "Manage HTTP Sensors",
         "description": "Add, edit, or remove HTTP sensors.\n\nCurrent sensors:\n{sensor_list}",
         "data": {
-          "action": {
-            "add": "Add new sensor",
-            "edit": "Edit existing sensor", 
-            "delete": "Delete sensor",
-            "done": "Save and exit"
-          }
+          "action": "Action"
         }
       },
       "add_sensor": {
