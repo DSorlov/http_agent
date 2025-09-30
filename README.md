@@ -1,6 +1,14 @@
+![maintained](https://img.shields.io/maintenance/yes/2025.svg)
+[![hacs_badge](https://img.shields.io/badge/hacs-default-green.svg)](https://github.com/custom-components/hacs)
+[![ha_version](https://img.shields.io/badge/home%20assistant-2025.08%2B-green.svg)](https://www.home-assistant.io)
+![version](https://img.shields.io/badge/version-1.0.0-green.svg)
+![stability-alpha](https://img.shields.io/badge/stability-stable-green.svg)
+[![maintainer](https://img.shields.io/badge/maintainer-dsorlov-blue.svg)](https://github.com/DSorlov)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 # HTTP Agent
 
-A comprehensive Home Assistant integration for making HTTP requests with template support and automatic sensor polling.
+A custom Home Assistant integration for making HTTP requests with template support and automatic sensor polling.
 
 ## Features
 
