@@ -1,8 +1,11 @@
 ![maintained](https://img.shields.io/maintenance/yes/2025.svg)
 [![hacs_badge](https://img.shields.io/badge/hacs-default-green.svg)](https://github.com/custom-components/hacs)
-[![ha_version](https://img.shields.io/badge/home%20assistant-2025.08%2B-green.svg)](https://www.home-assistant.io)
+[![ha_version](https://img.shields.io/badge/home%20assistant-2024.10%2B-green.svg)](https://www.home-assistant.io)
 ![version](https://img.shields.io/badge/version-1.0.0-green.svg)
-![stability-alpha](https://img.shields.io/badge/stability-stable-green.svg)
+![stability](https://img.shields.io/badge/stability-stable-green.svg)
+[![CI](https://github.com/DSorlov/httpAgent/workflows/CI/badge.svg)](https://github.com/DSorlov/httpAgent/actions/workflows/ci.yaml)
+[![hassfest](https://github.com/DSorlov/httpAgent/workflows/Validate%20with%20hassfest/badge.svg)](https://github.com/DSorlov/httpAgent/actions/workflows/hassfest.yaml)
+[![HACS](https://github.com/DSorlov/httpAgent/workflows/HACS%20Validation/badge.svg)](https://github.com/DSorlov/httpAgent/actions/workflows/hacs.yaml)
 [![maintainer](https://img.shields.io/badge/maintainer-dsorlov-blue.svg)](https://github.com/DSorlov)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
@@ -173,20 +176,20 @@ logger:
 3. **Timeout Issues**: Increase the timeout value for slow endpoints
 4. **Authentication**: Make sure to include proper headers for authenticated endpoints
 
-## Version History
-
-### 1.0.0
-- Initial release
-- HTTP services with template support
-- HTTP sensors with configurable polling
-- GUI configuration
-- Multi-language support
-- HACS compatibility
-
 ## Contributing
 
-Please report issues and feature requests on the [GitHub repository](https://github.com/dsorlov/httpAgent).
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+- :bug: [Report a Bug](https://github.com/dsorlov/snmpPrinter/issues)
+- :bulb: [Request a Feature](https://github.com/dsorlov/snmpPrinter/issues)
+- :book: [Documentation](https://github.com/dsorlov/snmpPrinter)
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for version history.
