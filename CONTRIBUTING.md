@@ -28,9 +28,9 @@ Thank you for your interest in contributing to HTTP Agent! We welcome contributi
 
 #### Code Standards
 - Follow PEP 8 style guidelines
-- Use Black for code formatting: `black custom_components/httpagent`
-- Sort imports with isort: `isort custom_components/httpagent`
-- Run flake8 for linting: `flake8 custom_components/httpagent`
+- Use Black for code formatting: `black custom_components/http_agent`
+- Sort imports with isort: `isort custom_components/http_agent`
+- Run flake8 for linting: `flake8 custom_components/http_agent`
 
 #### Testing
 - Ensure all GitHub Actions pass

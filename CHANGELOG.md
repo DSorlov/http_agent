@@ -34,4 +34,4 @@ A Home Assistant integration for HTTP operations with template support and autom
 This marks the first stable release of HTTP Agent, providing a robust foundation for HTTP operations in Home Assistant with enterprise-grade features and Home Assistant best practices.
 
 [keep-a-changelog]: http://keepachangelog.com/en/1.0.0/
-[1.0.0]: https://github.com/dsorlov/httpAgent
+[1.0.0]: https://github.com/dsorlov/http_agent

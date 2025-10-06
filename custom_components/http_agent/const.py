@@ -1,7 +1,7 @@
 """Constants for the HTTP Agent integration."""
 from typing import Final
 
-DOMAIN: Final = "httpagent"
+DOMAIN: Final = "http_agent"
 
 # Default values
 DEFAULT_TIMEOUT = 10

@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
         
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v4
         with:
           python-version: "3.11"
           
@@ -61,19 +61,19 @@ jobs:
           
       - name: Validate Python files
         run: |
-          python -m py_compile custom_components/httpagent/*.py
+          python -m py_compile custom_components/http_agent/*.py
           
       - name: Check imports
         run: |
-          python -c "from custom_components.httpagent import DOMAIN"
-          python -c "from custom_components.httpagent.const import DOMAIN, CONF_NAME"
+          python -c "from custom_components.http_agent import DOMAIN"
+          python -c "from custom_components.http_agent.const import DOMAIN, CONF_NAME"
           
   validate-translations:
     name: Validate Translations
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
         
       - name: Validate translation files
         run: |
@@ -82,7 +82,7 @@ jobs:
           import os
           from pathlib import Path
           
-          translations_dir = Path('custom_components/httpagent/translations')
+          translations_dir = Path('custom_components/http_agent/translations')
           
           if not translations_dir.exists():
               print('Translations directory not found')

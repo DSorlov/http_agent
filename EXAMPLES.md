@@ -4,14 +4,14 @@
 
 ### Basic HTTP GET request
 ```yaml
-service: httpagent.http_get
+service: http_agent.http_get
 data:
   url: "http://192.168.1.100:8080/api/status"
 ```
 
 ### HTTP POST with JSON payload and templates
 ```yaml
-service: httpagent.http_post
+service: http_agent.http_post
 data:
   url: "http://{{ states('sensor.server_ip') }}:8080/api/data"
   payload: |
@@ -27,7 +27,7 @@ data:
 
 ### HTTP request with query parameters
 ```yaml
-service: httpagent.http_get
+service: http_agent.http_get
 data:
   url: "http://api.example.com/data"
   querystring: "device_id={{ states('sensor.device_id') }}&format=json&limit=10"
@@ -37,7 +37,7 @@ data:
 
 ### HTTP request with SSL disabled
 ```yaml
-service: httpagent.http_post
+service: http_agent.http_post
 data:
   url: "https://192.168.1.100:8443/api/update"
   payload: '{"status": "online"}'
@@ -58,7 +58,7 @@ automation:
       - condition: template
         value_template: "{{ trigger.to_state.state != trigger.from_state.state }}"
     action:
-      - service: httpagent.http_post
+      - service: http_agent.http_post
         data:
           url: "http://monitoring.local/api/sensors"
           payload: |
@@ -82,7 +82,7 @@ automation:
       - platform: time_pattern
         minutes: 0
     action:
-      - service: httpagent.http_put
+      - service: http_agent.http_put
         data:
           url: "http://status-server.local/api/home-status"
           payload: |

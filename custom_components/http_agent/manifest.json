@@ -1,13 +1,13 @@
 {
-  "domain": "httpagent",
+  "domain": "http_agent",
   "name": "HTTP Agent",
   "codeowners": ["@dsorlov"],
   "config_flow": true,
-  "documentation": "https://github.com/dsorlov/httpAgent",
+  "documentation": "https://github.com/dsorlov/http_agent",
   "integration_type": "hub",
   "iot_class": "local_polling",
-  "issue_tracker": "https://github.com/dsorlov/httpAgent/issues",
-  "loggers": ["custom_components.httpagent"],
+  "issue_tracker": "https://github.com/dsorlov/http_agent/issues",
+  "loggers": ["custom_components.http_agent"],
   "requirements": ["aiohttp>=3.8.0"],
   "version": "1.0.0"
 }

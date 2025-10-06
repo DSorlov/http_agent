@@ -3,9 +3,9 @@
 [![ha_version](https://img.shields.io/badge/home%20assistant-2024.10%2B-green.svg)](https://www.home-assistant.io)
 ![version](https://img.shields.io/badge/version-1.0.0-green.svg)
 ![stability](https://img.shields.io/badge/stability-stable-green.svg)
-[![CI](https://github.com/DSorlov/httpAgent/workflows/CI/badge.svg)](https://github.com/DSorlov/httpAgent/actions/workflows/ci.yaml)
-[![hassfest](https://github.com/DSorlov/httpAgent/workflows/Validate%20with%20hassfest/badge.svg)](https://github.com/DSorlov/httpAgent/actions/workflows/hassfest.yaml)
-[![HACS](https://github.com/DSorlov/httpAgent/workflows/HACS%20Validation/badge.svg)](https://github.com/DSorlov/httpAgent/actions/workflows/hacs.yaml)
+[![CI](https://github.com/DSorlov/http_agent/workflows/CI/badge.svg)](https://github.com/DSorlov/http_agent/actions/workflows/ci.yaml)
+[![hassfest](https://github.com/DSorlov/http_agent/workflows/Validate%20with%20hassfest/badge.svg)](https://github.com/DSorlov/http_agent/actions/workflows/hassfest.yaml)
+[![HACS](https://github.com/DSorlov/http_agent/workflows/HACS%20Validation/badge.svg)](https://github.com/DSorlov/http_agent/actions/workflows/hacs.yaml)
 [![maintainer](https://img.shields.io/badge/maintainer-dsorlov-blue.svg)](https://github.com/DSorlov)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
@@ -34,7 +34,7 @@ A custom Home Assistant integration for making HTTP requests with template suppo
 
 ### Manual Installation
 
-1. Copy the `custom_components/httpagent` folder to your `custom_components` directory
+1. Copy the `custom_components/http_agent` folder to your `custom_components` directory
 2. Restart Home Assistant
 
 ## Configuration
@@ -50,19 +50,19 @@ A custom Home Assistant integration for making HTTP requests with template suppo
 
 The integration provides the following services:
 
-#### `httpagent.http_request`
+#### `http_agent.http_request`
 Make a generic HTTP request with full control over method, payload, headers, etc.
 
-#### `httpagent.http_get`
+#### `http_agent.http_get`
 Make a HTTP GET request.
 
-#### `httpagent.http_post`
+#### `http_agent.http_post`
 Make a HTTP POST request with payload.
 
-#### `httpagent.http_put`
+#### `http_agent.http_put`
 Make a HTTP PUT request with payload.
 
-#### `httpagent.http_delete`
+#### `http_agent.http_delete`
 Make a HTTP DELETE request.
 
 ### Service Parameters
@@ -110,7 +110,7 @@ You can use Home Assistant templates in:
 #### Service Call Example
 
 ```yaml
-service: httpagent.http_post
+service: http_agent.http_post
 data:
   url: "http://192.168.1.100:8080/api/update"
   payload: |
@@ -134,7 +134,7 @@ automation:
       - platform: state
         entity_id: sensor.outside_temperature
     action:
-      - service: httpagent.http_post
+      - service: http_agent.http_post
         data:
           url: "http://{{ states('sensor.weather_server') }}/temperature"
           payload: |
@@ -166,7 +166,7 @@ Add this to your `configuration.yaml` to enable debug logging:
 ```yaml
 logger:
   logs:
-    custom_components.httpagent: debug
+    custom_components.http_agent: debug
 ```
 
 ### Common Issues

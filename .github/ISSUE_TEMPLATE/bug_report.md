@@ -36,7 +36,7 @@ If applicable, add screenshots to help explain your problem.
 **Logs**
 ```
 # Relevant log entries from Home Assistant
-# Enable debug logging: custom_components.httpagent: debug
+# Enable debug logging: custom_components.http_agent: debug
 ```
 
 **Additional context**
