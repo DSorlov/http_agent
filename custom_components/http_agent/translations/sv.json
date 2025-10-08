@@ -19,10 +19,7 @@
           "action": "Åtgärd"
         },
         "data_description": {
-          "action": {
-            "add": "Lägg till huvud",
-            "done": "Fortsätt till nästa steg"
-          }
+          "action": "Select an action to perform"
         }
       },
       "add_header": {
@@ -48,10 +45,7 @@
           "action": "Åtgärd"
         },
         "data_description": {
-          "action": {
-            "add": "Lägg till sensor",
-            "done": "Skapa integration"
-          }
+          "action": "Select an action to perform"
         }
       },
       "add_sensor": {
@@ -96,12 +90,7 @@
           "action": "Konfigurationssektion"
         },
         "data_description": {
-          "action": {
-            "basic": "Redigera grundinställningar (URL, metod, timeout, intervall, SSL)",
-            "headers": "Redigera HTTP-huvuden",
-            "sensors": "Redigera sensorkonfiguration",
-            "payload": "Redigera förfrågansnyttolast"
-          }
+          "action": "Select a configuration section to edit"
         }
       },
       "basic": {
@@ -122,11 +111,7 @@
           "action": "Åtgärd"
         },
         "data_description": {
-          "action": {
-            "add": "Lägg till nytt huvud",
-            "clear": "Rensa alla huvuden",
-            "done": "Spara ändringar"
-          }
+          "action": "Select an action to perform"
         }
       },
       "add_header": {
@@ -152,12 +137,7 @@
           "action": "Åtgärd"
         },
         "data_description": {
-          "action": {
-            "add": "Lägg till ny sensor",
-            "edit": "Redigera/ta bort befintlig sensor",
-            "clear": "Rensa alla sensorer",
-            "done": "Spara ändringar"
-          }
+          "action": "Select an action to perform"
         }
       },
       "select_sensor": {
@@ -174,11 +154,7 @@
           "action": "Åtgärd"
         },
         "data_description": {
-          "action": {
-            "edit": "Redigera sensorinställningar",
-            "delete": "Ta bort denna sensor",
-            "back": "Tillbaka till sensorlistan"
-          }
+          "action": "Select an action to perform on this sensor"
         }
       },
       "modify_sensor": {
@@ -258,11 +234,11 @@
     },
     "tracker_source_type": {
       "options": {
-        "": "Ingen (standard)",
         "gps": "GPS",
         "router": "Router",
         "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE"
+        "bluetooth_le": "Bluetooth LE",
+        "none": "Ingen (standard)"
       }
     }
   }

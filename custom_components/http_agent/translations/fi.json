@@ -19,10 +19,7 @@
           "action": "Toiminto"
         },
         "data_description": {
-          "action": {
-            "add": "Lisää otsikko",
-            "done": "Jatka seuraavaan vaiheeseen"
-          }
+          "action": "Select an action to perform"
         }
       },
       "add_header": {
@@ -48,10 +45,7 @@
           "action": "Toiminto"
         },
         "data_description": {
-          "action": {
-            "add": "Lisää anturi",
-            "done": "Luo integraatio"
-          }
+          "action": "Select an action to perform"
         }
       },
       "add_sensor": {
@@ -96,12 +90,7 @@
           "action": "Konfigurointiosio"
         },
         "data_description": {
-          "action": {
-            "basic": "Muokkaa perusasetuksia (URL, metodi, aikakatkaisu, väli, SSL)",
-            "headers": "Muokkaa HTTP-otsikoita",
-            "sensors": "Muokkaa anturikonfigurointia",
-            "payload": "Muokkaa pyynnön hyötykuormaa"
-          }
+          "action": "Select a configuration section to edit"
         }
       },
       "basic": {
@@ -122,11 +111,7 @@
           "action": "Toiminto"
         },
         "data_description": {
-          "action": {
-            "add": "Lisää uusi otsikko",
-            "clear": "Tyhjennä kaikki otsikot",
-            "done": "Tallenna muutokset"
-          }
+          "action": "Select an action to perform"
         }
       },
       "add_header": {
@@ -152,12 +137,7 @@
           "action": "Toiminto"
         },
         "data_description": {
-          "action": {
-            "add": "Lisää uusi anturi",
-            "edit": "Muokkaa/poista olemassa oleva anturi",
-            "clear": "Tyhjennä kaikki anturit",
-            "done": "Tallenna muutokset"
-          }
+          "action": "Select an action to perform"
         }
       },
       "select_sensor": {
@@ -174,11 +154,7 @@
           "action": "Toiminto"
         },
         "data_description": {
-          "action": {
-            "edit": "Muokkaa anturin asetuksia",
-            "delete": "Poista tämä anturi",
-            "back": "Takaisin anturiluetteloon"
-          }
+          "action": "Select an action to perform on this sensor"
         }
       },
       "modify_sensor": {
@@ -258,11 +234,11 @@
     },
     "tracker_source_type": {
       "options": {
-        "": "Ei mitään (oletus)",
         "gps": "GPS",
         "router": "Reititin",
         "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE"
+        "bluetooth_le": "Bluetooth LE",
+        "none": "Ei mitään (oletus)"
       }
     }
   }

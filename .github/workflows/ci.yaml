@@ -24,7 +24,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install black isort flake8 mypy
-          pip install homeassistant aiohttp types-aiofiles
+          pip install homeassistant aiohttp beautifulsoup4 lxml types-aiofiles
           
       - name: Run Black (Code formatting)
         run: |
@@ -57,7 +57,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install homeassistant aiohttp pytest pytest-asyncio pytest-cov
+          pip install homeassistant aiohttp beautifulsoup4 lxml pytest pytest-asyncio pytest-cov
           
       - name: Validate Python files
         run: |
@@ -66,7 +66,7 @@ jobs:
       - name: Check imports
         run: |
           python -c "from custom_components.http_agent import DOMAIN"
-          python -c "from custom_components.http_agent.const import DOMAIN, CONF_NAME"
+          python -c "from custom_components.http_agent.const import DOMAIN"
           
   validate-translations:
     name: Validate Translations

@@ -19,10 +19,7 @@
           "action": "Handling"
         },
         "data_description": {
-          "action": {
-            "add": "Tilføj header",
-            "done": "Fortsæt til næste trin"
-          }
+          "action": "Select an action to perform"
         }
       },
       "add_header": {
@@ -48,10 +45,7 @@
           "action": "Handling"
         },
         "data_description": {
-          "action": {
-            "add": "Tilføj sensor",
-            "done": "Opret integration"
-          }
+          "action": "Select an action to perform"
         }
       },
       "add_sensor": {
@@ -96,12 +90,7 @@
           "action": "Konfigurationssektion"
         },
         "data_description": {
-          "action": {
-            "basic": "Rediger grundindstillinger (URL, metode, timeout, interval, SSL)",
-            "headers": "Rediger HTTP-headere",
-            "sensors": "Rediger sensor-konfiguration",
-            "payload": "Rediger anmodnings-payload"
-          }
+          "action": "Select a configuration section to edit"
         }
       },
       "basic": {
@@ -122,11 +111,7 @@
           "action": "Handling"
         },
         "data_description": {
-          "action": {
-            "add": "Tilføj ny header",
-            "clear": "Ryd alle headere",
-            "done": "Gem ændringer"
-          }
+          "action": "Select an action to perform"
         }
       },
       "add_header": {
@@ -152,12 +137,7 @@
           "action": "Handling"
         },
         "data_description": {
-          "action": {
-            "add": "Tilføj ny sensor",
-            "edit": "Rediger/slet eksisterende sensor",
-            "clear": "Ryd alle sensorer",
-            "done": "Gem ændringer"
-          }
+          "action": "Select an action to perform"
         }
       },
       "select_sensor": {
@@ -174,11 +154,7 @@
           "action": "Handling"
         },
         "data_description": {
-          "action": {
-            "edit": "Rediger sensorindstillinger",
-            "delete": "Slet denne sensor",
-            "back": "Tilbage til sensorliste"
-          }
+          "action": "Select an action to perform on this sensor"
         }
       },
       "modify_sensor": {
@@ -258,11 +234,11 @@
     },
     "tracker_source_type": {
       "options": {
-        "": "Ingen (standard)",
         "gps": "GPS",
         "router": "Router",
         "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE"
+        "bluetooth_le": "Bluetooth LE",
+        "none": "Ingen (standard)"
       }
     }
   }

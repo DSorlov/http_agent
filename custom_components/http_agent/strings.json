@@ -19,10 +19,7 @@
           "action": "Action"
         },
         "data_description": {
-          "action": {
-            "add": "Add header",
-            "done": "Continue to next step"
-          }
+          "action": "Select an action to perform"
         }
       },
       "add_header": {
@@ -48,10 +45,7 @@
           "action": "Action"
         },
         "data_description": {
-          "action": {
-            "add": "Add sensor",
-            "done": "Create integration"
-          }
+          "action": "Select an action to perform"
         }
       },
       "add_sensor": {
@@ -96,12 +90,7 @@
           "action": "Configuration Section"
         },
         "data_description": {
-          "action": {
-            "basic": "Edit basic settings (URL, method, timeout, interval, SSL)",
-            "headers": "Edit HTTP headers",
-            "sensors": "Edit sensors configuration",
-            "payload": "Edit request payload"
-          }
+          "action": "Select a configuration section to edit"
         }
       },
       "basic": {
@@ -122,11 +111,7 @@
           "action": "Action"
         },
         "data_description": {
-          "action": {
-            "add": "Add new header",
-            "clear": "Clear all headers",
-            "done": "Save changes"
-          }
+          "action": "Select an action to perform"
         }
       },
       "add_header": {
@@ -152,12 +137,7 @@
           "action": "Action"
         },
         "data_description": {
-          "action": {
-            "add": "Add new sensor",
-            "edit": "Edit/delete existing sensor",
-            "clear": "Clear all sensors",
-            "done": "Save changes"
-          }
+          "action": "Select an action to perform"
         }
       },
       "select_sensor": {
@@ -174,11 +154,7 @@
           "action": "Action"
         },
         "data_description": {
-          "action": {
-            "edit": "Edit sensor settings",
-            "delete": "Delete this sensor",
-            "back": "Back to sensors list"
-          }
+          "action": "Select an action to perform on this sensor"
         }
       },
       "modify_sensor": {
@@ -258,7 +234,7 @@
     },
     "tracker_source_type": {
       "options": {
-        "": "None (default)",
+        "none": "None (default)",
         "gps": "GPS",
         "router": "Router",
         "bluetooth": "Bluetooth",

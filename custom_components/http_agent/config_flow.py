@@ -324,7 +324,7 @@ class HTTPAgentConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             schema_dict[vol.Required(CONF_TRACKER_LONGITUDE)] = str
             schema_dict[vol.Optional(CONF_TRACKER_LOCATION_NAME, default="")] = str
             schema_dict[vol.Optional(CONF_TRACKER_SOURCE_TYPE, default="gps")] = vol.In(
-                ["gps", "router", "bluetooth", "bluetooth_le"]
+                ["none", "gps", "router", "bluetooth", "bluetooth_le"]
             )
 
         schema = vol.Schema(schema_dict)
@@ -756,9 +756,9 @@ class HTTPAgentOptionsFlow(config_entries.OptionsFlow):
             schema_dict[
                 vol.Optional(
                     CONF_TRACKER_SOURCE_TYPE,
-                    default=sensor.get(CONF_TRACKER_SOURCE_TYPE, ""),
+                    default=sensor.get(CONF_TRACKER_SOURCE_TYPE, "none"),
                 )
-            ] = vol.In(["", "gps", "router", "bluetooth", "bluetooth_le"])
+            ] = vol.In(["none", "gps", "router", "bluetooth", "bluetooth_le"])
 
         schema = vol.Schema(schema_dict)
 
@@ -852,7 +852,7 @@ class HTTPAgentOptionsFlow(config_entries.OptionsFlow):
             schema_dict[vol.Required(CONF_TRACKER_LONGITUDE)] = str
             schema_dict[vol.Optional(CONF_TRACKER_LOCATION_NAME, default="")] = str
             schema_dict[vol.Optional(CONF_TRACKER_SOURCE_TYPE, default="gps")] = vol.In(
-                ["gps", "router", "bluetooth", "bluetooth_le"]
+                ["none", "gps", "router", "bluetooth", "bluetooth_le"]
             )
 
         schema = vol.Schema(schema_dict)

@@ -19,10 +19,7 @@
           "action": "Aktion"
         },
         "data_description": {
-          "action": {
-            "add": "Header hinzufügen",
-            "done": "Weiter zum nächsten Schritt"
-          }
+          "action": "Select an action to perform"
         }
       },
       "add_header": {
@@ -48,10 +45,7 @@
           "action": "Aktion"
         },
         "data_description": {
-          "action": {
-            "add": "Sensor hinzufügen",
-            "done": "Integration erstellen"
-          }
+          "action": "Select an action to perform"
         }
       },
       "add_sensor": {
@@ -96,12 +90,7 @@
           "action": "Konfigurationsbereich"
         },
         "data_description": {
-          "action": {
-            "basic": "Grundeinstellungen bearbeiten (URL, Methode, Timeout, Intervall, SSL)",
-            "headers": "HTTP-Header bearbeiten",
-            "sensors": "Sensor-Konfiguration bearbeiten",
-            "payload": "Anfrage-Nutzlast bearbeiten"
-          }
+          "action": "Select a configuration section to edit"
         }
       },
       "basic": {
@@ -122,11 +111,7 @@
           "action": "Aktion"
         },
         "data_description": {
-          "action": {
-            "add": "Neuen Header hinzufügen",
-            "clear": "Alle Header löschen",
-            "done": "Änderungen speichern"
-          }
+          "action": "Select an action to perform"
         }
       },
       "add_header": {
@@ -152,12 +137,7 @@
           "action": "Aktion"
         },
         "data_description": {
-          "action": {
-            "add": "Neuen Sensor hinzufügen",
-            "edit": "Vorhandenen Sensor bearbeiten/löschen",
-            "clear": "Alle Sensoren löschen",
-            "done": "Änderungen speichern"
-          }
+          "action": "Select an action to perform"
         }
       },
       "select_sensor": {
@@ -174,11 +154,7 @@
           "action": "Aktion"
         },
         "data_description": {
-          "action": {
-            "edit": "Sensoreinstellungen bearbeiten",
-            "delete": "Diesen Sensor löschen",
-            "back": "Zurück zur Sensorliste"
-          }
+          "action": "Select an action to perform on this sensor"
         }
       },
       "modify_sensor": {
@@ -258,11 +234,11 @@
     },
     "tracker_source_type": {
       "options": {
-        "": "Keine (Standard)",
         "gps": "GPS",
         "router": "Router",
         "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE"
+        "bluetooth_le": "Bluetooth LE",
+        "none": "Keine (Standard)"
       }
     }
   }
