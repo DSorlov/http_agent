@@ -2,120 +2,268 @@
   "config": {
     "step": {
       "user": {
-        "title": "HTTP Agent Einrichtung",
-        "description": "HTTP Agent Integration einrichten",
+        "title": "HTTP Agent Konfiguration",
+        "description": "Konfigurieren Sie den HTTP-Endpunkt",
         "data": {
-          "name": "Integrationsname"
+          "url": "URL",
+          "method": "HTTP-Methode",
+          "timeout": "Zeitüberschreitung (Sekunden)",
+          "interval": "Aktualisierungsintervall (Sekunden)",
+          "verify_ssl": "SSL-Zertifikat verifizieren"
+        }
+      },
+      "headers": {
+        "title": "HTTP-Header",
+        "description": "HTTP-Header konfigurieren\n\nAktuelle Header:\n{headers}",
+        "data": {
+          "action": "Aktion"
+        },
+        "data_description": {
+          "action": {
+            "add": "Header hinzufügen",
+            "done": "Weiter zum nächsten Schritt"
+          }
+        }
+      },
+      "add_header": {
+        "title": "HTTP-Header hinzufügen",
+        "description": "Einen neuen HTTP-Header hinzufügen",
+        "data": {
+          "key": "Header-Name",
+          "value": "Header-Wert"
+        }
+      },
+      "payload": {
+        "title": "HTTP-Nutzlast",
+        "description": "Anfrage-Nutzlast konfigurieren",
+        "data": {
+          "content_type": "Inhaltstyp",
+          "payload": "Nutzlast (JSON/XML/Text)"
         }
       },
       "sensors": {
-        "title": "Sensoren konfigurieren",
-        "description": "Aktuelle Sensoren:\n{sensor_list}\n\nMöchten Sie weitere Sensoren hinzufügen?",
+        "title": "Sensor-Konfiguration",
+        "description": "Sensoren zur Datenextraktion konfigurieren\n\nAktuelle Sensoren:\n{sensors}",
         "data": {
-          "add_sensor": "Sensor hinzufügen"
+          "action": "Aktion"
+        },
+        "data_description": {
+          "action": {
+            "add": "Sensor hinzufügen",
+            "done": "Integration erstellen"
+          }
         }
       },
       "add_sensor": {
-        "title": "HTTP Sensor hinzufügen",
-        "description": "Neuen HTTP Sensor konfigurieren",
+        "title": "Sensor hinzufügen",
+        "description": "Sensortyp wählen und Namen angeben",
         "data": {
-          "name": "Sensorname",
-          "url": "URL",
-          "method": "HTTP Methode",
-          "interval": "Aktualisierungsintervall (Sekunden)",
-          "timeout": "Anfrage-Timeout (Sekunden)",
-          "ssl_verify": "SSL Zertifikat verifizieren",
-          "enabled": "Aktiviert",
-          "payload": "Anfrage-Inhalt (optional)",
-          "querystring": "Abfrageparameter (optional)"
+          "sensor_name": "Sensor-Name",
+          "sensor_type": "Sensor-Typ"
+        }
+      },
+      "sensor_config": {
+        "title": "Sensor-Konfiguration",
+        "description": "Sensor-Einstellungen konfigurieren. Die Extraktionsmethode (JSON/XPath/CSS) wird automatisch basierend auf dem Antwort-Inhaltstyp erkannt.",
+        "data": {
+          "sensor_state": "Zustandswähler (JSON/XPath/CSS - automatisch erkannt)",
+          "sensor_icon": "Symbol-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "sensor_color": "Farb-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "sensor_device_class": "Geräteklasse",
+          "sensor_unit": "Maßeinheit",
+          "tracker_latitude": "Breitengrad-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "tracker_longitude": "Längengrad-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "tracker_location_name": "Standortname-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "tracker_source_type": "Quellentyp"
         }
       }
     },
     "error": {
-      "invalid_sensor": "Ungültige Sensorkonfiguration"
+      "invalid_url": "Ungültiges URL-Format",
+      "no_sensors": "Mindestens ein Sensor muss konfiguriert werden"
     },
     "abort": {
-      "already_configured": "HTTP Agent ist bereits konfiguriert"
+      "already_configured": "Dieser HTTP-Endpunkt ist bereits konfiguriert",
+      "no_sensors": "Keine Sensoren wurden konfiguriert"
     }
   },
   "options": {
     "step": {
-      "sensors_menu": {
-        "title": "Sensoren verwalten",
-        "description": "Aktuelle Sensoren:\n{sensor_list}",
+      "init": {
+        "title": "HTTP Agent Konfiguration",
+        "description": "Wählen Sie, was bearbeitet werden soll",
         "data": {
-          "action": "Aktion"
+          "action": "Konfigurationsbereich"
+        },
+        "data_description": {
+          "action": {
+            "basic": "Grundeinstellungen bearbeiten (URL, Methode, Timeout, Intervall, SSL)",
+            "headers": "HTTP-Header bearbeiten",
+            "sensors": "Sensor-Konfiguration bearbeiten",
+            "payload": "Anfrage-Nutzlast bearbeiten"
+          }
         }
       },
-      "add_sensor": {
-        "title": "HTTP Sensor hinzufügen",
-        "description": "Neuen HTTP Sensor konfigurieren",
+      "basic": {
+        "title": "Grundeinstellungen",
+        "description": "URL, Methode, Zeitüberschreitung, Intervall und SSL-Verifizierung bearbeiten",
         "data": {
-          "name": "Sensorname",
           "url": "URL",
-          "method": "HTTP Methode",
+          "method": "HTTP-Methode",
+          "timeout": "Zeitüberschreitung (Sekunden)",
           "interval": "Aktualisierungsintervall (Sekunden)",
-          "timeout": "Anfrage-Timeout (Sekunden)",
-          "ssl_verify": "SSL Zertifikat verifizieren",
-          "enabled": "Aktiviert",
-          "payload": "Anfrage-Inhalt (optional)",
-          "querystring": "Abfrageparameter (optional)"
+          "verify_ssl": "SSL-Zertifikat verifizieren"
+        }
+      },
+      "headers": {
+        "title": "HTTP-Header",
+        "description": "HTTP-Header bearbeiten\n\nAktuelle Header:\n{headers}",
+        "data": {
+          "action": "Aktion"
+        },
+        "data_description": {
+          "action": {
+            "add": "Neuen Header hinzufügen",
+            "clear": "Alle Header löschen",
+            "done": "Änderungen speichern"
+          }
+        }
+      },
+      "add_header": {
+        "title": "HTTP-Header hinzufügen",
+        "description": "Einen neuen HTTP-Header hinzufügen",
+        "data": {
+          "key": "Header-Name",
+          "value": "Header-Wert"
+        }
+      },
+      "payload": {
+        "title": "HTTP-Nutzlast",
+        "description": "Anfrage-Nutzlast bearbeiten",
+        "data": {
+          "content_type": "Inhaltstyp",
+          "payload": "Nutzlast (JSON/XML/Text)"
+        }
+      },
+      "sensors": {
+        "title": "Sensor-Konfiguration",
+        "description": "Sensor-Konfiguration bearbeiten\n\nAktuelle Sensoren:\n{sensors}",
+        "data": {
+          "action": "Aktion"
+        },
+        "data_description": {
+          "action": {
+            "add": "Neuen Sensor hinzufügen",
+            "edit": "Vorhandenen Sensor bearbeiten/löschen",
+            "clear": "Alle Sensoren löschen",
+            "done": "Änderungen speichern"
+          }
         }
       },
       "select_sensor": {
         "title": "Sensor auswählen",
-        "description": "Wählen Sie den zu bearbeitenden Sensor",
+        "description": "Einen Sensor zum Bearbeiten oder Löschen auswählen",
         "data": {
           "sensor": "Sensor"
         }
       },
       "edit_sensor": {
-        "title": "HTTP Sensor bearbeiten",
-        "description": "Sensorkonfiguration aktualisieren",
+        "title": "Sensor bearbeiten",
+        "description": "Wählen Sie, was mit diesem Sensor gemacht werden soll:\n\n{sensor_info}",
         "data": {
-          "name": "Sensorname",
-          "url": "URL",
-          "method": "HTTP Methode",
-          "interval": "Aktualisierungsintervall (Sekunden)",
-          "timeout": "Anfrage-Timeout (Sekunden)",
-          "ssl_verify": "SSL Zertifikat verifizieren",
-          "enabled": "Aktiviert",
-          "payload": "Anfrage-Inhalt (optional)",
-          "querystring": "Abfrageparameter (optional)"
+          "action": "Aktion"
+        },
+        "data_description": {
+          "action": {
+            "edit": "Sensoreinstellungen bearbeiten",
+            "delete": "Diesen Sensor löschen",
+            "back": "Zurück zur Sensorliste"
+          }
         }
       },
-      "delete_sensor": {
-        "title": "Sensor löschen",
-        "description": "Wählen Sie den zu löschenden Sensor",
+      "modify_sensor": {
+        "title": "Sensor ändern",
+        "description": "Sensor-Konfiguration bearbeiten. Die Extraktionsmethode (JSON/XPath/CSS) wird automatisch basierend auf dem Antwort-Inhaltstyp erkannt.",
         "data": {
-          "sensor": "Sensor"
+          "sensor_name": "Sensor-Name",
+          "sensor_state": "Zustandswähler (JSON/XPath/CSS - automatisch erkannt)",
+          "sensor_icon": "Symbol-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "sensor_color": "Farb-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "sensor_device_class": "Geräteklasse",
+          "sensor_unit": "Maßeinheit",
+          "tracker_latitude": "Breitengrad-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "tracker_longitude": "Längengrad-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "tracker_location_name": "Standortname-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "tracker_source_type": "Quellentyp"
+        }
+      },
+      "add_sensor": {
+        "title": "Sensor hinzufügen",
+        "description": "Sensortyp wählen und Namen angeben",
+        "data": {
+          "sensor_name": "Sensor-Name",
+          "sensor_type": "Sensor-Typ"
+        }
+      },
+      "sensor_config": {
+        "title": "Sensor-Konfiguration",
+        "description": "Sensor-Einstellungen konfigurieren. Die Extraktionsmethode (JSON/XPath/CSS) wird automatisch basierend auf dem Antwort-Inhaltstyp erkannt.",
+        "data": {
+          "sensor_state": "Zustandswähler (JSON/XPath/CSS - automatisch erkannt)",
+          "sensor_icon": "Symbol-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "sensor_color": "Farb-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "sensor_device_class": "Geräteklasse",
+          "sensor_unit": "Maßeinheit",
+          "tracker_latitude": "Breitengrad-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "tracker_longitude": "Längengrad-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "tracker_location_name": "Standortname-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "tracker_source_type": "Quellentyp"
         }
       }
     },
     "error": {
-      "invalid_sensor": "Ungültige Sensorkonfiguration"
+      "invalid_url": "Ungültiges URL-Format",
+      "no_sensors": "Mindestens ein Sensor muss konfiguriert werden"
+    },
+    "abort": {
+      "no_sensors": "Keine Sensoren wurden konfiguriert"
     }
   },
-  "services": {
-    "http_request": {
-      "name": "HTTP Anfrage",
-      "description": "HTTP Anfrage an die angegebene URL senden"
+  "selector": {
+    "action": {
+      "options": {
+        "basic": "Grundeinstellungen bearbeiten (URL, Methode, Zeitüberschreitung, Intervall, SSL)",
+        "headers": "HTTP-Header bearbeiten",
+        "sensors": "Sensor-Konfiguration bearbeiten",
+        "payload": "Anfrage-Nutzlast bearbeiten",
+        "add": "Hinzufügen",
+        "done": "Fertig",
+        "clear": "Alle löschen",
+        "save": "Änderungen speichern",
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "back": "Zurück"
+      }
     },
-    "http_get": {
-      "name": "HTTP GET",
-      "description": "HTTP GET Anfrage senden"
+    "sensor": {
+      "options": {}
     },
-    "http_post": {
-      "name": "HTTP POST",
-      "description": "HTTP POST Anfrage senden"
+    "sensor_type": {
+      "options": {
+        "sensor": "Sensor",
+        "binary_sensor": "Binärer Sensor",
+        "number": "Nummer",
+        "device_tracker": "Geräteverfolgung"
+      }
     },
-    "http_put": {
-      "name": "HTTP PUT",
-      "description": "HTTP PUT Anfrage senden"
-    },
-    "http_delete": {
-      "name": "HTTP DELETE",
-      "description": "HTTP DELETE Anfrage senden"
+    "tracker_source_type": {
+      "options": {
+        "": "Keine (Standard)",
+        "gps": "GPS",
+        "router": "Router",
+        "bluetooth": "Bluetooth",
+        "bluetooth_le": "Bluetooth LE"
+      }
     }
   }
 }

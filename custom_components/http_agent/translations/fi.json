@@ -2,120 +2,268 @@
   "config": {
     "step": {
       "user": {
-        "title": "HTTP Agent Asennus",
-        "description": "Määritä HTTP Agent integraatio",
+        "title": "HTTP Agent Konfigurointi",
+        "description": "Konfiguroi HTTP-päätepiste",
         "data": {
-          "name": "Integraation nimi"
+          "url": "URL",
+          "method": "HTTP-metodi",
+          "timeout": "Aikakatkaisu (sekuntia)",
+          "interval": "Päivitysväli (sekuntia)",
+          "verify_ssl": "Vahvista SSL-varmenne"
+        }
+      },
+      "headers": {
+        "title": "HTTP-otsikot",
+        "description": "Konfiguroi HTTP-otsikot\n\nNykyiset otsikot:\n{headers}",
+        "data": {
+          "action": "Toiminto"
+        },
+        "data_description": {
+          "action": {
+            "add": "Lisää otsikko",
+            "done": "Jatka seuraavaan vaiheeseen"
+          }
+        }
+      },
+      "add_header": {
+        "title": "Lisää HTTP-otsikko",
+        "description": "Lisää uusi HTTP-otsikko",
+        "data": {
+          "key": "Otsikon nimi",
+          "value": "Otsikon arvo"
+        }
+      },
+      "payload": {
+        "title": "HTTP-hyötykuorma",
+        "description": "Konfiguroi pyynnön hyötykuorma",
+        "data": {
+          "content_type": "Sisältötyyppi",
+          "payload": "Hyötykuorma (JSON/XML/Teksti)"
         }
       },
       "sensors": {
-        "title": "Määritä Anturit",
-        "description": "Nykyiset anturit:\n{sensor_list}\n\nHaluatko lisätä lisää antureita?",
+        "title": "Anturikonfigurointi",
+        "description": "Konfiguroi anturit datan poimimiseksi\n\nNykyiset anturit:\n{sensors}",
         "data": {
-          "add_sensor": "Lisää anturi"
+          "action": "Toiminto"
+        },
+        "data_description": {
+          "action": {
+            "add": "Lisää anturi",
+            "done": "Luo integraatio"
+          }
         }
       },
       "add_sensor": {
-        "title": "Lisää HTTP Anturi",
-        "description": "Määritä uusi HTTP anturi",
+        "title": "Lisää anturi",
+        "description": "Valitse anturityyppi ja anna nimi",
         "data": {
-          "name": "Anturin nimi",
-          "url": "URL",
-          "method": "HTTP Menetelmä",
-          "interval": "Päivitysväli (sekuntia)",
-          "timeout": "Pyynnön aikakatkaisu (sekuntia)",
-          "ssl_verify": "Vahvista SSL Sertifikaatti",
-          "enabled": "Käytössä",
-          "payload": "Pyynnön sisältö (valinnainen)",
-          "querystring": "Kyselyparametrit (valinnainen)"
+          "sensor_name": "Anturin nimi",
+          "sensor_type": "Anturityyppi"
+        }
+      },
+      "sensor_config": {
+        "title": "Anturikonfigurointi",
+        "description": "Konfiguroi anturin asetukset. Poimimismenetelmä (JSON/XPath/CSS) tunnistetaan automaattisesti vastauksen sisältötyypin perusteella.",
+        "data": {
+          "sensor_state": "Tilavalitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "sensor_icon": "Kuvatunnusten valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "sensor_color": "Värin valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "sensor_device_class": "Laitteen luokka",
+          "sensor_unit": "Mittayksikkö",
+          "tracker_latitude": "Leveysasteen valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "tracker_longitude": "Pituusasteen valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "tracker_location_name": "Sijainnin nimen valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "tracker_source_type": "Lähdetyyppi"
         }
       }
     },
     "error": {
-      "invalid_sensor": "Virheellinen anturin konfiguraatio"
+      "invalid_url": "Virheellinen URL-muoto",
+      "no_sensors": "Vähintään yksi anturi on määritettävä"
     },
     "abort": {
-      "already_configured": "HTTP Agent on jo määritetty"
+      "already_configured": "Tämä HTTP-päätepiste on jo määritetty",
+      "no_sensors": "Antureita ei määritetty"
     }
   },
   "options": {
     "step": {
-      "sensors_menu": {
-        "title": "Hallitse Antureita",
-        "description": "Nykyiset anturit:\n{sensor_list}",
+      "init": {
+        "title": "HTTP Agent Konfigurointi",
+        "description": "Valitse mitä muokata",
         "data": {
-          "action": "Toiminto"
+          "action": "Konfigurointiosio"
+        },
+        "data_description": {
+          "action": {
+            "basic": "Muokkaa perusasetuksia (URL, metodi, aikakatkaisu, väli, SSL)",
+            "headers": "Muokkaa HTTP-otsikoita",
+            "sensors": "Muokkaa anturikonfigurointia",
+            "payload": "Muokkaa pyynnön hyötykuormaa"
+          }
         }
       },
-      "add_sensor": {
-        "title": "Lisää HTTP Anturi",
-        "description": "Määritä uusi HTTP anturi",
+      "basic": {
+        "title": "Perusasetukset",
+        "description": "Muokkaa URL:ia, metodia, aikakatkaisua, väliä ja SSL-vahvistusta",
         "data": {
-          "name": "Anturin nimi",
           "url": "URL",
-          "method": "HTTP Menetelmä",
+          "method": "HTTP-metodi",
+          "timeout": "Aikakatkaisu (sekuntia)",
           "interval": "Päivitysväli (sekuntia)",
-          "timeout": "Pyynnön aikakatkaisu (sekuntia)",
-          "ssl_verify": "Vahvista SSL Sertifikaatti",
-          "enabled": "Käytössä",
-          "payload": "Pyynnön sisältö (valinnainen)",
-          "querystring": "Kyselyparametrit (valinnainen)"
+          "verify_ssl": "Vahvista SSL-varmenne"
+        }
+      },
+      "headers": {
+        "title": "HTTP-otsikot",
+        "description": "Muokkaa HTTP-otsikoita\n\nNykyiset otsikot:\n{headers}",
+        "data": {
+          "action": "Toiminto"
+        },
+        "data_description": {
+          "action": {
+            "add": "Lisää uusi otsikko",
+            "clear": "Tyhjennä kaikki otsikot",
+            "done": "Tallenna muutokset"
+          }
+        }
+      },
+      "add_header": {
+        "title": "Lisää HTTP-otsikko",
+        "description": "Lisää uusi HTTP-otsikko",
+        "data": {
+          "key": "Otsikon nimi",
+          "value": "Otsikon arvo"
+        }
+      },
+      "payload": {
+        "title": "HTTP-hyötykuorma",
+        "description": "Muokkaa pyynnön hyötykuormaa",
+        "data": {
+          "content_type": "Sisältötyyppi",
+          "payload": "Hyötykuorma (JSON/XML/Teksti)"
+        }
+      },
+      "sensors": {
+        "title": "Anturikonfigurointi",
+        "description": "Muokkaa anturikonfiguraatiota\n\nNykyiset anturit:\n{sensors}",
+        "data": {
+          "action": "Toiminto"
+        },
+        "data_description": {
+          "action": {
+            "add": "Lisää uusi anturi",
+            "edit": "Muokkaa/poista olemassa oleva anturi",
+            "clear": "Tyhjennä kaikki anturit",
+            "done": "Tallenna muutokset"
+          }
         }
       },
       "select_sensor": {
-        "title": "Valitse Anturi",
-        "description": "Valitse muokattava anturi",
+        "title": "Valitse anturi",
+        "description": "Valitse anturi muokattavaksi tai poistettavaksi",
         "data": {
           "sensor": "Anturi"
         }
       },
       "edit_sensor": {
-        "title": "Muokkaa HTTP Anturia",
-        "description": "Päivitä anturin konfiguraatio",
+        "title": "Muokkaa anturia",
+        "description": "Valitse mitä tehdä tälle anturille:\n\n{sensor_info}",
         "data": {
-          "name": "Anturin nimi",
-          "url": "URL",
-          "method": "HTTP Menetelmä",
-          "interval": "Päivitysväli (sekuntia)",
-          "timeout": "Pyynnön aikakatkaisu (sekuntia)",
-          "ssl_verify": "Vahvista SSL Sertifikaatti",
-          "enabled": "Käytössä",
-          "payload": "Pyynnön sisältö (valinnainen)",
-          "querystring": "Kyselyparametrit (valinnainen)"
+          "action": "Toiminto"
+        },
+        "data_description": {
+          "action": {
+            "edit": "Muokkaa anturin asetuksia",
+            "delete": "Poista tämä anturi",
+            "back": "Takaisin anturiluetteloon"
+          }
         }
       },
-      "delete_sensor": {
-        "title": "Poista Anturi",
-        "description": "Valitse poistettava anturi",
+      "modify_sensor": {
+        "title": "Muuta anturia",
+        "description": "Muokkaa anturikonfiguraatiota. Poimimismenetelmä (JSON/XPath/CSS) tunnistetaan automaattisesti vastauksen sisältötyypin perusteella.",
         "data": {
-          "sensor": "Anturi"
+          "sensor_name": "Anturin nimi",
+          "sensor_state": "Tilavalitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "sensor_icon": "Kuvatunnusten valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "sensor_color": "Värin valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "sensor_device_class": "Laitteen luokka",
+          "sensor_unit": "Mittayksikkö",
+          "tracker_latitude": "Leveysasteen valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "tracker_longitude": "Pituusasteen valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "tracker_location_name": "Sijainnin nimen valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "tracker_source_type": "Lähdetyyppi"
+        }
+      },
+      "add_sensor": {
+        "title": "Lisää anturi",
+        "description": "Valitse anturityyppi ja anna nimi",
+        "data": {
+          "sensor_name": "Anturin nimi",
+          "sensor_type": "Anturityyppi"
+        }
+      },
+      "sensor_config": {
+        "title": "Anturikonfigurointi",
+        "description": "Konfiguroi anturin asetukset. Poimimismenetelmä (JSON/XPath/CSS) tunnistetaan automaattisesti vastauksen sisältötyypin perusteella.",
+        "data": {
+          "sensor_state": "Tilavalitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "sensor_icon": "Kuvatunnusten valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "sensor_color": "Värin valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "sensor_device_class": "Laitteen luokka",
+          "sensor_unit": "Mittayksikkö",
+          "tracker_latitude": "Leveysasteen valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "tracker_longitude": "Pituusasteen valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "tracker_location_name": "Sijainnin nimen valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "tracker_source_type": "Lähdetyyppi"
         }
       }
     },
     "error": {
-      "invalid_sensor": "Virheellinen anturin konfiguraatio"
+      "invalid_url": "Virheellinen URL-muoto",
+      "no_sensors": "Vähintään yksi anturi on määritettävä"
+    },
+    "abort": {
+      "no_sensors": "Antureita ei määritetty"
     }
   },
-  "services": {
-    "http_request": {
-      "name": "HTTP Pyyntö",
-      "description": "Tee HTTP pyyntö määritettyyn URL:iin"
+  "selector": {
+    "action": {
+      "options": {
+        "basic": "Muokkaa perusasetuksia (URL, metodi, aikakatkaisu, väli, SSL)",
+        "headers": "Muokkaa HTTP-otsikoita",
+        "sensors": "Muokkaa anturikonfiguraatiota",
+        "payload": "Muokkaa pyynnön hyötykuormaa",
+        "add": "Lisää",
+        "done": "Valmis",
+        "clear": "Tyhjennä kaikki",
+        "save": "Tallenna muutokset",
+        "edit": "Muokkaa",
+        "delete": "Poista",
+        "back": "Takaisin"
+      }
     },
-    "http_get": {
-      "name": "HTTP GET",
-      "description": "Tee HTTP GET pyyntö"
+    "sensor": {
+      "options": {}
     },
-    "http_post": {
-      "name": "HTTP POST",
-      "description": "Tee HTTP POST pyyntö"
+    "sensor_type": {
+      "options": {
+        "sensor": "Anturi",
+        "binary_sensor": "Binäärianturi",
+        "number": "Numero",
+        "device_tracker": "Laitteen seuranta"
+      }
     },
-    "http_put": {
-      "name": "HTTP PUT",
-      "description": "Tee HTTP PUT pyyntö"
-    },
-    "http_delete": {
-      "name": "HTTP DELETE",
-      "description": "Tee HTTP DELETE pyyntö"
+    "tracker_source_type": {
+      "options": {
+        "": "Ei mitään (oletus)",
+        "gps": "GPS",
+        "router": "Reititin",
+        "bluetooth": "Bluetooth",
+        "bluetooth_le": "Bluetooth LE"
+      }
     }
   }
 }

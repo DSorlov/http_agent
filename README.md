@@ -1,6 +1,6 @@
 ![maintained](https://img.shields.io/maintenance/yes/2025.svg)
 [![hacs_badge](https://img.shields.io/badge/hacs-default-green.svg)](https://github.com/custom-components/hacs)
-[![ha_version](https://img.shields.io/badge/home%20assistant-2024.10%2B-green.svg)](https://www.home-assistant.io)
+[![ha_version](https://img.shields.io/badge/home%20assistant-2025.10%2B-green.svg)](https://www.home-assistant.io)
 ![version](https://img.shields.io/badge/version-1.0.0-green.svg)
 ![stability](https://img.shields.io/badge/stability-stable-green.svg)
 [![CI](https://github.com/DSorlov/http_agent/workflows/CI/badge.svg)](https://github.com/DSorlov/http_agent/actions/workflows/ci.yaml)
@@ -9,17 +9,9 @@
 [![maintainer](https://img.shields.io/badge/maintainer-dsorlov-blue.svg)](https://github.com/DSorlov)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-# HTTP Agent
+# HTTP Agent for Home Assistant
 
-A custom Home Assistant integration for making HTTP requests with template support and automatic sensor polling.
-
-## Features
-
-- **HTTP Services**: Make HTTP requests (GET, POST, PUT, DELETE, PATCH, HEAD) with full template support
-- **HTTP Sensors**: Automatically poll HTTP endpoints at configurable intervals
-- **Template Support**: Use Home Assistant templates in URLs, payloads, query parameters, and headers
-- **GUI Configuration**: Full GUI-based setup and management of sensors
-- **Multi-language Support**: Available in English, Swedish, Danish, Finnish, Norwegian, German, Spanish, and French
+HTTP Agent is a powerful Home Assistant custom integration that creates individual HTTP sensor instances with advanced data extraction capabilities supporting both JSON, XML and even HTML/CSS-Selectors. Unlike traditional hub-based integrations, each HTTP endpoint becomes its own integration instance and then you can define multiple sensors for that request.
 
 ## Installation
 
@@ -46,135 +38,127 @@ A custom Home Assistant integration for making HTTP requests with template suppo
 3. Search for "HTTP Agent"
 4. Follow the setup wizard to configure your integration
 
-### Services
+## Configuration
 
-The integration provides the following services:
+### Step 1: URL Configuration
+- **URL**: The HTTP endpoint to poll (supports templates)
+- **Method**: HTTP method (GET, POST, PUT, DELETE, PATCH)
+- **Timeout**: Request timeout in seconds (1-300)
+- **Update Interval**: How often to poll in seconds (5-86400)
 
-#### `http_agent.http_request`
-Make a generic HTTP request with full control over method, payload, headers, etc.
+### Step 2: Headers (Optional)
+Add any HTTP headers needed for authentication or content negotiation.
 
-#### `http_agent.http_get`
-Make a HTTP GET request.
+### Step 3: Payload (For POST/PUT/DELETE/PATCH)
+Configure request body with content type selection. The field supports templates.
 
-#### `http_agent.http_post`
-Make a HTTP POST request with payload.
+### Step 4: Sensors
+Define sensors to extract data from the response:
+- **Name**: Sensor name
+- **Extraction Method**: JSON, XML or CSS selectors.
+- **State**: Main sensor value selector/template
+- **Icon**: Icon selector/template (auto-prefixed with `mdi:`)
+- **Color**: Color selector/template
 
-#### `http_agent.http_put`
-Make a HTTP PUT request with payload.
+## Extraction Methods
 
-#### `http_agent.http_delete`
-Make a HTTP DELETE request.
-
-### Service Parameters
-
-All services support the following parameters:
-
-- `url` (required): The URL to make the request to (supports templates)
-- `method`: HTTP method (for generic http_request service)
-- `payload`: Request body content (supports templates)
-- `headers`: HTTP headers as a dictionary
-- `querystring`: URL query parameters (supports templates)
-- `timeout`: Request timeout in seconds (default: 10)
-- `ssl_verify`: Whether to verify SSL certificates (default: true)
-
-### Sensors
-
-HTTP sensors automatically poll endpoints at regular intervals and store:
-
-- **State**: HTTP status code or connection state
-- **Dynamic Icons**: Visual status indicators
-  - 🟢 `mdi:web-check` - Success (HTTP 2xx)
-  - 🔴 `mdi:web-remove` - Error (HTTP 4xx/5xx)
-  - 🟡 `mdi:web-clock` - Timeout
-  - ⚫ `mdi:web-off` - Disabled
-  - 🔵 `mdi:web` - Unknown/Pending
-- **Attributes**:
-  - `response`: Parsed response (JSON if possible, otherwise text)
-  - `response_text`: Raw response text
-  - `headers`: Response headers
-  - `status_code`: HTTP status code
-  - `url`: Actual URL requested (after template rendering)
-  - `method`: HTTP method used
-  - `last_updated`: Timestamp of last update
-
-### Template Support
-
-You can use Home Assistant templates in:
-- URLs: `http://{{ states('sensor.server_ip') }}:8080/api`
-- Payloads: `{\"value\": {{ states('sensor.temperature') }}}`
-- Query strings: `id={{ states('sensor.device_id') }}&token=abc123`
-- Headers: Values in the headers dictionary
-
-### Examples
-
-#### Service Call Example
-
-```yaml
-service: http_agent.http_post
-data:
-  url: "http://192.168.1.100:8080/api/update"
-  payload: |
-    {
-      \"temperature\": {{ states('sensor.outside_temperature') }},
-      \"humidity\": {{ states('sensor.outside_humidity') }},
-      \"timestamp\": \"{{ now().isoformat() }}\"
-    }
-  headers:
-    Authorization: "Bearer {{ states('input_text.api_token') }}"
-    Content-Type: "application/json"
-  ssl_verify: false
+### JSON
+Use dot notation to access JSON properties:
+```
+temperature          # Simple property
+sensors.0.value      # Array index
+metadata.device.id   # Nested objects
 ```
 
-#### Automation Example
-
-```yaml
-automation:
-  - alias: "Send temperature update"
-    trigger:
-      - platform: state
-        entity_id: sensor.outside_temperature
-    action:
-      - service: http_agent.http_post
-        data:
-          url: "http://{{ states('sensor.weather_server') }}/temperature"
-          payload: |
-            {
-              \"location\": \"outside\",
-              \"temperature\": {{ states('sensor.outside_temperature') }},
-              \"unit\": \"°C\"
-            }
-          headers:
-            Content-Type: "application/json"
+### XML
+Use XPath expressions:
+```
+./temperature        # Direct child
+.//sensor[@name='temp1']/@value  # Attribute search
+./metadata/battery   # Nested elements
 ```
 
-#### Sensor Configuration
+### CSS Selectors
+Use CSS selectors for HTML content:
+```
+.temperature         # Class selector
+#sensor-value        # ID selector
+div[data-sensor="temp"]  # Attribute selector
+```
 
-Sensors are configured through the GUI when setting up the integration. Each sensor can have:
+## Template Support
 
-- Custom update intervals (5-86400 seconds)
-- Different HTTP methods
-- Custom payloads and query parameters
-- Individual SSL verification settings
-- Enable/disable toggle
+All configuration fields support Home Assistant templates:
+
+### URL Templates
+```
+http://api.example.com/sensors/{{ states('input_text.device_id') }}
+```
+
+### Header Templates  
+```
+Key: Authorization
+Value: Bearer {{ states('input_text.api_token') }}
+```
+
+### Payload Templates
+```json
+{
+  "device": "{{ states('input_text.device_name') }}",
+  "timestamp": "{{ now().isoformat() }}"
+}
+```
+
+## Examples
+
+### JSON API Example
+```yaml
+URL: https://api.weather.com/v1/current
+Method: GET
+Headers:
+  - API-Key: your-api-key
+Sensors:
+  - Name: Temperature
+    Method: JSON
+    State: current.temperature
+    Icon: current.condition_icon
+    Attributes:
+      - Humidity: current.humidity
+      - Pressure: current.pressure
+```
+
+### XML API Example  
+```yaml
+URL: https://api.example.com/data.xml
+Method: GET
+Sensors:
+  - Name: Sensor Value
+    Method: XML
+    State: ./sensors/sensor[@id='temp1']/value
+    Icon: ./sensors/sensor[@id='temp1']/icon
+```
+
+### HTML Scraping Example
+```yaml
+URL: https://example.com/status
+Method: GET
+Sensors:
+  - Name: Status
+    Method: CSS
+    State: .status-value
+    Color: .status-indicator
+    Icon: .status-icon
+```
 
 ## Troubleshooting
 
-### Debug Logging
-
-Add this to your `configuration.yaml` to enable debug logging:
-
+### Enable Debug Logging
+Add to `configuration.yaml`:
 ```yaml
 logger:
   logs:
     custom_components.http_agent: debug
 ```
-
-### Common Issues
-
-1. **SSL Certificate Errors**: Set `ssl_verify: false` if you're using self-signed certificates
-2. **Template Errors**: Check your template syntax in the Home Assistant template editor
-3. **Timeout Issues**: Increase the timeout value for slow endpoints
-4. **Authentication**: Make sure to include proper headers for authenticated endpoints
 
 ## Contributing
 

@@ -1,13 +1,14 @@
 {
   "domain": "http_agent",
   "name": "HTTP Agent",
-  "codeowners": ["@dsorlov"],
-  "config_flow": true,
+  "codeowners": ["@DSorlov"],
+  "config_flow": true, 
+  "dependencies": [],
   "documentation": "https://github.com/dsorlov/http_agent",
-  "integration_type": "hub",
-  "iot_class": "local_polling",
-  "issue_tracker": "https://github.com/dsorlov/http_agent/issues",
+  "integration_type": "device",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/DSorlov/http_agent/issues",
   "loggers": ["custom_components.http_agent"],
-  "requirements": ["aiohttp>=3.8.0"],
+  "requirements": ["aiohttp>=3.8.0", "beautifulsoup4>=4.11.0", "lxml>=4.9.0"],
   "version": "1.0.0"
-}
+} 

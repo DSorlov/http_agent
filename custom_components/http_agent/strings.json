@@ -2,104 +2,268 @@
   "config": {
     "step": {
       "user": {
-        "title": "HTTP Agent Setup",
-        "description": "Set up the HTTP Agent integration to make HTTP requests and create sensors.",
+        "title": "HTTP Agent Configuration",
+        "description": "Configure the HTTP endpoint",
         "data": {
-          "name": "Integration Name"
+          "url": "URL",
+          "method": "HTTP Method",
+          "timeout": "Timeout (seconds)",
+          "interval": "Update Interval (seconds)",
+          "verify_ssl": "Verify SSL Certificate"
+        }
+      },
+      "headers": {
+        "title": "HTTP Headers",
+        "description": "Configure HTTP headers\n\nCurrent headers:\n{headers}",
+        "data": {
+          "action": "Action"
+        },
+        "data_description": {
+          "action": {
+            "add": "Add header",
+            "done": "Continue to next step"
+          }
+        }
+      },
+      "add_header": {
+        "title": "Add HTTP Header",
+        "description": "Add a new HTTP header",
+        "data": {
+          "key": "Header Name",
+          "value": "Header Value"
+        }
+      },
+      "payload": {
+        "title": "HTTP Payload",
+        "description": "Configure the request payload",
+        "data": {
+          "content_type": "Content Type",
+          "payload": "Payload (JSON/XML/Text)"
         }
       },
       "sensors": {
-        "title": "Configure Sensors",
-        "description": "Configure HTTP sensors that will automatically poll endpoints.\n\nCurrent sensors:\n{sensor_list}\n\nWould you like to add sensors?",
+        "title": "Sensors Configuration",
+        "description": "Configure sensors to extract data\n\nCurrent sensors:\n{sensors}",
         "data": {
-          "add_sensor": "Add a sensor"
+          "action": "Action"
+        },
+        "data_description": {
+          "action": {
+            "add": "Add sensor",
+            "done": "Create integration"
+          }
         }
       },
       "add_sensor": {
-        "title": "Add HTTP Sensor",
-        "description": "Configure a new HTTP sensor that will poll an endpoint at regular intervals.",
+        "title": "Add Sensor",
+        "description": "Choose the sensor type and provide a name",
         "data": {
-          "name": "Sensor Name",
-          "url": "URL (supports templates)",
-          "method": "HTTP Method",
-          "interval": "Update Interval (seconds)",
-          "timeout": "Request Timeout (seconds)",
-          "ssl_verify": "Verify SSL Certificate",
-          "enabled": "Enabled",
-          "payload": "Request Payload (optional, supports templates)",
-          "querystring": "Query Parameters (optional, supports templates)"
+          "sensor_name": "Sensor Name",
+          "sensor_type": "Sensor Type"
+        }
+      },
+      "sensor_config": {
+        "title": "Sensor Configuration",
+        "description": "Configure the sensor settings. The extraction method (JSON/XPath/CSS) will be automatically detected based on the response content type.",
+        "data": {
+          "sensor_state": "State Selector (JSON/XPath/CSS - auto-detected)",
+          "sensor_icon": "Icon Selector (JSON/XPath/CSS - auto-detected)",
+          "sensor_color": "Color Selector (JSON/XPath/CSS - auto-detected)",
+          "sensor_device_class": "Device Class",
+          "sensor_unit": "Unit of Measurement",
+          "tracker_latitude": "Latitude Selector (JSON/XPath/CSS - auto-detected)",
+          "tracker_longitude": "Longitude Selector (JSON/XPath/CSS - auto-detected)",
+          "tracker_location_name": "Location Name Selector (JSON/XPath/CSS - auto-detected)",
+          "tracker_source_type": "Source Type"
         }
       }
     },
     "error": {
-      "invalid_sensor": "Invalid sensor configuration. Please check your settings.",
-      "invalid_url": "Invalid URL format.",
-      "invalid_interval": "Update interval must be between 5 and 86400 seconds.",
-      "invalid_timeout": "Timeout must be between 1 and 300 seconds."
+      "invalid_url": "Invalid URL format",
+      "no_sensors": "At least one sensor must be configured"
     },
     "abort": {
-      "already_configured": "HTTP Agent is already configured for this Home Assistant instance."
+      "already_configured": "This HTTP endpoint is already configured",
+      "no_sensors": "No sensors were configured"
     }
   },
   "options": {
     "step": {
-      "sensors_menu": {
-        "title": "Manage HTTP Sensors",
-        "description": "Add, edit, or remove HTTP sensors.\n\nCurrent sensors:\n{sensor_list}",
+      "init": {
+        "title": "HTTP Agent Configuration",
+        "description": "Choose what to edit",
         "data": {
-          "action": "Action"
+          "action": "Configuration Section"
+        },
+        "data_description": {
+          "action": {
+            "basic": "Edit basic settings (URL, method, timeout, interval, SSL)",
+            "headers": "Edit HTTP headers",
+            "sensors": "Edit sensors configuration",
+            "payload": "Edit request payload"
+          }
         }
       },
-      "add_sensor": {
-        "title": "Add HTTP Sensor",
-        "description": "Configure a new HTTP sensor that will poll an endpoint at regular intervals.",
+      "basic": {
+        "title": "Basic Settings",
+        "description": "Edit URL, method, timeout, interval and SSL verification",
         "data": {
-          "name": "Sensor Name",
-          "url": "URL (supports templates)",
+          "url": "URL",
           "method": "HTTP Method",
+          "timeout": "Timeout (seconds)",
           "interval": "Update Interval (seconds)",
-          "timeout": "Request Timeout (seconds)",
-          "ssl_verify": "Verify SSL Certificate",
-          "enabled": "Enabled",
-          "payload": "Request Payload (optional, supports templates)",
-          "querystring": "Query Parameters (optional, supports templates)"
+          "verify_ssl": "Verify SSL Certificate"
+        }
+      },
+      "headers": {
+        "title": "HTTP Headers",
+        "description": "Edit HTTP headers\n\nCurrent headers:\n{headers}",
+        "data": {
+          "action": "Action"
+        },
+        "data_description": {
+          "action": {
+            "add": "Add new header",
+            "clear": "Clear all headers",
+            "done": "Save changes"
+          }
+        }
+      },
+      "add_header": {
+        "title": "Add HTTP Header",
+        "description": "Add a new HTTP header",
+        "data": {
+          "key": "Header Name",
+          "value": "Header Value"
+        }
+      },
+      "payload": {
+        "title": "HTTP Payload",
+        "description": "Edit the request payload",
+        "data": {
+          "content_type": "Content Type",
+          "payload": "Payload (JSON/XML/Text)"
+        }
+      },
+      "sensors": {
+        "title": "Sensors Configuration",
+        "description": "Edit sensors configuration\n\nCurrent sensors:\n{sensors}",
+        "data": {
+          "action": "Action"
+        },
+        "data_description": {
+          "action": {
+            "add": "Add new sensor",
+            "edit": "Edit/delete existing sensor",
+            "clear": "Clear all sensors",
+            "done": "Save changes"
+          }
         }
       },
       "select_sensor": {
-        "title": "Select Sensor to Edit",
-        "description": "Choose which sensor you want to modify.",
+        "title": "Select Sensor",
+        "description": "Choose a sensor to edit or delete",
         "data": {
           "sensor": "Sensor"
         }
       },
       "edit_sensor": {
-        "title": "Edit HTTP Sensor",
-        "description": "Update the configuration for this HTTP sensor.",
+        "title": "Edit Sensor",
+        "description": "Choose what to do with this sensor:\n\n{sensor_info}",
         "data": {
-          "name": "Sensor Name",
-          "url": "URL (supports templates)",
-          "method": "HTTP Method",
-          "interval": "Update Interval (seconds)",
-          "timeout": "Request Timeout (seconds)",
-          "ssl_verify": "Verify SSL Certificate",
-          "enabled": "Enabled",
-          "payload": "Request Payload (optional, supports templates)",
-          "querystring": "Query Parameters (optional, supports templates)"
+          "action": "Action"
+        },
+        "data_description": {
+          "action": {
+            "edit": "Edit sensor settings",
+            "delete": "Delete this sensor",
+            "back": "Back to sensors list"
+          }
         }
       },
-      "delete_sensor": {
-        "title": "Delete Sensor",
-        "description": "Select the sensor you want to permanently remove.",
+      "modify_sensor": {
+        "title": "Modify Sensor",
+        "description": "Edit sensor configuration. The extraction method (JSON/XPath/CSS) will be automatically detected based on the response content type.",
         "data": {
-          "sensor": "Sensor to Delete"
+          "sensor_name": "Sensor Name",
+          "sensor_state": "State Selector (JSON/XPath/CSS - auto-detected)",
+          "sensor_icon": "Icon Selector (JSON/XPath/CSS - auto-detected)",
+          "sensor_color": "Color Selector (JSON/XPath/CSS - auto-detected)",
+          "sensor_device_class": "Device Class",
+          "sensor_unit": "Unit of Measurement",
+          "tracker_latitude": "Latitude Selector (JSON/XPath/CSS - auto-detected)",
+          "tracker_longitude": "Longitude Selector (JSON/XPath/CSS - auto-detected)",
+          "tracker_location_name": "Location Name Selector (JSON/XPath/CSS - auto-detected)",
+          "tracker_source_type": "Source Type"
+        }
+      },
+      "add_sensor": {
+        "title": "Add Sensor",
+        "description": "Choose the sensor type and provide a name",
+        "data": {
+          "sensor_name": "Sensor Name",
+          "sensor_type": "Sensor Type"
+        }
+      },
+      "sensor_config": {
+        "title": "Sensor Configuration",
+        "description": "Configure the sensor settings. The extraction method (JSON/XPath/CSS) will be automatically detected based on the response content type.",
+        "data": {
+          "sensor_state": "State Selector (JSON/XPath/CSS - auto-detected)",
+          "sensor_icon": "Icon Selector (JSON/XPath/CSS - auto-detected)",
+          "sensor_color": "Color Selector (JSON/XPath/CSS - auto-detected)",
+          "sensor_device_class": "Device Class",
+          "sensor_unit": "Unit of Measurement",
+          "tracker_latitude": "Latitude Selector (JSON/XPath/CSS - auto-detected)",
+          "tracker_longitude": "Longitude Selector (JSON/XPath/CSS - auto-detected)",
+          "tracker_location_name": "Location Name Selector (JSON/XPath/CSS - auto-detected)",
+          "tracker_source_type": "Source Type"
         }
       }
     },
     "error": {
-      "invalid_sensor": "Invalid sensor configuration. Please check your settings.",
-      "invalid_url": "Invalid URL format.",
-      "invalid_interval": "Update interval must be between 5 and 86400 seconds.",
-      "invalid_timeout": "Timeout must be between 1 and 300 seconds."
+      "invalid_url": "Invalid URL format",
+      "no_sensors": "At least one sensor must be configured"
+    },
+    "abort": {
+      "no_sensors": "No sensors were configured"
+    }
+  },
+  "selector": {
+    "action": {
+      "options": {
+        "basic": "Edit basic settings (URL, method, timeout, interval, SSL)",
+        "headers": "Edit HTTP headers",
+        "sensors": "Edit sensors configuration",
+        "payload": "Edit request payload",
+        "add": "Add",
+        "done": "Done",
+        "clear": "Clear all",
+        "save": "Save changes",
+        "edit": "Edit",
+        "delete": "Delete",
+        "back": "Back"
+      }
+    },
+    "sensor": {
+      "options": {}
+    },
+    "sensor_type": {
+      "options": {
+        "sensor": "Sensor",
+        "binary_sensor": "Binary Sensor",
+        "number": "Number",
+        "device_tracker": "Device Tracker"
+      }
+    },
+    "tracker_source_type": {
+      "options": {
+        "": "None (default)",
+        "gps": "GPS",
+        "router": "Router",
+        "bluetooth": "Bluetooth",
+        "bluetooth_le": "Bluetooth LE"
+      }
     }
   }
 }

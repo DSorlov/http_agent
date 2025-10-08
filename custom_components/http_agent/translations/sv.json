@@ -2,120 +2,268 @@
   "config": {
     "step": {
       "user": {
-        "title": "HTTP Agent Inställning",
-        "description": "Konfigurera HTTP Agent-integrationen",
+        "title": "HTTP Agent Konfiguration",
+        "description": "Konfigurera HTTP-slutpunkten",
         "data": {
-          "name": "Integrationsnamn"
+          "url": "URL",
+          "method": "HTTP-metod",
+          "timeout": "Timeout (sekunder)",
+          "interval": "Uppdateringsintervall (sekunder)",
+          "verify_ssl": "Verifiera SSL-certifikat"
+        }
+      },
+      "headers": {
+        "title": "HTTP-huvuden",
+        "description": "Konfigurera HTTP-huvuden\n\nAktuella huvuden:\n{headers}",
+        "data": {
+          "action": "Åtgärd"
+        },
+        "data_description": {
+          "action": {
+            "add": "Lägg till huvud",
+            "done": "Fortsätt till nästa steg"
+          }
+        }
+      },
+      "add_header": {
+        "title": "Lägg till HTTP-huvud",
+        "description": "Lägg till ett nytt HTTP-huvud",
+        "data": {
+          "key": "Huvudnamn",
+          "value": "Huvudvärde"
+        }
+      },
+      "payload": {
+        "title": "HTTP-nyttolast",
+        "description": "Konfigurera förfrågansnyttolasten",
+        "data": {
+          "content_type": "Innehållstyp",
+          "payload": "Nyttolast (JSON/XML/Text)"
         }
       },
       "sensors": {
-        "title": "Konfigurera Sensorer",
-        "description": "Nuvarande sensorer:\n{sensor_list}\n\nVill du lägga till fler sensorer?",
+        "title": "Sensorkonfiguration",
+        "description": "Konfigurera sensorer för att extrahera data\n\nAktuella sensorer:\n{sensors}",
         "data": {
-          "add_sensor": "Lägg till en sensor"
+          "action": "Åtgärd"
+        },
+        "data_description": {
+          "action": {
+            "add": "Lägg till sensor",
+            "done": "Skapa integration"
+          }
         }
       },
       "add_sensor": {
-        "title": "Lägg till HTTP Sensor",
-        "description": "Konfigurera en ny HTTP sensor",
+        "title": "Lägg till sensor",
+        "description": "Välj sensortyp och ange ett namn",
         "data": {
-          "name": "Sensornamn",
-          "url": "URL",
-          "method": "HTTP Metod",
-          "interval": "Uppdateringsintervall (sekunder)",
-          "timeout": "Begäran timeout (sekunder)",
-          "ssl_verify": "Verifiera SSL Certifikat",
-          "enabled": "Aktiverad",
-          "payload": "Begärandeinnehåll (valfritt)",
-          "querystring": "Frågeparametrar (valfritt)"
+          "sensor_name": "Sensornamn",
+          "sensor_type": "Sensortyp"
+        }
+      },
+      "sensor_config": {
+        "title": "Sensorkonfiguration",
+        "description": "Konfigurera sensorinställningarna. Extraktionsmetoden (JSON/XPath/CSS) kommer automatiskt att detekteras baserat på svarsinnehållstypen.",
+        "data": {
+          "sensor_state": "Tillståndsväljare (JSON/XPath/CSS - auto-detekterad)",
+          "sensor_icon": "Ikonväljare (JSON/XPath/CSS - auto-detekterad)",
+          "sensor_color": "Färgväljare (JSON/XPath/CSS - auto-detekterad)",
+          "sensor_device_class": "Enhetsklass",
+          "sensor_unit": "Mätenhet",
+          "tracker_latitude": "Latitudväljare (JSON/XPath/CSS - auto-detekterad)",
+          "tracker_longitude": "Longitudväljare (JSON/XPath/CSS - auto-detekterad)",
+          "tracker_location_name": "Platsnamnsväljare (JSON/XPath/CSS - auto-detekterad)",
+          "tracker_source_type": "Källtyp"
         }
       }
     },
     "error": {
-      "invalid_sensor": "Ogiltig sensorkonfiguration"
+      "invalid_url": "Ogiltigt URL-format",
+      "no_sensors": "Minst en sensor måste konfigureras"
     },
     "abort": {
-      "already_configured": "HTTP Agent är redan konfigurerad"
+      "already_configured": "Denna HTTP-slutpunkt är redan konfigurerad",
+      "no_sensors": "Inga sensorer konfigurerades"
     }
   },
   "options": {
     "step": {
-      "sensors_menu": {
-        "title": "Hantera Sensorer",
-        "description": "Nuvarande sensorer:\n{sensor_list}",
+      "init": {
+        "title": "HTTP Agent Konfiguration",
+        "description": "Välj vad som ska redigeras",
         "data": {
-          "action": "Åtgärd"
+          "action": "Konfigurationssektion"
+        },
+        "data_description": {
+          "action": {
+            "basic": "Redigera grundinställningar (URL, metod, timeout, intervall, SSL)",
+            "headers": "Redigera HTTP-huvuden",
+            "sensors": "Redigera sensorkonfiguration",
+            "payload": "Redigera förfrågansnyttolast"
+          }
         }
       },
-      "add_sensor": {
-        "title": "Lägg till HTTP Sensor",
-        "description": "Konfigurera en ny HTTP sensor",
+      "basic": {
+        "title": "Grundinställningar",
+        "description": "Redigera URL, metod, timeout, intervall och SSL-verifiering",
         "data": {
-          "name": "Sensornamn",
           "url": "URL",
-          "method": "HTTP Metod",
+          "method": "HTTP-metod",
+          "timeout": "Timeout (sekunder)",
           "interval": "Uppdateringsintervall (sekunder)",
-          "timeout": "Begäran timeout (sekunder)",
-          "ssl_verify": "Verifiera SSL Certifikat",
-          "enabled": "Aktiverad",
-          "payload": "Begärandeinnehåll (valfritt)",
-          "querystring": "Frågeparametrar (valfritt)"
+          "verify_ssl": "Verifiera SSL-certifikat"
+        }
+      },
+      "headers": {
+        "title": "HTTP-huvuden",
+        "description": "Redigera HTTP-huvuden\n\nAktuella huvuden:\n{headers}",
+        "data": {
+          "action": "Åtgärd"
+        },
+        "data_description": {
+          "action": {
+            "add": "Lägg till nytt huvud",
+            "clear": "Rensa alla huvuden",
+            "done": "Spara ändringar"
+          }
+        }
+      },
+      "add_header": {
+        "title": "Lägg till HTTP-huvud",
+        "description": "Lägg till ett nytt HTTP-huvud",
+        "data": {
+          "key": "Huvudnamn",
+          "value": "Huvudvärde"
+        }
+      },
+      "payload": {
+        "title": "HTTP-nyttolast",
+        "description": "Redigera förfrågansnyttolasten",
+        "data": {
+          "content_type": "Innehållstyp",
+          "payload": "Nyttolast (JSON/XML/Text)"
+        }
+      },
+      "sensors": {
+        "title": "Sensorkonfiguration",
+        "description": "Redigera sensorkonfiguration\n\nAktuella sensorer:\n{sensors}",
+        "data": {
+          "action": "Åtgärd"
+        },
+        "data_description": {
+          "action": {
+            "add": "Lägg till ny sensor",
+            "edit": "Redigera/ta bort befintlig sensor",
+            "clear": "Rensa alla sensorer",
+            "done": "Spara ändringar"
+          }
         }
       },
       "select_sensor": {
-        "title": "Välj Sensor",
-        "description": "Välj sensorn att redigera",
+        "title": "Välj sensor",
+        "description": "Välj en sensor att redigera eller ta bort",
         "data": {
           "sensor": "Sensor"
         }
       },
       "edit_sensor": {
-        "title": "Redigera HTTP Sensor",
-        "description": "Uppdatera sensorkonfiguration",
+        "title": "Redigera sensor",
+        "description": "Välj vad som ska göras med denna sensor:\n\n{sensor_info}",
         "data": {
-          "name": "Sensornamn",
-          "url": "URL",
-          "method": "HTTP Metod",
-          "interval": "Uppdateringsintervall (sekunder)",
-          "timeout": "Begäran timeout (sekunder)",
-          "ssl_verify": "Verifiera SSL Certifikat",
-          "enabled": "Aktiverad",
-          "payload": "Begärandeinnehåll (valfritt)",
-          "querystring": "Frågeparametrar (valfritt)"
+          "action": "Åtgärd"
+        },
+        "data_description": {
+          "action": {
+            "edit": "Redigera sensorinställningar",
+            "delete": "Ta bort denna sensor",
+            "back": "Tillbaka till sensorlistan"
+          }
         }
       },
-      "delete_sensor": {
-        "title": "Ta bort Sensor",
-        "description": "Välj sensorn att ta bort",
+      "modify_sensor": {
+        "title": "Ändra sensor",
+        "description": "Redigera sensorkonfiguration. Extraktionsmetoden (JSON/XPath/CSS) kommer automatiskt att detekteras baserat på svarsinnehållstypen.",
         "data": {
-          "sensor": "Sensor"
+          "sensor_name": "Sensornamn",
+          "sensor_state": "Tillståndsväljare (JSON/XPath/CSS - auto-detekterad)",
+          "sensor_icon": "Ikonväljare (JSON/XPath/CSS - auto-detekterad)",
+          "sensor_color": "Färgväljare (JSON/XPath/CSS - auto-detekterad)",
+          "sensor_device_class": "Enhetsklass",
+          "sensor_unit": "Mätenhet",
+          "tracker_latitude": "Latitudväljare (JSON/XPath/CSS - auto-detekterad)",
+          "tracker_longitude": "Longitudväljare (JSON/XPath/CSS - auto-detekterad)",
+          "tracker_location_name": "Platsnamnsväljare (JSON/XPath/CSS - auto-detekterad)",
+          "tracker_source_type": "Källtyp"
+        }
+      },
+      "add_sensor": {
+        "title": "Lägg till sensor",
+        "description": "Välj sensortyp och ange ett namn",
+        "data": {
+          "sensor_name": "Sensornamn",
+          "sensor_type": "Sensortyp"
+        }
+      },
+      "sensor_config": {
+        "title": "Sensorkonfiguration",
+        "description": "Konfigurera sensorinställningarna. Extraktionsmetoden (JSON/XPath/CSS) kommer automatiskt att detekteras baserat på svarsinnehållstypen.",
+        "data": {
+          "sensor_state": "Tillståndsväljare (JSON/XPath/CSS - auto-detekterad)",
+          "sensor_icon": "Ikonväljare (JSON/XPath/CSS - auto-detekterad)",
+          "sensor_color": "Färgväljare (JSON/XPath/CSS - auto-detekterad)",
+          "sensor_device_class": "Enhetsklass",
+          "sensor_unit": "Mätenhet",
+          "tracker_latitude": "Latitudväljare (JSON/XPath/CSS - auto-detekterad)",
+          "tracker_longitude": "Longitudväljare (JSON/XPath/CSS - auto-detekterad)",
+          "tracker_location_name": "Platsnamnsväljare (JSON/XPath/CSS - auto-detekterad)",
+          "tracker_source_type": "Källtyp"
         }
       }
     },
     "error": {
-      "invalid_sensor": "Ogiltig sensorkonfiguration"
+      "invalid_url": "Ogiltigt URL-format",
+      "no_sensors": "Minst en sensor måste konfigureras"
+    },
+    "abort": {
+      "no_sensors": "Inga sensorer konfigurerades"
     }
   },
-  "services": {
-    "http_request": {
-      "name": "HTTP Förfrågan",
-      "description": "Gör en HTTP förfrågan till angiven URL"
+  "selector": {
+    "action": {
+      "options": {
+        "basic": "Redigera grundinställningar (URL, metod, timeout, intervall, SSL)",
+        "headers": "Redigera HTTP-huvuden",
+        "sensors": "Redigera sensorkonfiguration",
+        "payload": "Redigera förfrågansnyttolast",
+        "add": "Lägg till",
+        "done": "Klar",
+        "clear": "Rensa alla",
+        "save": "Spara ändringar",
+        "edit": "Redigera",
+        "delete": "Ta bort",
+        "back": "Tillbaka"
+      }
     },
-    "http_get": {
-      "name": "HTTP GET",
-      "description": "Gör en HTTP GET förfrågan"
+    "sensor": {
+      "options": {}
     },
-    "http_post": {
-      "name": "HTTP POST",
-      "description": "Gör en HTTP POST förfrågan"
+    "sensor_type": {
+      "options": {
+        "sensor": "Sensor",
+        "binary_sensor": "Binär sensor",
+        "number": "Nummer",
+        "device_tracker": "Enhetsspårning"
+      }
     },
-    "http_put": {
-      "name": "HTTP PUT",
-      "description": "Gör en HTTP PUT förfrågan"
-    },
-    "http_delete": {
-      "name": "HTTP DELETE",
-      "description": "Gör en HTTP DELETE förfrågan"
+    "tracker_source_type": {
+      "options": {
+        "": "Ingen (standard)",
+        "gps": "GPS",
+        "router": "Router",
+        "bluetooth": "Bluetooth",
+        "bluetooth_le": "Bluetooth LE"
+      }
     }
   }
 }

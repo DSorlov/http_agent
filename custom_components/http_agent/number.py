@@ -1,11 +1,11 @@
-"""HTTP Agent sensor platform."""
+"""HTTP Agent number platform."""
 
 from __future__ import annotations
 
 import logging
 from typing import Any
 
-from homeassistant.components.sensor import SensorEntity
+from homeassistant.components.number import NumberEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -29,7 +29,7 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up HTTP Agent sensors from a config entry."""
+    """Set up HTTP Agent number entities from a config entry."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
 
     # Merge config data with options
@@ -37,49 +37,19 @@ async def async_setup_entry(
     if entry.options:
         data.update(entry.options)
 
-    sensors = []
+    numbers = []
     for sensor_config in data[CONF_SENSORS]:
-        # Only create sensors of type "sensor"
-        if sensor_config.get(CONF_SENSOR_TYPE, "sensor") == "sensor":
+        # Only create numbers of type "number"
+        if sensor_config.get(CONF_SENSOR_TYPE, "sensor") == "number":
             sensor_name = sensor_config[CONF_SENSOR_NAME]
-            sensors.append(HTTPAgentSensor(coordinator, entry, sensor_name))
+            numbers.append(HTTPAgentNumber(coordinator, entry, sensor_name))
 
-    async_add_entities(sensors)
-
-    # Clean up removed sensors from entity registry
-    from homeassistant.helpers import entity_registry as er
-
-    entity_registry = er.async_get(hass)
-
-    # Get current sensor names
-    current_sensor_names = {
-        sensor_config[CONF_SENSOR_NAME] for sensor_config in data[CONF_SENSORS]
-    }
-
-    # Find entities to remove (create list first to avoid iteration error)
-    entities_to_remove = []
-    for entity_id, entity_entry in entity_registry.entities.items():
-        if (
-            entity_entry.config_entry_id == entry.entry_id
-            and entity_entry.domain == "sensor"
-            and entity_entry.platform == DOMAIN
-        ):
-
-            # Extract sensor name from unique_id
-            unique_id = entity_entry.unique_id
-            if unique_id and "_" in unique_id:
-                sensor_name = unique_id.split("_", 1)[1]
-                if sensor_name not in current_sensor_names:
-                    entities_to_remove.append(entity_id)
-
-    # Remove obsolete entities
-    for entity_id in entities_to_remove:
-        _LOGGER.info("Removing obsolete sensor entity: %s", entity_id)
-        entity_registry.async_remove(entity_id)
+    if numbers:
+        async_add_entities(numbers)
 
 
-class HTTPAgentSensor(CoordinatorEntity, SensorEntity):
-    """HTTP Agent sensor."""
+class HTTPAgentNumber(CoordinatorEntity, NumberEntity):
+    """HTTP Agent number entity."""
 
     def __init__(
         self,
@@ -87,7 +57,7 @@ class HTTPAgentSensor(CoordinatorEntity, SensorEntity):
         entry: ConfigEntry,
         sensor_name: str,
     ) -> None:
-        """Initialize the sensor."""
+        """Initialize the number entity."""
         super().__init__(coordinator)
         self.entry = entry
         self.sensor_name = sensor_name
@@ -96,44 +66,63 @@ class HTTPAgentSensor(CoordinatorEntity, SensorEntity):
         self._attr_name = sensor_name
         self._attr_unique_id = f"{entry.entry_id}_{sensor_name}"
 
+        # Number entities are read-only for HTTP Agent
+        self._attr_mode = "box"
+
         # Find sensor config
         self.sensor_config = None
-        for config in entry.data[CONF_SENSORS]:
+        data = dict(entry.data)
+        if entry.options:
+            data.update(entry.options)
+
+        for config in data[CONF_SENSORS]:
             if config[CONF_SENSOR_NAME] == sensor_name:
                 self.sensor_config = config
                 break
 
     @property
     def name(self) -> str:
-        """Return the name of the sensor."""
+        """Return the name of the number entity."""
         return self.sensor_name
 
     @property
-    def native_value(self) -> Any:
-        """Return the state of the sensor."""
+    def native_value(self) -> float | None:
+        """Return the value of the number entity."""
         if not self.coordinator.data:
             return None
 
         sensor_data = self.coordinator.data.get(self.sensor_name, {})
-        return sensor_data.get("state")
+        state = sensor_data.get("state")
+
+        # Convert state to float
+        if state is None:
+            return None
+
+        try:
+            return float(state)
+        except (ValueError, TypeError):
+            _LOGGER.warning(
+                "Could not convert state '%s' to number for %s", state, self.sensor_name
+            )
+            return None
 
     @property
     def device_class(self) -> str | None:
-        """Return the device class of the sensor."""
+        """Return the device class of the number entity."""
         if self.sensor_config:
             return self.sensor_config.get(CONF_SENSOR_DEVICE_CLASS)
         return None
 
     @property
     def native_unit_of_measurement(self) -> str | None:
-        """Return the unit of measurement of the sensor."""
+        """Return the unit of measurement of the number entity."""
         if self.sensor_config:
             return self.sensor_config.get(CONF_SENSOR_UNIT)
         return None
 
     @property
     def icon(self) -> str | None:
-        """Return the icon of the sensor."""
+        """Return the icon of the number entity."""
         if not self.coordinator.data:
             return None
 
@@ -148,7 +137,7 @@ class HTTPAgentSensor(CoordinatorEntity, SensorEntity):
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
-        """Return the state attributes of the sensor."""
+        """Return the state attributes of the number entity."""
         if not self.coordinator.data:
             return {}
 
@@ -168,7 +157,7 @@ class HTTPAgentSensor(CoordinatorEntity, SensorEntity):
             "identifiers": {(DOMAIN, self.entry.entry_id)},
             "name": self.entry.title,
             "manufacturer": "HTTP Agent",
-            "model": "HTTP Sensor",
+            "model": "HTTP Number",
             "sw_version": "1.0.0",
         }
 
@@ -176,3 +165,8 @@ class HTTPAgentSensor(CoordinatorEntity, SensorEntity):
     def available(self) -> bool:
         """Return True if entity is available."""
         return self.coordinator.last_update_success
+
+    # Number entities from HTTP Agent are read-only
+    async def async_set_native_value(self, value: float) -> None:
+        """Set new value - not supported for HTTP Agent."""
+        raise NotImplementedError("HTTP Agent numbers are read-only")

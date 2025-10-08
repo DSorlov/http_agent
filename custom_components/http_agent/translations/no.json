@@ -2,120 +2,268 @@
   "config": {
     "step": {
       "user": {
-        "title": "HTTP Agent Oppsett",
-        "description": "Sett opp HTTP Agent integrasjonen",
+        "title": "HTTP Agent Konfigurasjon",
+        "description": "Konfigurer HTTP-endepunktet",
         "data": {
-          "name": "Integrasjonsnavn"
+          "url": "URL",
+          "method": "HTTP-metode",
+          "timeout": "Tidsavbrudd (sekunder)",
+          "interval": "Oppdateringsintervall (sekunder)",
+          "verify_ssl": "Verifiser SSL-sertifikat"
+        }
+      },
+      "headers": {
+        "title": "HTTP-hoder",
+        "description": "Konfigurer HTTP-hoder\n\nGjeldende hoder:\n{headers}",
+        "data": {
+          "action": "Handling"
+        },
+        "data_description": {
+          "action": {
+            "add": "Legg til hode",
+            "done": "Fortsett til neste trinn"
+          }
+        }
+      },
+      "add_header": {
+        "title": "Legg til HTTP-hode",
+        "description": "Legg til et nytt HTTP-hode",
+        "data": {
+          "key": "Hodenavn",
+          "value": "Hodeverdi"
+        }
+      },
+      "payload": {
+        "title": "HTTP-nyttelast",
+        "description": "Konfigurer forespørselsnyttelasten",
+        "data": {
+          "content_type": "Innholdstype",
+          "payload": "Nyttelast (JSON/XML/Tekst)"
         }
       },
       "sensors": {
-        "title": "Konfigurer Sensorer",
-        "description": "Nåværende sensorer:\n{sensor_list}\n\nVil du legge til flere sensorer?",
+        "title": "Sensorkonfigurasjon",
+        "description": "Konfigurer sensorer for å trekke ut data\n\nGjeldende sensorer:\n{sensors}",
         "data": {
-          "add_sensor": "Legg til en sensor"
+          "action": "Handling"
+        },
+        "data_description": {
+          "action": {
+            "add": "Legg til sensor",
+            "done": "Opprett integrasjon"
+          }
         }
       },
       "add_sensor": {
-        "title": "Legg til HTTP Sensor",
-        "description": "Konfigurer en ny HTTP sensor",
+        "title": "Legg til sensor",
+        "description": "Velg sensortype og oppgi et navn",
         "data": {
-          "name": "Sensornavn",
-          "url": "URL",
-          "method": "HTTP Metode",
-          "interval": "Oppdateringsintervall (sekunder)",
-          "timeout": "Forespørsel timeout (sekunder)",
-          "ssl_verify": "Verifiser SSL Sertifikat",
-          "enabled": "Aktivert",
-          "payload": "Forespørselsinnhold (valgfritt)",
-          "querystring": "Spørringsparametere (valgfritt)"
+          "sensor_name": "Sensornavn",
+          "sensor_type": "Sensortype"
+        }
+      },
+      "sensor_config": {
+        "title": "Sensorkonfigurasjon",
+        "description": "Konfigurer sensorinnstillingene. Utvinningsmetoden (JSON/XPath/CSS) vil automatisk bli oppdaget basert på responsinnholdstypen.",
+        "data": {
+          "sensor_state": "Tilstandsvelger (JSON/XPath/CSS - auto-oppdaget)",
+          "sensor_icon": "Ikonvelger (JSON/XPath/CSS - auto-oppdaget)",
+          "sensor_color": "Fargevelger (JSON/XPath/CSS - auto-oppdaget)",
+          "sensor_device_class": "Enhetsklasse",
+          "sensor_unit": "Måleenhet",
+          "tracker_latitude": "Breddegradvelger (JSON/XPath/CSS - auto-oppdaget)",
+          "tracker_longitude": "Lengdegradvelger (JSON/XPath/CSS - auto-oppdaget)",
+          "tracker_location_name": "Stedsnavnvelger (JSON/XPath/CSS - auto-oppdaget)",
+          "tracker_source_type": "Kildetype"
         }
       }
     },
     "error": {
-      "invalid_sensor": "Ugyldig sensorkonfigurasjon"
+      "invalid_url": "Ugyldig URL-format",
+      "no_sensors": "Minst én sensor må konfigureres"
     },
     "abort": {
-      "already_configured": "HTTP Agent er allerede konfigurert"
+      "already_configured": "Dette HTTP-endepunktet er allerede konfigurert",
+      "no_sensors": "Ingen sensorer ble konfigurert"
     }
   },
   "options": {
     "step": {
-      "sensors_menu": {
-        "title": "Administrer Sensorer",
-        "description": "Nåværende sensorer:\n{sensor_list}",
+      "init": {
+        "title": "HTTP Agent Konfigurasjon",
+        "description": "Velg hva som skal redigeres",
         "data": {
-          "action": "Handling"
+          "action": "Konfigurasjonsseksjon"
+        },
+        "data_description": {
+          "action": {
+            "basic": "Rediger grunninnstillinger (URL, metode, tidsavbrudd, intervall, SSL)",
+            "headers": "Rediger HTTP-hoder",
+            "sensors": "Rediger sensorkonfigurasjon",
+            "payload": "Rediger forespørselsnyttelast"
+          }
         }
       },
-      "add_sensor": {
-        "title": "Legg til HTTP Sensor",
-        "description": "Konfigurer en ny HTTP sensor",
+      "basic": {
+        "title": "Grunninnstillinger",
+        "description": "Rediger URL, metode, tidsavbrudd, intervall og SSL-verifisering",
         "data": {
-          "name": "Sensornavn",
           "url": "URL",
-          "method": "HTTP Metode",
+          "method": "HTTP-metode",
+          "timeout": "Tidsavbrudd (sekunder)",
           "interval": "Oppdateringsintervall (sekunder)",
-          "timeout": "Forespørsel timeout (sekunder)",
-          "ssl_verify": "Verifiser SSL Sertifikat",
-          "enabled": "Aktivert",
-          "payload": "Forespørselsinnhold (valgfritt)",
-          "querystring": "Spørringsparametere (valgfritt)"
+          "verify_ssl": "Verifiser SSL-sertifikat"
+        }
+      },
+      "headers": {
+        "title": "HTTP-hoder",
+        "description": "Rediger HTTP-hoder\n\nGjeldende hoder:\n{headers}",
+        "data": {
+          "action": "Handling"
+        },
+        "data_description": {
+          "action": {
+            "add": "Legg til nytt hode",
+            "clear": "Fjern alle hoder",
+            "done": "Lagre endringer"
+          }
+        }
+      },
+      "add_header": {
+        "title": "Legg til HTTP-hode",
+        "description": "Legg til et nytt HTTP-hode",
+        "data": {
+          "key": "Hodenavn",
+          "value": "Hodeverdi"
+        }
+      },
+      "payload": {
+        "title": "HTTP-nyttelast",
+        "description": "Rediger forespørselsnyttelasten",
+        "data": {
+          "content_type": "Innholdstype",
+          "payload": "Nyttelast (JSON/XML/Tekst)"
+        }
+      },
+      "sensors": {
+        "title": "Sensorkonfigurasjon",
+        "description": "Rediger sensorkonfigurasjon\n\nGjeldende sensorer:\n{sensors}",
+        "data": {
+          "action": "Handling"
+        },
+        "data_description": {
+          "action": {
+            "add": "Legg til ny sensor",
+            "edit": "Rediger/slett eksisterende sensor",
+            "clear": "Fjern alle sensorer",
+            "done": "Lagre endringer"
+          }
         }
       },
       "select_sensor": {
-        "title": "Velg Sensor",
-        "description": "Velg sensoren som skal redigeres",
+        "title": "Velg sensor",
+        "description": "Velg en sensor å redigere eller slette",
         "data": {
           "sensor": "Sensor"
         }
       },
       "edit_sensor": {
-        "title": "Rediger HTTP Sensor",
-        "description": "Oppdater sensorkonfigurasjon",
+        "title": "Rediger sensor",
+        "description": "Velg hva som skal gjøres med denne sensoren:\n\n{sensor_info}",
         "data": {
-          "name": "Sensornavn",
-          "url": "URL",
-          "method": "HTTP Metode",
-          "interval": "Oppdateringsintervall (sekunder)",
-          "timeout": "Forespørsel timeout (sekunder)",
-          "ssl_verify": "Verifiser SSL Sertifikat",
-          "enabled": "Aktivert",
-          "payload": "Forespørselsinnhold (valgfritt)",
-          "querystring": "Spørringsparametere (valgfritt)"
+          "action": "Handling"
+        },
+        "data_description": {
+          "action": {
+            "edit": "Rediger sensorinnstillinger",
+            "delete": "Slett denne sensoren",
+            "back": "Tilbake til sensorliste"
+          }
         }
       },
-      "delete_sensor": {
-        "title": "Slett Sensor",
-        "description": "Velg sensoren som skal slettes",
+      "modify_sensor": {
+        "title": "Endre sensor",
+        "description": "Rediger sensorkonfigurasjon. Utvinningsmetoden (JSON/XPath/CSS) vil automatisk bli oppdaget basert på responsinnholdstypen.",
         "data": {
-          "sensor": "Sensor"
+          "sensor_name": "Sensornavn",
+          "sensor_state": "Tilstandsvelger (JSON/XPath/CSS - auto-oppdaget)",
+          "sensor_icon": "Ikonvelger (JSON/XPath/CSS - auto-oppdaget)",
+          "sensor_color": "Fargevelger (JSON/XPath/CSS - auto-oppdaget)",
+          "sensor_device_class": "Enhetsklasse",
+          "sensor_unit": "Måleenhet",
+          "tracker_latitude": "Breddegradvelger (JSON/XPath/CSS - auto-oppdaget)",
+          "tracker_longitude": "Lengdegradvelger (JSON/XPath/CSS - auto-oppdaget)",
+          "tracker_location_name": "Stedsnavnvelger (JSON/XPath/CSS - auto-oppdaget)",
+          "tracker_source_type": "Kildetype"
+        }
+      },
+      "add_sensor": {
+        "title": "Legg til sensor",
+        "description": "Velg sensortype og oppgi et navn",
+        "data": {
+          "sensor_name": "Sensornavn",
+          "sensor_type": "Sensortype"
+        }
+      },
+      "sensor_config": {
+        "title": "Sensorkonfigurasjon",
+        "description": "Konfigurer sensorinnstillingene. Utvinningsmetoden (JSON/XPath/CSS) vil automatisk bli oppdaget basert på responsinnholdstypen.",
+        "data": {
+          "sensor_state": "Tilstandsvelger (JSON/XPath/CSS - auto-oppdaget)",
+          "sensor_icon": "Ikonvelger (JSON/XPath/CSS - auto-oppdaget)",
+          "sensor_color": "Fargevelger (JSON/XPath/CSS - auto-oppdaget)",
+          "sensor_device_class": "Enhetsklasse",
+          "sensor_unit": "Måleenhet",
+          "tracker_latitude": "Breddegradvelger (JSON/XPath/CSS - auto-oppdaget)",
+          "tracker_longitude": "Lengdegradvelger (JSON/XPath/CSS - auto-oppdaget)",
+          "tracker_location_name": "Stedsnavnvelger (JSON/XPath/CSS - auto-oppdaget)",
+          "tracker_source_type": "Kildetype"
         }
       }
     },
     "error": {
-      "invalid_sensor": "Ugyldig sensorkonfigurasjon"
+      "invalid_url": "Ugyldig URL-format",
+      "no_sensors": "Minst én sensor må konfigureres"
+    },
+    "abort": {
+      "no_sensors": "Ingen sensorer ble konfigurert"
     }
   },
-  "services": {
-    "http_request": {
-      "name": "HTTP Forespørsel",
-      "description": "Gjør en HTTP forespørsel til den angitte URL"
+  "selector": {
+    "action": {
+      "options": {
+        "basic": "Rediger grunninnstillinger (URL, metode, tidsavbrudd, intervall, SSL)",
+        "headers": "Rediger HTTP-hoder",
+        "sensors": "Rediger sensorkonfigurasjon",
+        "payload": "Rediger forespørselsnyttelast",
+        "add": "Legg til",
+        "done": "Ferdig",
+        "clear": "Fjern alle",
+        "save": "Lagre endringer",
+        "edit": "Rediger",
+        "delete": "Slett",
+        "back": "Tilbake"
+      }
     },
-    "http_get": {
-      "name": "HTTP GET",
-      "description": "Gjør en HTTP GET forespørsel"
+    "sensor": {
+      "options": {}
     },
-    "http_post": {
-      "name": "HTTP POST",
-      "description": "Gjør en HTTP POST forespørsel"
+    "sensor_type": {
+      "options": {
+        "sensor": "Sensor",
+        "binary_sensor": "Binær sensor",
+        "number": "Nummer",
+        "device_tracker": "Enhetssporing"
+      }
     },
-    "http_put": {
-      "name": "HTTP PUT",
-      "description": "Gjør en HTTP PUT forespørsel"
-    },
-    "http_delete": {
-      "name": "HTTP DELETE",
-      "description": "Gjør en HTTP DELETE forespørsel"
+    "tracker_source_type": {
+      "options": {
+        "": "Ingen (standard)",
+        "gps": "GPS",
+        "router": "Ruter",
+        "bluetooth": "Bluetooth",
+        "bluetooth_le": "Bluetooth LE"
+      }
     }
   }
 }
