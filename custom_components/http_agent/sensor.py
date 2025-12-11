@@ -98,7 +98,11 @@ class HTTPAgentSensor(CoordinatorEntity, SensorEntity):
 
         # Find sensor config
         self.sensor_config = None
-        for config in entry.data[CONF_SENSORS]:
+        data = dict(entry.data)
+        if entry.options:
+            data.update(entry.options)
+
+        for config in data[CONF_SENSORS]:
             if config[CONF_SENSOR_NAME] == sensor_name:
                 self.sensor_config = config
                 break
