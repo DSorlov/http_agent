@@ -58,16 +58,16 @@
       },
       "sensor_config": {
         "title": "Sensor Configuration",
-        "description": "Configure the sensor settings. The extraction method (JSON/XPath/CSS) will be automatically detected based on the response content type.",
+        "description": "Configure the sensor settings. The extraction method (JSON/XPath/CSS/RegEx) will be automatically detected based on the response content type.",
         "data": {
-          "sensor_state": "State Selector (JSON/XPath/CSS - auto-detected)",
-          "sensor_icon": "Icon Selector (JSON/XPath/CSS - auto-detected)",
-          "sensor_color": "Color Selector (JSON/XPath/CSS - auto-detected)",
+          "sensor_state": "State Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
+          "sensor_icon": "Icon Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
+          "sensor_color": "Color Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
           "sensor_device_class": "Device Class",
           "sensor_unit": "Unit of Measurement",
-          "tracker_latitude": "Latitude Selector (JSON/XPath/CSS - auto-detected)",
-          "tracker_longitude": "Longitude Selector (JSON/XPath/CSS - auto-detected)",
-          "tracker_location_name": "Location Name Selector (JSON/XPath/CSS - auto-detected)",
+          "tracker_latitude": "Latitude Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
+          "tracker_longitude": "Longitude Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
+          "tracker_location_name": "Location Name Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
           "tracker_source_type": "Source Type"
         }
       }
@@ -159,17 +159,17 @@
       },
       "modify_sensor": {
         "title": "Modify Sensor",
-        "description": "Edit sensor configuration. The extraction method (JSON/XPath/CSS) will be automatically detected based on the response content type.",
+        "description": "Edit sensor configuration. The extraction method (JSON/XPath/CSS/RegEx) will be automatically detected based on the response content type.",
         "data": {
           "sensor_name": "Sensor Name",
-          "sensor_state": "State Selector (JSON/XPath/CSS - auto-detected)",
-          "sensor_icon": "Icon Selector (JSON/XPath/CSS - auto-detected)",
-          "sensor_color": "Color Selector (JSON/XPath/CSS - auto-detected)",
+          "sensor_state": "State Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
+          "sensor_icon": "Icon Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
+          "sensor_color": "Color Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
           "sensor_device_class": "Device Class",
           "sensor_unit": "Unit of Measurement",
-          "tracker_latitude": "Latitude Selector (JSON/XPath/CSS - auto-detected)",
-          "tracker_longitude": "Longitude Selector (JSON/XPath/CSS - auto-detected)",
-          "tracker_location_name": "Location Name Selector (JSON/XPath/CSS - auto-detected)",
+          "tracker_latitude": "Latitude Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
+          "tracker_longitude": "Longitude Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
+          "tracker_location_name": "Location Name Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
           "tracker_source_type": "Source Type"
         }
       },
@@ -183,16 +183,16 @@
       },
       "sensor_config": {
         "title": "Sensor Configuration",
-        "description": "Configure the sensor settings. The extraction method (JSON/XPath/CSS) will be automatically detected based on the response content type.",
+        "description": "Configure the sensor settings. The extraction method (JSON/XPath/CSS/RegEx) will be automatically detected based on the response content type.",
         "data": {
-          "sensor_state": "State Selector (JSON/XPath/CSS - auto-detected)",
-          "sensor_icon": "Icon Selector (JSON/XPath/CSS - auto-detected)",
-          "sensor_color": "Color Selector (JSON/XPath/CSS - auto-detected)",
+          "sensor_state": "State Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
+          "sensor_icon": "Icon Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
+          "sensor_color": "Color Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
           "sensor_device_class": "Device Class",
           "sensor_unit": "Unit of Measurement",
-          "tracker_latitude": "Latitude Selector (JSON/XPath/CSS - auto-detected)",
-          "tracker_longitude": "Longitude Selector (JSON/XPath/CSS - auto-detected)",
-          "tracker_location_name": "Location Name Selector (JSON/XPath/CSS - auto-detected)",
+          "tracker_latitude": "Latitude Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
+          "tracker_longitude": "Longitude Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
+          "tracker_location_name": "Location Name Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
           "tracker_source_type": "Source Type"
         }
       }

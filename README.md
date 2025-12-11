@@ -11,7 +11,7 @@
 
 # HTTP Agent for Home Assistant
 
-HTTP Agent is a powerful Home Assistant custom integration that creates individual HTTP sensor instances with advanced data extraction capabilities supporting both JSON, XML and even HTML/CSS-Selectors. Unlike traditional hub-based integrations, each HTTP endpoint becomes its own integration instance and then you can define multiple sensors for that request.
+HTTP Agent is a powerful Home Assistant custom integration that creates individual HTTP sensor instances with advanced data extraction capabilities supporting JSON, XML, HTML/CSS-Selectors and Regular Expressions. Unlike traditional hub-based integrations, each HTTP endpoint becomes its own integration instance and then you can define multiple sensors for that request.
 
 ## Installation
 
@@ -55,7 +55,7 @@ Configure request body with content type selection. The field supports templates
 ### Step 4: Sensors
 Define sensors to extract data from the response:
 - **Name**: Sensor name
-- **Extraction Method**: JSON, XML or CSS selectors.
+- **Extraction Method**: JSON, XML, CSS selectors or Regular Expression.
 - **State**: Main sensor value selector/template
 - **Icon**: Icon selector/template (auto-prefixed with `mdi:`)
 - **Color**: Color selector/template
@@ -84,6 +84,14 @@ Use CSS selectors for HTML content:
 .temperature         # Class selector
 #sensor-value        # ID selector
 div[data-sensor="temp"]  # Attribute selector
+```
+
+### Regular Expressions
+Use regular expressions for text content, use PCRE-format delimiters `/pattern/flags`:
+```
+/Some Text: ([0-9]+)/      # single group
+/some text: ([0-9]+)/i     # case insensitive
+/Some Text: ([0-9]+) other text ([a-z]+)     # multiple groups, result will be merged "group 1|group 2"
 ```
 
 ## Template Support
