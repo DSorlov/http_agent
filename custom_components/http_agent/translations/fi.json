@@ -58,16 +58,16 @@
       },
       "sensor_config": {
         "title": "Anturikonfigurointi",
-        "description": "Konfiguroi anturin asetukset. Poimimismenetelmä (JSON/XPath/CSS) tunnistetaan automaattisesti vastauksen sisältötyypin perusteella.",
+        "description": "Konfiguroi anturin asetukset. Poimimismenetelmä (JSON/XPath/CSS/RegEx) tunnistetaan automaattisesti vastauksen sisältötyypin perusteella.",
         "data": {
-          "sensor_state": "Tilavalitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
-          "sensor_icon": "Kuvatunnusten valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
-          "sensor_color": "Värin valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "sensor_state": "Tilavalitsin (JSON\/XPath\/CSS\/RegEx - automaattisesti tunnistettu)",
+          "sensor_icon": "Kuvatunnusten valitsin (JSON\/XPath\/CSS\/RegEx - automaattisesti tunnistettu)",
+          "sensor_color": "Värin valitsin (JSON\/XPath\/CSS\/RegEx - automaattisesti tunnistettu)",
           "sensor_device_class": "Laitteen luokka",
           "sensor_unit": "Mittayksikkö",
-          "tracker_latitude": "Leveysasteen valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
-          "tracker_longitude": "Pituusasteen valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
-          "tracker_location_name": "Sijainnin nimen valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "tracker_latitude": "Leveysasteen valitsin (JSON\/XPath\/CSS\/RegEx - automaattisesti tunnistettu)",
+          "tracker_longitude": "Pituusasteen valitsin (JSON\/XPath\/CSS\/RegEx - automaattisesti tunnistettu)",
+          "tracker_location_name": "Sijainnin nimen valitsin (JSON\/XPath\/CSS\/RegEx - automaattisesti tunnistettu)",
           "tracker_source_type": "Lähdetyyppi"
         }
       }
@@ -159,17 +159,17 @@
       },
       "modify_sensor": {
         "title": "Muuta anturia",
-        "description": "Muokkaa anturikonfiguraatiota. Poimimismenetelmä (JSON/XPath/CSS) tunnistetaan automaattisesti vastauksen sisältötyypin perusteella.",
+        "description": "Muokkaa anturikonfiguraatiota. Poimimismenetelmä (JSON/XPath/CSS/RegEx) tunnistetaan automaattisesti vastauksen sisältötyypin perusteella.",
         "data": {
           "sensor_name": "Anturin nimi",
-          "sensor_state": "Tilavalitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
-          "sensor_icon": "Kuvatunnusten valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
-          "sensor_color": "Värin valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "sensor_state": "Tilavalitsin (JSON\/XPath\/CSS\/RegEx - automaattisesti tunnistettu)",
+          "sensor_icon": "Kuvatunnusten valitsin (JSON\/XPath\/CSS\/RegEx - automaattisesti tunnistettu)",
+          "sensor_color": "Värin valitsin (JSON\/XPath\/CSS\/RegEx - automaattisesti tunnistettu)",
           "sensor_device_class": "Laitteen luokka",
           "sensor_unit": "Mittayksikkö",
-          "tracker_latitude": "Leveysasteen valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
-          "tracker_longitude": "Pituusasteen valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
-          "tracker_location_name": "Sijainnin nimen valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "tracker_latitude": "Leveysasteen valitsin (JSON\/XPath\/CSS\/RegEx - automaattisesti tunnistettu)",
+          "tracker_longitude": "Pituusasteen valitsin (JSON\/XPath\/CSS\/RegEx - automaattisesti tunnistettu)",
+          "tracker_location_name": "Sijainnin nimen valitsin (JSON\/XPath\/CSS\/RegEx - automaattisesti tunnistettu)",
           "tracker_source_type": "Lähdetyyppi"
         }
       },
@@ -183,16 +183,16 @@
       },
       "sensor_config": {
         "title": "Anturikonfigurointi",
-        "description": "Konfiguroi anturin asetukset. Poimimismenetelmä (JSON/XPath/CSS) tunnistetaan automaattisesti vastauksen sisältötyypin perusteella.",
+        "description": "Konfiguroi anturin asetukset. Poimimismenetelmä (JSON/XPath/CSS/RegEx) tunnistetaan automaattisesti vastauksen sisältötyypin perusteella.",
         "data": {
-          "sensor_state": "Tilavalitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
-          "sensor_icon": "Kuvatunnusten valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
-          "sensor_color": "Värin valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "sensor_state": "Tilavalitsin (JSON\/XPath\/CSS\/RegEx - automaattisesti tunnistettu)",
+          "sensor_icon": "Kuvatunnusten valitsin (JSON\/XPath\/CSS\/RegEx - automaattisesti tunnistettu)",
+          "sensor_color": "Värin valitsin (JSON\/XPath\/CSS\/RegEx - automaattisesti tunnistettu)",
           "sensor_device_class": "Laitteen luokka",
           "sensor_unit": "Mittayksikkö",
-          "tracker_latitude": "Leveysasteen valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
-          "tracker_longitude": "Pituusasteen valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
-          "tracker_location_name": "Sijainnin nimen valitsin (JSON/XPath/CSS - automaattisesti tunnistettu)",
+          "tracker_latitude": "Leveysasteen valitsin (JSON\/XPath\/CSS\/RegEx - automaattisesti tunnistettu)",
+          "tracker_longitude": "Pituusasteen valitsin (JSON\/XPath\/CSS\/RegEx - automaattisesti tunnistettu)",
+          "tracker_location_name": "Sijainnin nimen valitsin (JSON\/XPath\/CSS\/RegEx - automaattisesti tunnistettu)",
           "tracker_source_type": "Lähdetyyppi"
         }
       }

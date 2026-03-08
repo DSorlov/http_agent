@@ -58,16 +58,16 @@
       },
       "sensor_config": {
         "title": "Sensor-Konfiguration",
-        "description": "Sensor-Einstellungen konfigurieren. Die Extraktionsmethode (JSON/XPath/CSS) wird automatisch basierend auf dem Antwort-Inhaltstyp erkannt.",
+        "description": "Sensor-Einstellungen konfigurieren. Die Extraktionsmethode (JSON/XPath/CSS/RegEx) wird automatisch basierend auf dem Antwort-Inhaltstyp erkannt.",
         "data": {
-          "sensor_state": "Zustandswähler (JSON/XPath/CSS - automatisch erkannt)",
-          "sensor_icon": "Symbol-Wähler (JSON/XPath/CSS - automatisch erkannt)",
-          "sensor_color": "Farb-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "sensor_state": "Zustandswähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
+          "sensor_icon": "Symbol-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
+          "sensor_color": "Farb-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
           "sensor_device_class": "Geräteklasse",
           "sensor_unit": "Maßeinheit",
-          "tracker_latitude": "Breitengrad-Wähler (JSON/XPath/CSS - automatisch erkannt)",
-          "tracker_longitude": "Längengrad-Wähler (JSON/XPath/CSS - automatisch erkannt)",
-          "tracker_location_name": "Standortname-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "tracker_latitude": "Breitengrad-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
+          "tracker_longitude": "Längengrad-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
+          "tracker_location_name": "Standortname-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
           "tracker_source_type": "Quellentyp"
         }
       }
@@ -159,17 +159,17 @@
       },
       "modify_sensor": {
         "title": "Sensor ändern",
-        "description": "Sensor-Konfiguration bearbeiten. Die Extraktionsmethode (JSON/XPath/CSS) wird automatisch basierend auf dem Antwort-Inhaltstyp erkannt.",
+        "description": "Sensor-Konfiguration bearbeiten. Die Extraktionsmethode (JSON/XPath/CSS/RegEx) wird automatisch basierend auf dem Antwort-Inhaltstyp erkannt.",
         "data": {
           "sensor_name": "Sensor-Name",
-          "sensor_state": "Zustandswähler (JSON/XPath/CSS - automatisch erkannt)",
-          "sensor_icon": "Symbol-Wähler (JSON/XPath/CSS - automatisch erkannt)",
-          "sensor_color": "Farb-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "sensor_state": "Zustandswähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
+          "sensor_icon": "Symbol-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
+          "sensor_color": "Farb-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
           "sensor_device_class": "Geräteklasse",
           "sensor_unit": "Maßeinheit",
-          "tracker_latitude": "Breitengrad-Wähler (JSON/XPath/CSS - automatisch erkannt)",
-          "tracker_longitude": "Längengrad-Wähler (JSON/XPath/CSS - automatisch erkannt)",
-          "tracker_location_name": "Standortname-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "tracker_latitude": "Breitengrad-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
+          "tracker_longitude": "Längengrad-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
+          "tracker_location_name": "Standortname-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
           "tracker_source_type": "Quellentyp"
         }
       },
@@ -183,16 +183,16 @@
       },
       "sensor_config": {
         "title": "Sensor-Konfiguration",
-        "description": "Sensor-Einstellungen konfigurieren. Die Extraktionsmethode (JSON/XPath/CSS) wird automatisch basierend auf dem Antwort-Inhaltstyp erkannt.",
+        "description": "Sensor-Einstellungen konfigurieren. Die Extraktionsmethode (JSON/XPath/CSS/RegEx) wird automatisch basierend auf dem Antwort-Inhaltstyp erkannt.",
         "data": {
-          "sensor_state": "Zustandswähler (JSON/XPath/CSS - automatisch erkannt)",
-          "sensor_icon": "Symbol-Wähler (JSON/XPath/CSS - automatisch erkannt)",
-          "sensor_color": "Farb-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "sensor_state": "Zustandswähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
+          "sensor_icon": "Symbol-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
+          "sensor_color": "Farb-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
           "sensor_device_class": "Geräteklasse",
           "sensor_unit": "Maßeinheit",
-          "tracker_latitude": "Breitengrad-Wähler (JSON/XPath/CSS - automatisch erkannt)",
-          "tracker_longitude": "Längengrad-Wähler (JSON/XPath/CSS - automatisch erkannt)",
-          "tracker_location_name": "Standortname-Wähler (JSON/XPath/CSS - automatisch erkannt)",
+          "tracker_latitude": "Breitengrad-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
+          "tracker_longitude": "Längengrad-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
+          "tracker_location_name": "Standortname-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
           "tracker_source_type": "Quellentyp"
         }
       }
