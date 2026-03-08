@@ -61,12 +61,16 @@ class HTTPResponse:
         except (json.JSONDecodeError, TypeError):
             self.json = None
 
-        # Parse as XML/HTML
+        # Parse as HTML / Soup
         try:
             self.soup = BeautifulSoup(text, "lxml")
-            self.xml = ET.fromstring(text)
         except Exception:
             self.soup = None
+
+        # Parse as XML/HTML
+        try:
+            self.xml = ET.fromstring(text)
+        except Exception:
             self.xml = None
 
 
