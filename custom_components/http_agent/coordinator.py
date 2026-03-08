@@ -11,6 +11,7 @@ from xml.etree import ElementTree as ET
 
 import aiohttp
 from bs4 import BeautifulSoup
+import re
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.template import Template
@@ -247,6 +248,9 @@ class HTTPAgentCoordinator(DataUpdateCoordinator):
         if "html" in content_type or response.soup is not None:
             methods_to_try.append(("css", self._extract_css_value, response.soup))
 
+        if response.text is not None:
+            methods_to_try.append(("regex", self._extract_regex_value, response.text))
+
         # If no content type match, try all available methods
         if not methods_to_try:
             if response.json is not None:
@@ -332,6 +336,47 @@ class HTTPAgentCoordinator(DataUpdateCoordinator):
             element = soup.select_one(selector)
             if element:
                 return element.get_text(strip=True)
+        except Exception:
+            pass
+
+        return None
+
+    def _extract_regex_value(self, text: str, selector: str) -> Any:
+        """Extract value from text using regular expressions."""
+        if not (selector.startswith("/") or selector.count("/") < 2):
+            return None
+
+        last_slash = selector.rfind("/")
+        pattern = selector[1:last_slash]
+        flags_str = selector[last_slash + 1:]
+
+        flag_map = {
+            "i": re.I,
+            "m": re.M,
+            "s": re.S,
+            "x": re.X,
+            "a": re.A,
+            "l": re.L,
+        }
+
+        re_flags = 0
+        for f in flags_str:
+            if f.lower() in flag_map:
+                re_flags |= flag_map[f.lower()]
+            else:
+                _LOGGER.debug(
+                    "Unhandled regex flag '%s'",
+                    f,
+                )
+                return None
+
+        try:
+            match = re.search(pattern, text, re_flags)
+            if match:
+                if match.lastindex == 1:
+                    return match.group(1)
+                elif match.lastindex > 1:
+                    return "|".join(match.group(i) for i in range(1, match.lastindex + 1))
         except Exception:
             pass
 

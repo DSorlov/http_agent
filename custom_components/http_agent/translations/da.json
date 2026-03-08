@@ -58,16 +58,16 @@
       },
       "sensor_config": {
         "title": "Sensor-konfiguration",
-        "description": "Konfigurer sensorindstillingerne. Udvindingsmetoden (JSON/XPath/CSS) vil automatisk blive registreret baseret på svarets indholdstype.",
+        "description": "Konfigurer sensorindstillingerne. Udvindingsmetoden (JSON/XPath/CSS/RegEx) vil automatisk blive registreret baseret på svarets indholdstype.",
         "data": {
-          "sensor_state": "Tilstandsvælger (JSON/XPath/CSS - auto-registreret)",
-          "sensor_icon": "Ikonvælger (JSON/XPath/CSS - auto-registreret)",
-          "sensor_color": "Farvevælger (JSON/XPath/CSS - auto-registreret)",
+          "sensor_state": "Tilstandsvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
+          "sensor_icon": "Ikonvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
+          "sensor_color": "Farvevælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
           "sensor_device_class": "Enhedsklasse",
           "sensor_unit": "Måleenhed",
-          "tracker_latitude": "Breddegradvælger (JSON/XPath/CSS - auto-registreret)",
-          "tracker_longitude": "Længdegradvælger (JSON/XPath/CSS - auto-registreret)",
-          "tracker_location_name": "Lokationsnavnvælger (JSON/XPath/CSS - auto-registreret)",
+          "tracker_latitude": "Breddegradvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
+          "tracker_longitude": "Længdegradvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
+          "tracker_location_name": "Lokationsnavnvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
           "tracker_source_type": "Kildetype"
         }
       }
@@ -159,17 +159,17 @@
       },
       "modify_sensor": {
         "title": "Modificer sensor",
-        "description": "Rediger sensor-konfiguration. Udvindingsmetoden (JSON/XPath/CSS) vil automatisk blive registreret baseret på svarets indholdstype.",
+        "description": "Rediger sensor-konfiguration. Udvindingsmetoden (JSON/XPath/CSS/RegEx) vil automatisk blive registreret baseret på svarets indholdstype.",
         "data": {
           "sensor_name": "Sensornavn",
-          "sensor_state": "Tilstandsvælger (JSON/XPath/CSS - auto-registreret)",
-          "sensor_icon": "Ikonvælger (JSON/XPath/CSS - auto-registreret)",
-          "sensor_color": "Farvevælger (JSON/XPath/CSS - auto-registreret)",
+          "sensor_state": "Tilstandsvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
+          "sensor_icon": "Ikonvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
+          "sensor_color": "Farvevælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
           "sensor_device_class": "Enhedsklasse",
           "sensor_unit": "Måleenhed",
-          "tracker_latitude": "Breddegradvælger (JSON/XPath/CSS - auto-registreret)",
-          "tracker_longitude": "Længdegradvælger (JSON/XPath/CSS - auto-registreret)",
-          "tracker_location_name": "Lokationsnavnvælger (JSON/XPath/CSS - auto-registreret)",
+          "tracker_latitude": "Breddegradvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
+          "tracker_longitude": "Længdegradvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
+          "tracker_location_name": "Lokationsnavnvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
           "tracker_source_type": "Kildetype"
         }
       },
@@ -183,16 +183,16 @@
       },
       "sensor_config": {
         "title": "Sensor-konfiguration",
-        "description": "Konfigurer sensorindstillingerne. Udvindingsmetoden (JSON/XPath/CSS) vil automatisk blive registreret baseret på svarets indholdstype.",
+        "description": "Konfigurer sensorindstillingerne. Udvindingsmetoden (JSON/XPath/CSS/RegEx) vil automatisk blive registreret baseret på svarets indholdstype.",
         "data": {
-          "sensor_state": "Tilstandsvælger (JSON/XPath/CSS - auto-registreret)",
-          "sensor_icon": "Ikonvælger (JSON/XPath/CSS - auto-registreret)",
-          "sensor_color": "Farvevælger (JSON/XPath/CSS - auto-registreret)",
+          "sensor_state": "Tilstandsvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
+          "sensor_icon": "Ikonvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
+          "sensor_color": "Farvevælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
           "sensor_device_class": "Enhedsklasse",
           "sensor_unit": "Måleenhed",
-          "tracker_latitude": "Breddegradvælger (JSON/XPath/CSS - auto-registreret)",
-          "tracker_longitude": "Længdegradvælger (JSON/XPath/CSS - auto-registreret)",
-          "tracker_location_name": "Lokationsnavnvælger (JSON/XPath/CSS - auto-registreret)",
+          "tracker_latitude": "Breddegradvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
+          "tracker_longitude": "Længdegradvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
+          "tracker_location_name": "Lokationsnavnvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
           "tracker_source_type": "Kildetype"
         }
       }

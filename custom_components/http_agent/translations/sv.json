@@ -58,16 +58,16 @@
       },
       "sensor_config": {
         "title": "Sensorkonfiguration",
-        "description": "Konfigurera sensorinställningarna. Extraktionsmetoden (JSON/XPath/CSS) kommer automatiskt att detekteras baserat på svarsinnehållstypen.",
+        "description": "Konfigurera sensorinställningarna. Extraktionsmetoden (JSON/XPath/CSS/RegEx) kommer automatiskt att detekteras baserat på svarsinnehållstypen.",
         "data": {
-          "sensor_state": "Tillståndsväljare (JSON/XPath/CSS - auto-detekterad)",
-          "sensor_icon": "Ikonväljare (JSON/XPath/CSS - auto-detekterad)",
-          "sensor_color": "Färgväljare (JSON/XPath/CSS - auto-detekterad)",
+          "sensor_state": "Tillståndsväljare (JSON\/XPath\/CSS\/RegEx - auto-detekterad)",
+          "sensor_icon": "Ikonväljare (JSON\/XPath\/CSS\/RegEx - auto-detekterad)",
+          "sensor_color": "Färgväljare (JSON\/XPath\/CSS\/RegEx - auto-detekterad)",
           "sensor_device_class": "Enhetsklass",
           "sensor_unit": "Mätenhet",
-          "tracker_latitude": "Latitudväljare (JSON/XPath/CSS - auto-detekterad)",
-          "tracker_longitude": "Longitudväljare (JSON/XPath/CSS - auto-detekterad)",
-          "tracker_location_name": "Platsnamnsväljare (JSON/XPath/CSS - auto-detekterad)",
+          "tracker_latitude": "Latitudväljare (JSON\/XPath\/CSS\/RegEx - auto-detekterad)",
+          "tracker_longitude": "Longitudväljare (JSON\/XPath\/CSS\/RegEx - auto-detekterad)",
+          "tracker_location_name": "Platsnamnsväljare (JSON\/XPath\/CSS\/RegEx - auto-detekterad)",
           "tracker_source_type": "Källtyp"
         }
       }
@@ -159,17 +159,17 @@
       },
       "modify_sensor": {
         "title": "Ändra sensor",
-        "description": "Redigera sensorkonfiguration. Extraktionsmetoden (JSON/XPath/CSS) kommer automatiskt att detekteras baserat på svarsinnehållstypen.",
+        "description": "Redigera sensorkonfiguration. Extraktionsmetoden (JSON/XPath/CSS/RegEx) kommer automatiskt att detekteras baserat på svarsinnehållstypen.",
         "data": {
           "sensor_name": "Sensornamn",
-          "sensor_state": "Tillståndsväljare (JSON/XPath/CSS - auto-detekterad)",
-          "sensor_icon": "Ikonväljare (JSON/XPath/CSS - auto-detekterad)",
-          "sensor_color": "Färgväljare (JSON/XPath/CSS - auto-detekterad)",
+          "sensor_state": "Tillståndsväljare (JSON\/XPath\/CSS\/RegEx - auto-detekterad)",
+          "sensor_icon": "Ikonväljare (JSON\/XPath\/CSS\/RegEx - auto-detekterad)",
+          "sensor_color": "Färgväljare (JSON\/XPath\/CSS\/RegEx - auto-detekterad)",
           "sensor_device_class": "Enhetsklass",
           "sensor_unit": "Mätenhet",
-          "tracker_latitude": "Latitudväljare (JSON/XPath/CSS - auto-detekterad)",
-          "tracker_longitude": "Longitudväljare (JSON/XPath/CSS - auto-detekterad)",
-          "tracker_location_name": "Platsnamnsväljare (JSON/XPath/CSS - auto-detekterad)",
+          "tracker_latitude": "Latitudväljare (JSON\/XPath\/CSS\/RegEx - auto-detekterad)",
+          "tracker_longitude": "Longitudväljare (JSON\/XPath\/CSS\/RegEx - auto-detekterad)",
+          "tracker_location_name": "Platsnamnsväljare (JSON\/XPath\/CSS\/RegEx - auto-detekterad)",
           "tracker_source_type": "Källtyp"
         }
       },
@@ -183,16 +183,16 @@
       },
       "sensor_config": {
         "title": "Sensorkonfiguration",
-        "description": "Konfigurera sensorinställningarna. Extraktionsmetoden (JSON/XPath/CSS) kommer automatiskt att detekteras baserat på svarsinnehållstypen.",
+        "description": "Konfigurera sensorinställningarna. Extraktionsmetoden (JSON/XPath/CSS/RegEx) kommer automatiskt att detekteras baserat på svarsinnehållstypen.",
         "data": {
-          "sensor_state": "Tillståndsväljare (JSON/XPath/CSS - auto-detekterad)",
-          "sensor_icon": "Ikonväljare (JSON/XPath/CSS - auto-detekterad)",
-          "sensor_color": "Färgväljare (JSON/XPath/CSS - auto-detekterad)",
+          "sensor_state": "Tillståndsväljare (JSON\/XPath\/CSS\/RegEx - auto-detekterad)",
+          "sensor_icon": "Ikonväljare (JSON\/XPath\/CSS\/RegEx - auto-detekterad)",
+          "sensor_color": "Färgväljare (JSON\/XPath\/CSS\/RegEx - auto-detekterad)",
           "sensor_device_class": "Enhetsklass",
           "sensor_unit": "Mätenhet",
-          "tracker_latitude": "Latitudväljare (JSON/XPath/CSS - auto-detekterad)",
-          "tracker_longitude": "Longitudväljare (JSON/XPath/CSS - auto-detekterad)",
-          "tracker_location_name": "Platsnamnsväljare (JSON/XPath/CSS - auto-detekterad)",
+          "tracker_latitude": "Latitudväljare (JSON\/XPath\/CSS\/RegEx - auto-detekterad)",
+          "tracker_longitude": "Longitudväljare (JSON\/XPath\/CSS\/RegEx - auto-detekterad)",
+          "tracker_location_name": "Platsnamnsväljare (JSON\/XPath\/CSS\/RegEx - auto-detekterad)",
           "tracker_source_type": "Källtyp"
         }
       }
