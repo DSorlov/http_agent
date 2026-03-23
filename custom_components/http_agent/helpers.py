@@ -4,7 +4,7 @@ from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 
-from .const import CONF_SENSOR_NAME, CONF_SENSORS, CONF_SENSOR_UNIT
+from .const import CONF_SENSOR_NAME, CONF_SENSOR_UNIT, CONF_SENSORS
 
 
 def get_sensor_config(entry: ConfigEntry, sensor_name: str) -> dict[str, Any] | None:
