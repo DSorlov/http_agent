@@ -372,7 +372,7 @@ class HTTPAgentCoordinator(DataUpdateCoordinator):
 
         try:
             match = re.search(pattern, text, re_flags)
-            if match:
+            if match and match.lastindex is not None:
                 if match.lastindex == 1:
                     return match.group(1)
                 elif match.lastindex > 1:
