@@ -20,4 +20,3 @@ def get_sensor_config(entry: ConfigEntry, sensor_name: str) -> dict[str, Any] | 
             return config
 
     return None
-
