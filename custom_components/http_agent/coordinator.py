@@ -6,12 +6,12 @@ import asyncio
 from datetime import timedelta
 import json
 import logging
+import re
 from typing import Any
 from xml.etree import ElementTree as ET
 
 import aiohttp
 from bs4 import BeautifulSoup
-import re
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.template import Template

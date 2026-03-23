@@ -1,7 +1,9 @@
 """Helper utilities for HTTP Agent entities."""
 
 from typing import Any
+
 from homeassistant.config_entries import ConfigEntry
+
 from .const import CONF_SENSOR_NAME, CONF_SENSORS, CONF_SENSOR_UNIT
 
 
