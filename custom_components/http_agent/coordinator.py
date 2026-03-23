@@ -348,7 +348,7 @@ class HTTPAgentCoordinator(DataUpdateCoordinator):
 
         last_slash = selector.rfind("/")
         pattern = selector[1:last_slash]
-        flags_str = selector[last_slash + 1:]
+        flags_str = selector[last_slash + 1 :]
 
         flag_map = {
             "i": re.I,
@@ -376,7 +376,9 @@ class HTTPAgentCoordinator(DataUpdateCoordinator):
                 if match.lastindex == 1:
                     return match.group(1)
                 elif match.lastindex > 1:
-                    return "|".join(match.group(i) for i in range(1, match.lastindex + 1))
+                    return "|".join(
+                        match.group(i) for i in range(1, match.lastindex + 1)
+                    )
         except Exception:
             pass
 
