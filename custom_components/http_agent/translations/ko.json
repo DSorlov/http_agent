@@ -1,0 +1,247 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "HTTP Agent 구성",
+        "description": "HTTP 엔드포인트 구성",
+        "data": {
+          "url": "URL",
+          "method": "HTTP 메서드",
+          "timeout": "시간 초과 (초)",
+          "interval": "업데이트 간격 (초)",
+          "retries": "오류 시 재시도",
+          "verify_ssl": "SSL 인증서 확인"
+        }
+      },
+      "headers": {
+        "title": "HTTP 헤더",
+        "description": "HTTP 헤더 구성\n\n현재 헤더:\n{headers}",
+        "data": {
+          "action": "작업"
+        },
+        "data_description": {
+          "action": "수행할 작업을 선택하세요"
+        }
+      },
+      "add_header": {
+        "title": "HTTP 헤더 추가",
+        "description": "새 HTTP 헤더 추가",
+        "data": {
+          "key": "헤더 이름",
+          "value": "헤더 값"
+        }
+      },
+      "payload": {
+        "title": "HTTP 페이로드",
+        "description": "요청 페이로드 구성",
+        "data": {
+          "content_type": "콘텐츠 유형",
+          "payload": "페이로드 (JSON/XML/텍스트)"
+        }
+      },
+      "sensors": {
+        "title": "센서 구성",
+        "description": "데이터 추출용 센서 구성\n\n현재 센서:\n{sensors}",
+        "data": {
+          "action": "작업"
+        },
+        "data_description": {
+          "action": "수행할 작업을 선택하세요"
+        }
+      },
+      "add_sensor": {
+        "title": "센서 추가",
+        "description": "센서 유형을 선택하고 이름을 입력하세요",
+        "data": {
+          "sensor_name": "센서 이름",
+          "sensor_type": "센서 유형"
+        }
+      },
+      "sensor_config": {
+        "title": "센서 구성",
+        "description": "센서 설정을 구성합니다. 추출 방법(JSON/XPath/CSS/RegEx)은 응답 콘텐츠 유형에 따라 자동으로 감지됩니다.",
+        "data": {
+          "sensor_state": "상태 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
+          "sensor_icon": "아이콘 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
+          "sensor_color": "색상 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
+          "sensor_device_class": "장치 클래스",
+          "sensor_unit": "측정 단위",
+          "tracker_latitude": "위도 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
+          "tracker_longitude": "경도 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
+          "tracker_location_name": "위치 이름 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
+          "tracker_source_type": "소스 유형"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "잘못된 URL 형식",
+      "no_sensors": "최소 하나의 센서를 구성해야 합니다"
+    },
+    "abort": {
+      "already_configured": "이 HTTP 엔드포인트는 이미 구성되어 있습니다",
+      "no_sensors": "구성된 센서가 없습니다"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "HTTP Agent 구성",
+        "description": "수정할 항목 선택",
+        "data": {
+          "action": "구성 섹션"
+        },
+        "data_description": {
+          "action": "수정할 구성 섹션을 선택하세요"
+        }
+      },
+      "basic": {
+        "title": "기본 설정",
+        "description": "URL, 메서드, 시간 초과, 간격 및 SSL 확인 수정",
+        "data": {
+          "url": "URL",
+          "method": "HTTP 메서드",
+          "timeout": "시간 초과 (초)",
+          "interval": "업데이트 간격 (초)",
+          "retries": "오류 시 재시도",
+          "verify_ssl": "SSL 인증서 확인"
+        }
+      },
+      "headers": {
+        "title": "HTTP 헤더",
+        "description": "HTTP 헤더 수정\n\n현재 헤더:\n{headers}",
+        "data": {
+          "action": "작업"
+        },
+        "data_description": {
+          "action": "수행할 작업을 선택하세요"
+        }
+      },
+      "add_header": {
+        "title": "HTTP 헤더 추가",
+        "description": "새 HTTP 헤더 추가",
+        "data": {
+          "key": "헤더 이름",
+          "value": "헤더 값"
+        }
+      },
+      "payload": {
+        "title": "HTTP 페이로드",
+        "description": "요청 페이로드 수정",
+        "data": {
+          "content_type": "콘텐츠 유형",
+          "payload": "페이로드 (JSON/XML/텍스트)"
+        }
+      },
+      "sensors": {
+        "title": "센서 구성",
+        "description": "센서 구성 수정\n\n현재 센서:\n{sensors}",
+        "data": {
+          "action": "작업"
+        },
+        "data_description": {
+          "action": "수행할 작업을 선택하세요"
+        }
+      },
+      "select_sensor": {
+        "title": "센서 선택",
+        "description": "수정하거나 삭제할 센서를 선택하세요",
+        "data": {
+          "sensor": "센서"
+        }
+      },
+      "edit_sensor": {
+        "title": "센서 수정",
+        "description": "이 센서에 대해 수행할 작업을 선택하세요:\n\n{sensor_info}",
+        "data": {
+          "action": "작업"
+        },
+        "data_description": {
+          "action": "이 센서에서 수행할 작업을 선택하세요"
+        }
+      },
+      "modify_sensor": {
+        "title": "센서 수정",
+        "description": "센서 구성을 수정합니다. 추출 방법(JSON/XPath/CSS/RegEx)은 응답 콘텐츠 유형에 따라 자동으로 감지됩니다.",
+        "data": {
+          "sensor_name": "센서 이름",
+          "sensor_state": "상태 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
+          "sensor_icon": "아이콘 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
+          "sensor_color": "색상 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
+          "sensor_device_class": "장치 클래스",
+          "sensor_unit": "측정 단위",
+          "tracker_latitude": "위도 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
+          "tracker_longitude": "경도 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
+          "tracker_location_name": "위치 이름 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
+          "tracker_source_type": "소스 유형"
+        }
+      },
+      "add_sensor": {
+        "title": "센서 추가",
+        "description": "센서 유형을 선택하고 이름을 입력하세요",
+        "data": {
+          "sensor_name": "센서 이름",
+          "sensor_type": "센서 유형"
+        }
+      },
+      "sensor_config": {
+        "title": "센서 구성",
+        "description": "센서 설정을 구성합니다. 추출 방법(JSON/XPath/CSS/RegEx)은 응답 콘텐츠 유형에 따라 자동으로 감지됩니다.",
+        "data": {
+          "sensor_state": "상태 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
+          "sensor_icon": "아이콘 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
+          "sensor_color": "색상 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
+          "sensor_device_class": "장치 클래스",
+          "sensor_unit": "측정 단위",
+          "tracker_latitude": "위도 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
+          "tracker_longitude": "경도 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
+          "tracker_location_name": "위치 이름 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
+          "tracker_source_type": "소스 유형"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "잘못된 URL 형식",
+      "no_sensors": "최소 하나의 센서를 구성해야 합니다"
+    },
+    "abort": {
+      "no_sensors": "구성된 센서가 없습니다"
+    }
+  },
+  "selector": {
+    "action": {
+      "options": {
+        "basic": "기본 설정 수정 (URL, 메서드, 시간 초과, 간격, SSL)",
+        "headers": "HTTP 헤더 수정",
+        "sensors": "센서 구성 수정",
+        "payload": "요청 페이로드 수정",
+        "add": "추가",
+        "done": "완료",
+        "clear": "모두 지우기",
+        "save": "변경 사항 저장",
+        "edit": "수정",
+        "delete": "삭제",
+        "back": "뒤로"
+      }
+    },
+    "sensor": {
+      "options": {}
+    },
+    "tracker_source_type": {
+      "options": {
+        "gps": "GPS",
+        "router": "라우터",
+        "bluetooth": "Bluetooth",
+        "bluetooth_le": "Bluetooth LE",
+        "none": "없음 (기본값)"
+      }
+    },
+    "sensor_type": {
+      "options": {
+        "sensor": "센서",
+        "binary_sensor": "바이너리 센서",
+        "number": "숫자",
+        "device_tracker": "장치 추적기"
+      }
+    }
+  }
+}

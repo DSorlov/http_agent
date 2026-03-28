@@ -1,0 +1,247 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "HTTP Agent-configuratie",
+        "description": "HTTP-eindpunt configureren",
+        "data": {
+          "url": "URL",
+          "method": "HTTP-methode",
+          "timeout": "Time-out (seconden)",
+          "interval": "Update-interval (seconden)",
+          "retries": "Opnieuw proberen bij fout",
+          "verify_ssl": "SSL-certificaat verifiëren"
+        }
+      },
+      "headers": {
+        "title": "HTTP-headers",
+        "description": "HTTP-headers configureren\n\nHuidige headers:\n{headers}",
+        "data": {
+          "action": "Actie"
+        },
+        "data_description": {
+          "action": "Selecteer een actie om uit te voeren"
+        }
+      },
+      "add_header": {
+        "title": "HTTP-header toevoegen",
+        "description": "Een nieuwe HTTP-header toevoegen",
+        "data": {
+          "key": "Headernaam",
+          "value": "Headerwaarde"
+        }
+      },
+      "payload": {
+        "title": "HTTP-payload",
+        "description": "De verzoekpayload configureren",
+        "data": {
+          "content_type": "Inhoudstype",
+          "payload": "Payload (JSON/XML/Tekst)"
+        }
+      },
+      "sensors": {
+        "title": "Sensorconfiguratie",
+        "description": "Sensors configureren om gegevens te extraheren\n\nHuidige sensors:\n{sensors}",
+        "data": {
+          "action": "Actie"
+        },
+        "data_description": {
+          "action": "Selecteer een actie om uit te voeren"
+        }
+      },
+      "add_sensor": {
+        "title": "Sensor toevoegen",
+        "description": "Kies het sensortype en geef een naam op",
+        "data": {
+          "sensor_name": "Sensornaam",
+          "sensor_type": "Sensortype"
+        }
+      },
+      "sensor_config": {
+        "title": "Sensorconfiguratie",
+        "description": "Configureer de sensorinstellingen. De extractiemethode (JSON/XPath/CSS/RegEx) wordt automatisch gedetecteerd op basis van het inhoudstype van het antwoord.",
+        "data": {
+          "sensor_state": "Statusselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
+          "sensor_icon": "Icoonselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
+          "sensor_color": "Kleurselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
+          "sensor_device_class": "Apparaatklasse",
+          "sensor_unit": "Meeteenheid",
+          "tracker_latitude": "Breedtegraadselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
+          "tracker_longitude": "Lengtegraadselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
+          "tracker_location_name": "Locatienaamselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
+          "tracker_source_type": "Brontype"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Ongeldig URL-formaat",
+      "no_sensors": "Er moet minstens één sensor worden geconfigureerd"
+    },
+    "abort": {
+      "already_configured": "Dit HTTP-eindpunt is al geconfigureerd",
+      "no_sensors": "Er zijn geen sensors geconfigureerd"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "HTTP Agent-configuratie",
+        "description": "Kies wat je wilt bewerken",
+        "data": {
+          "action": "Configuratiesectie"
+        },
+        "data_description": {
+          "action": "Selecteer een configuratiesectie om te bewerken"
+        }
+      },
+      "basic": {
+        "title": "Basisinstellingen",
+        "description": "URL, methode, time-out, interval en SSL-verificatie bewerken",
+        "data": {
+          "url": "URL",
+          "method": "HTTP-methode",
+          "timeout": "Time-out (seconden)",
+          "interval": "Update-interval (seconden)",
+          "retries": "Opnieuw proberen bij fout",
+          "verify_ssl": "SSL-certificaat verifiëren"
+        }
+      },
+      "headers": {
+        "title": "HTTP-headers",
+        "description": "HTTP-headers bewerken\n\nHuidige headers:\n{headers}",
+        "data": {
+          "action": "Actie"
+        },
+        "data_description": {
+          "action": "Selecteer een actie om uit te voeren"
+        }
+      },
+      "add_header": {
+        "title": "HTTP-header toevoegen",
+        "description": "Een nieuwe HTTP-header toevoegen",
+        "data": {
+          "key": "Headernaam",
+          "value": "Headerwaarde"
+        }
+      },
+      "payload": {
+        "title": "HTTP-payload",
+        "description": "De verzoekpayload bewerken",
+        "data": {
+          "content_type": "Inhoudstype",
+          "payload": "Payload (JSON/XML/Tekst)"
+        }
+      },
+      "sensors": {
+        "title": "Sensorconfiguratie",
+        "description": "Sensorconfiguratie bewerken\n\nHuidige sensors:\n{sensors}",
+        "data": {
+          "action": "Actie"
+        },
+        "data_description": {
+          "action": "Selecteer een actie om uit te voeren"
+        }
+      },
+      "select_sensor": {
+        "title": "Sensor selecteren",
+        "description": "Kies een sensor om te bewerken of te verwijderen",
+        "data": {
+          "sensor": "Sensor"
+        }
+      },
+      "edit_sensor": {
+        "title": "Sensor bewerken",
+        "description": "Kies wat je met deze sensor wilt doen:\n\n{sensor_info}",
+        "data": {
+          "action": "Actie"
+        },
+        "data_description": {
+          "action": "Selecteer een actie om op deze sensor uit te voeren"
+        }
+      },
+      "modify_sensor": {
+        "title": "Sensor wijzigen",
+        "description": "Bewerk de sensorconfiguratie. De extractiemethode (JSON/XPath/CSS/RegEx) wordt automatisch gedetecteerd op basis van het inhoudstype van het antwoord.",
+        "data": {
+          "sensor_name": "Sensornaam",
+          "sensor_state": "Statusselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
+          "sensor_icon": "Icoonselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
+          "sensor_color": "Kleurselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
+          "sensor_device_class": "Apparaatklasse",
+          "sensor_unit": "Meeteenheid",
+          "tracker_latitude": "Breedtegraadselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
+          "tracker_longitude": "Lengtegraadselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
+          "tracker_location_name": "Locatienaamselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
+          "tracker_source_type": "Brontype"
+        }
+      },
+      "add_sensor": {
+        "title": "Sensor toevoegen",
+        "description": "Kies het sensortype en geef een naam op",
+        "data": {
+          "sensor_name": "Sensornaam",
+          "sensor_type": "Sensortype"
+        }
+      },
+      "sensor_config": {
+        "title": "Sensorconfiguratie",
+        "description": "Configureer de sensorinstellingen. De extractiemethode (JSON/XPath/CSS/RegEx) wordt automatisch gedetecteerd op basis van het inhoudstype van het antwoord.",
+        "data": {
+          "sensor_state": "Statusselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
+          "sensor_icon": "Icoonselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
+          "sensor_color": "Kleurselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
+          "sensor_device_class": "Apparaatklasse",
+          "sensor_unit": "Meeteenheid",
+          "tracker_latitude": "Breedtegraadselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
+          "tracker_longitude": "Lengtegraadselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
+          "tracker_location_name": "Locatienaamselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
+          "tracker_source_type": "Brontype"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Ongeldig URL-formaat",
+      "no_sensors": "Er moet minstens één sensor worden geconfigureerd"
+    },
+    "abort": {
+      "no_sensors": "Er zijn geen sensors geconfigureerd"
+    }
+  },
+  "selector": {
+    "action": {
+      "options": {
+        "basic": "Basisinstellingen bewerken (URL, methode, time-out, interval, SSL)",
+        "headers": "HTTP-headers bewerken",
+        "sensors": "Sensorconfiguratie bewerken",
+        "payload": "Verzoekpayload bewerken",
+        "add": "Toevoegen",
+        "done": "Klaar",
+        "clear": "Alles wissen",
+        "save": "Wijzigingen opslaan",
+        "edit": "Bewerken",
+        "delete": "Verwijderen",
+        "back": "Terug"
+      }
+    },
+    "sensor": {
+      "options": {}
+    },
+    "tracker_source_type": {
+      "options": {
+        "gps": "GPS",
+        "router": "Router",
+        "bluetooth": "Bluetooth",
+        "bluetooth_le": "Bluetooth LE",
+        "none": "Geen (standaard)"
+      }
+    },
+    "sensor_type": {
+      "options": {
+        "sensor": "Sensor",
+        "binary_sensor": "Binaire sensor",
+        "number": "Getal",
+        "device_tracker": "Apparaattracker"
+      }
+    }
+  }
+}

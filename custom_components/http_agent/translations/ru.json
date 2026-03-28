@@ -1,0 +1,247 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Конфигурация HTTP Agent",
+        "description": "Настройте HTTP-эндпоинт",
+        "data": {
+          "url": "URL",
+          "method": "HTTP-метод",
+          "timeout": "Тайм-аут (секунды)",
+          "interval": "Интервал обновления (секунды)",
+          "retries": "Повторы при ошибке",
+          "verify_ssl": "Проверять SSL-сертификат"
+        }
+      },
+      "headers": {
+        "title": "HTTP-заголовки",
+        "description": "Настройка HTTP-заголовков\n\nТекущие заголовки:\n{headers}",
+        "data": {
+          "action": "Действие"
+        },
+        "data_description": {
+          "action": "Выберите действие"
+        }
+      },
+      "add_header": {
+        "title": "Добавить HTTP-заголовок",
+        "description": "Добавить новый HTTP-заголовок",
+        "data": {
+          "key": "Имя заголовка",
+          "value": "Значение заголовка"
+        }
+      },
+      "payload": {
+        "title": "HTTP-тело",
+        "description": "Настройте тело запроса",
+        "data": {
+          "content_type": "Тип содержимого",
+          "payload": "Тело (JSON/XML/Текст)"
+        }
+      },
+      "sensors": {
+        "title": "Конфигурация сенсоров",
+        "description": "Настройка сенсоров для извлечения данных\n\nТекущие сенсоры:\n{sensors}",
+        "data": {
+          "action": "Действие"
+        },
+        "data_description": {
+          "action": "Выберите действие"
+        }
+      },
+      "add_sensor": {
+        "title": "Добавить сенсор",
+        "description": "Выберите тип сенсора и укажите имя",
+        "data": {
+          "sensor_name": "Имя сенсора",
+          "sensor_type": "Тип сенсора"
+        }
+      },
+      "sensor_config": {
+        "title": "Конфигурация сенсора",
+        "description": "Настройте параметры сенсора. Метод извлечения (JSON/XPath/CSS/RegEx) будет автоматически определен по типу содержимого ответа.",
+        "data": {
+          "sensor_state": "Селектор состояния (JSON/XPath/CSS/RegEx - автоопределение)",
+          "sensor_icon": "Селектор значка (JSON/XPath/CSS/RegEx - автоопределение)",
+          "sensor_color": "Селектор цвета (JSON/XPath/CSS/RegEx - автоопределение)",
+          "sensor_device_class": "Класс устройства",
+          "sensor_unit": "Единица измерения",
+          "tracker_latitude": "Селектор широты (JSON/XPath/CSS/RegEx - автоопределение)",
+          "tracker_longitude": "Селектор долготы (JSON/XPath/CSS/RegEx - автоопределение)",
+          "tracker_location_name": "Селектор названия местоположения (JSON/XPath/CSS/RegEx - автоопределение)",
+          "tracker_source_type": "Тип источника"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Неверный формат URL",
+      "no_sensors": "Должен быть настроен хотя бы один сенсор"
+    },
+    "abort": {
+      "already_configured": "Этот HTTP-эндпоинт уже настроен",
+      "no_sensors": "Сенсоры не были настроены"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Конфигурация HTTP Agent",
+        "description": "Выберите, что редактировать",
+        "data": {
+          "action": "Раздел конфигурации"
+        },
+        "data_description": {
+          "action": "Выберите раздел конфигурации для редактирования"
+        }
+      },
+      "basic": {
+        "title": "Базовые настройки",
+        "description": "Изменить URL, метод, тайм-аут, интервал и проверку SSL",
+        "data": {
+          "url": "URL",
+          "method": "HTTP-метод",
+          "timeout": "Тайм-аут (секунды)",
+          "interval": "Интервал обновления (секунды)",
+          "retries": "Повторы при ошибке",
+          "verify_ssl": "Проверять SSL-сертификат"
+        }
+      },
+      "headers": {
+        "title": "HTTP-заголовки",
+        "description": "Изменить HTTP-заголовки\n\nТекущие заголовки:\n{headers}",
+        "data": {
+          "action": "Действие"
+        },
+        "data_description": {
+          "action": "Выберите действие"
+        }
+      },
+      "add_header": {
+        "title": "Добавить HTTP-заголовок",
+        "description": "Добавить новый HTTP-заголовок",
+        "data": {
+          "key": "Имя заголовка",
+          "value": "Значение заголовка"
+        }
+      },
+      "payload": {
+        "title": "HTTP-тело",
+        "description": "Изменить тело запроса",
+        "data": {
+          "content_type": "Тип содержимого",
+          "payload": "Тело (JSON/XML/Текст)"
+        }
+      },
+      "sensors": {
+        "title": "Конфигурация сенсоров",
+        "description": "Изменить конфигурацию сенсоров\n\nТекущие сенсоры:\n{sensors}",
+        "data": {
+          "action": "Действие"
+        },
+        "data_description": {
+          "action": "Выберите действие"
+        }
+      },
+      "select_sensor": {
+        "title": "Выбрать сенсор",
+        "description": "Выберите сенсор для редактирования или удаления",
+        "data": {
+          "sensor": "Сенсор"
+        }
+      },
+      "edit_sensor": {
+        "title": "Изменить сенсор",
+        "description": "Выберите, что сделать с этим сенсором:\n\n{sensor_info}",
+        "data": {
+          "action": "Действие"
+        },
+        "data_description": {
+          "action": "Выберите действие для этого сенсора"
+        }
+      },
+      "modify_sensor": {
+        "title": "Изменить сенсор",
+        "description": "Измените конфигурацию сенсора. Метод извлечения (JSON/XPath/CSS/RegEx) будет автоматически определен по типу содержимого ответа.",
+        "data": {
+          "sensor_name": "Имя сенсора",
+          "sensor_state": "Селектор состояния (JSON/XPath/CSS/RegEx - автоопределение)",
+          "sensor_icon": "Селектор значка (JSON/XPath/CSS/RegEx - автоопределение)",
+          "sensor_color": "Селектор цвета (JSON/XPath/CSS/RegEx - автоопределение)",
+          "sensor_device_class": "Класс устройства",
+          "sensor_unit": "Единица измерения",
+          "tracker_latitude": "Селектор широты (JSON/XPath/CSS/RegEx - автоопределение)",
+          "tracker_longitude": "Селектор долготы (JSON/XPath/CSS/RegEx - автоопределение)",
+          "tracker_location_name": "Селектор названия местоположения (JSON/XPath/CSS/RegEx - автоопределение)",
+          "tracker_source_type": "Тип источника"
+        }
+      },
+      "add_sensor": {
+        "title": "Добавить сенсор",
+        "description": "Выберите тип сенсора и укажите имя",
+        "data": {
+          "sensor_name": "Имя сенсора",
+          "sensor_type": "Тип сенсора"
+        }
+      },
+      "sensor_config": {
+        "title": "Конфигурация сенсора",
+        "description": "Настройте параметры сенсора. Метод извлечения (JSON/XPath/CSS/RegEx) будет автоматически определен по типу содержимого ответа.",
+        "data": {
+          "sensor_state": "Селектор состояния (JSON/XPath/CSS/RegEx - автоопределение)",
+          "sensor_icon": "Селектор значка (JSON/XPath/CSS/RegEx - автоопределение)",
+          "sensor_color": "Селектор цвета (JSON/XPath/CSS/RegEx - автоопределение)",
+          "sensor_device_class": "Класс устройства",
+          "sensor_unit": "Единица измерения",
+          "tracker_latitude": "Селектор широты (JSON/XPath/CSS/RegEx - автоопределение)",
+          "tracker_longitude": "Селектор долготы (JSON/XPath/CSS/RegEx - автоопределение)",
+          "tracker_location_name": "Селектор названия местоположения (JSON/XPath/CSS/RegEx - автоопределение)",
+          "tracker_source_type": "Тип источника"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Неверный формат URL",
+      "no_sensors": "Должен быть настроен хотя бы один сенсор"
+    },
+    "abort": {
+      "no_sensors": "Сенсоры не были настроены"
+    }
+  },
+  "selector": {
+    "action": {
+      "options": {
+        "basic": "Изменить базовые настройки (URL, метод, тайм-аут, интервал, SSL)",
+        "headers": "Изменить HTTP-заголовки",
+        "sensors": "Изменить конфигурацию сенсоров",
+        "payload": "Изменить тело запроса",
+        "add": "Добавить",
+        "done": "Готово",
+        "clear": "Очистить все",
+        "save": "Сохранить изменения",
+        "edit": "Изменить",
+        "delete": "Удалить",
+        "back": "Назад"
+      }
+    },
+    "sensor": {
+      "options": {}
+    },
+    "tracker_source_type": {
+      "options": {
+        "gps": "GPS",
+        "router": "Маршрутизатор",
+        "bluetooth": "Bluetooth",
+        "bluetooth_le": "Bluetooth LE",
+        "none": "Нет (по умолчанию)"
+      }
+    },
+    "sensor_type": {
+      "options": {
+        "sensor": "Сенсор",
+        "binary_sensor": "Бинарный сенсор",
+        "number": "Число",
+        "device_tracker": "Трекер устройства"
+      }
+    }
+  }
+}

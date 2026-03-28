@@ -1,0 +1,247 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configuracao do HTTP Agent",
+        "description": "Configurar o endpoint HTTP",
+        "data": {
+          "url": "URL",
+          "method": "Metodo HTTP",
+          "timeout": "Tempo limite (segundos)",
+          "interval": "Intervalo de atualizacao (segundos)",
+          "retries": "Tentativas em caso de erro",
+          "verify_ssl": "Verificar certificado SSL"
+        }
+      },
+      "headers": {
+        "title": "Cabecalhos HTTP",
+        "description": "Configurar cabecalhos HTTP\n\nCabecalhos atuais:\n{headers}",
+        "data": {
+          "action": "Acao"
+        },
+        "data_description": {
+          "action": "Selecione uma acao para executar"
+        }
+      },
+      "add_header": {
+        "title": "Adicionar cabecalho HTTP",
+        "description": "Adicionar um novo cabecalho HTTP",
+        "data": {
+          "key": "Nome do cabecalho",
+          "value": "Valor do cabecalho"
+        }
+      },
+      "payload": {
+        "title": "Payload HTTP",
+        "description": "Configurar o payload da requisicao",
+        "data": {
+          "content_type": "Tipo de conteudo",
+          "payload": "Payload (JSON/XML/Texto)"
+        }
+      },
+      "sensors": {
+        "title": "Configuracao dos sensores",
+        "description": "Configurar sensores para extrair dados\n\nSensores atuais:\n{sensors}",
+        "data": {
+          "action": "Acao"
+        },
+        "data_description": {
+          "action": "Selecione uma acao para executar"
+        }
+      },
+      "add_sensor": {
+        "title": "Adicionar sensor",
+        "description": "Escolha o tipo de sensor e informe um nome",
+        "data": {
+          "sensor_name": "Nome do sensor",
+          "sensor_type": "Tipo de sensor"
+        }
+      },
+      "sensor_config": {
+        "title": "Configuracao do sensor",
+        "description": "Configure as configuracoes do sensor. O metodo de extracao (JSON/XPath/CSS/RegEx) sera detectado automaticamente com base no tipo de conteudo da resposta.",
+        "data": {
+          "sensor_state": "Seletor de estado (JSON/XPath/CSS/RegEx - detectado automaticamente)",
+          "sensor_icon": "Seletor de icone (JSON/XPath/CSS/RegEx - detectado automaticamente)",
+          "sensor_color": "Seletor de cor (JSON/XPath/CSS/RegEx - detectado automaticamente)",
+          "sensor_device_class": "Classe do dispositivo",
+          "sensor_unit": "Unidade de medida",
+          "tracker_latitude": "Seletor de latitude (JSON/XPath/CSS/RegEx - detectado automaticamente)",
+          "tracker_longitude": "Seletor de longitude (JSON/XPath/CSS/RegEx - detectado automaticamente)",
+          "tracker_location_name": "Seletor de nome da localizacao (JSON/XPath/CSS/RegEx - detectado automaticamente)",
+          "tracker_source_type": "Tipo de origem"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Formato de URL invalido",
+      "no_sensors": "Pelo menos um sensor deve ser configurado"
+    },
+    "abort": {
+      "already_configured": "Este endpoint HTTP ja esta configurado",
+      "no_sensors": "Nenhum sensor foi configurado"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Configuracao do HTTP Agent",
+        "description": "Escolha o que editar",
+        "data": {
+          "action": "Secao de configuracao"
+        },
+        "data_description": {
+          "action": "Selecione uma secao de configuracao para editar"
+        }
+      },
+      "basic": {
+        "title": "Configuracoes basicas",
+        "description": "Editar URL, metodo, timeout, intervalo e verificacao SSL",
+        "data": {
+          "url": "URL",
+          "method": "Metodo HTTP",
+          "timeout": "Tempo limite (segundos)",
+          "interval": "Intervalo de atualizacao (segundos)",
+          "retries": "Tentativas em caso de erro",
+          "verify_ssl": "Verificar certificado SSL"
+        }
+      },
+      "headers": {
+        "title": "Cabecalhos HTTP",
+        "description": "Editar cabecalhos HTTP\n\nCabecalhos atuais:\n{headers}",
+        "data": {
+          "action": "Acao"
+        },
+        "data_description": {
+          "action": "Selecione uma acao para executar"
+        }
+      },
+      "add_header": {
+        "title": "Adicionar cabecalho HTTP",
+        "description": "Adicionar um novo cabecalho HTTP",
+        "data": {
+          "key": "Nome do cabecalho",
+          "value": "Valor do cabecalho"
+        }
+      },
+      "payload": {
+        "title": "Payload HTTP",
+        "description": "Editar o payload da requisicao",
+        "data": {
+          "content_type": "Tipo de conteudo",
+          "payload": "Payload (JSON/XML/Texto)"
+        }
+      },
+      "sensors": {
+        "title": "Configuracao dos sensores",
+        "description": "Editar configuracao dos sensores\n\nSensores atuais:\n{sensors}",
+        "data": {
+          "action": "Acao"
+        },
+        "data_description": {
+          "action": "Selecione uma acao para executar"
+        }
+      },
+      "select_sensor": {
+        "title": "Selecionar sensor",
+        "description": "Escolha um sensor para editar ou excluir",
+        "data": {
+          "sensor": "Sensor"
+        }
+      },
+      "edit_sensor": {
+        "title": "Editar sensor",
+        "description": "Escolha o que fazer com este sensor:\n\n{sensor_info}",
+        "data": {
+          "action": "Acao"
+        },
+        "data_description": {
+          "action": "Selecione uma acao para executar neste sensor"
+        }
+      },
+      "modify_sensor": {
+        "title": "Modificar sensor",
+        "description": "Edite a configuracao do sensor. O metodo de extracao (JSON/XPath/CSS/RegEx) sera detectado automaticamente com base no tipo de conteudo da resposta.",
+        "data": {
+          "sensor_name": "Nome do sensor",
+          "sensor_state": "Seletor de estado (JSON/XPath/CSS/RegEx - detectado automaticamente)",
+          "sensor_icon": "Seletor de icone (JSON/XPath/CSS/RegEx - detectado automaticamente)",
+          "sensor_color": "Seletor de cor (JSON/XPath/CSS/RegEx - detectado automaticamente)",
+          "sensor_device_class": "Classe do dispositivo",
+          "sensor_unit": "Unidade de medida",
+          "tracker_latitude": "Seletor de latitude (JSON/XPath/CSS/RegEx - detectado automaticamente)",
+          "tracker_longitude": "Seletor de longitude (JSON/XPath/CSS/RegEx - detectado automaticamente)",
+          "tracker_location_name": "Seletor de nome da localizacao (JSON/XPath/CSS/RegEx - detectado automaticamente)",
+          "tracker_source_type": "Tipo de origem"
+        }
+      },
+      "add_sensor": {
+        "title": "Adicionar sensor",
+        "description": "Escolha o tipo de sensor e informe um nome",
+        "data": {
+          "sensor_name": "Nome do sensor",
+          "sensor_type": "Tipo de sensor"
+        }
+      },
+      "sensor_config": {
+        "title": "Configuracao do sensor",
+        "description": "Configure as configuracoes do sensor. O metodo de extracao (JSON/XPath/CSS/RegEx) sera detectado automaticamente com base no tipo de conteudo da resposta.",
+        "data": {
+          "sensor_state": "Seletor de estado (JSON/XPath/CSS/RegEx - detectado automaticamente)",
+          "sensor_icon": "Seletor de icone (JSON/XPath/CSS/RegEx - detectado automaticamente)",
+          "sensor_color": "Seletor de cor (JSON/XPath/CSS/RegEx - detectado automaticamente)",
+          "sensor_device_class": "Classe do dispositivo",
+          "sensor_unit": "Unidade de medida",
+          "tracker_latitude": "Seletor de latitude (JSON/XPath/CSS/RegEx - detectado automaticamente)",
+          "tracker_longitude": "Seletor de longitude (JSON/XPath/CSS/RegEx - detectado automaticamente)",
+          "tracker_location_name": "Seletor de nome da localizacao (JSON/XPath/CSS/RegEx - detectado automaticamente)",
+          "tracker_source_type": "Tipo de origem"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Formato de URL invalido",
+      "no_sensors": "Pelo menos um sensor deve ser configurado"
+    },
+    "abort": {
+      "no_sensors": "Nenhum sensor foi configurado"
+    }
+  },
+  "selector": {
+    "action": {
+      "options": {
+        "basic": "Editar configuracoes basicas (URL, metodo, timeout, intervalo, SSL)",
+        "headers": "Editar cabecalhos HTTP",
+        "sensors": "Editar configuracao dos sensores",
+        "payload": "Editar payload da requisicao",
+        "add": "Adicionar",
+        "done": "Concluido",
+        "clear": "Limpar tudo",
+        "save": "Salvar alteracoes",
+        "edit": "Editar",
+        "delete": "Excluir",
+        "back": "Voltar"
+      }
+    },
+    "sensor": {
+      "options": {}
+    },
+    "tracker_source_type": {
+      "options": {
+        "gps": "GPS",
+        "router": "Roteador",
+        "bluetooth": "Bluetooth",
+        "bluetooth_le": "Bluetooth LE",
+        "none": "Nenhum (padrao)"
+      }
+    },
+    "sensor_type": {
+      "options": {
+        "sensor": "Sensor",
+        "binary_sensor": "Sensor binario",
+        "number": "Numero",
+        "device_tracker": "Rastreador de dispositivo"
+      }
+    }
+  }
+}

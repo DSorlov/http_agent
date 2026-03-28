@@ -1,0 +1,247 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "HTTP Agent 設定",
+        "description": "設定 HTTP 端點",
+        "data": {
+          "url": "URL",
+          "method": "HTTP 方法",
+          "timeout": "逾時（秒）",
+          "interval": "更新間隔（秒）",
+          "retries": "發生錯誤時重試",
+          "verify_ssl": "驗證 SSL 憑證"
+        }
+      },
+      "headers": {
+        "title": "HTTP 標頭",
+        "description": "設定 HTTP 標頭\n\n目前標頭：\n{headers}",
+        "data": {
+          "action": "操作"
+        },
+        "data_description": {
+          "action": "選擇要執行的動作"
+        }
+      },
+      "add_header": {
+        "title": "新增 HTTP 標頭",
+        "description": "新增 HTTP 標頭",
+        "data": {
+          "key": "標頭名稱",
+          "value": "標頭值"
+        }
+      },
+      "payload": {
+        "title": "HTTP 負載",
+        "description": "設定請求負載",
+        "data": {
+          "content_type": "內容類型",
+          "payload": "負載（JSON/XML/文字）"
+        }
+      },
+      "sensors": {
+        "title": "感測器設定",
+        "description": "設定感測器以擷取資料\n\n目前感測器：\n{sensors}",
+        "data": {
+          "action": "操作"
+        },
+        "data_description": {
+          "action": "選擇要執行的動作"
+        }
+      },
+      "add_sensor": {
+        "title": "新增感測器",
+        "description": "選擇感測器類型並提供名稱",
+        "data": {
+          "sensor_name": "感測器名稱",
+          "sensor_type": "感測器類型"
+        }
+      },
+      "sensor_config": {
+        "title": "感測器設定",
+        "description": "設定感測器參數。擷取方法（JSON/XPath/CSS/RegEx）會根據回應內容類型自動偵測。",
+        "data": {
+          "sensor_state": "狀態選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
+          "sensor_icon": "圖示選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
+          "sensor_color": "顏色選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
+          "sensor_device_class": "裝置類別",
+          "sensor_unit": "計量單位",
+          "tracker_latitude": "緯度選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
+          "tracker_longitude": "經度選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
+          "tracker_location_name": "位置名稱選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
+          "tracker_source_type": "來源類型"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "URL 格式無效",
+      "no_sensors": "至少必須設定一個感測器"
+    },
+    "abort": {
+      "already_configured": "此 HTTP 端點已設定",
+      "no_sensors": "未設定任何感測器"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "HTTP Agent 設定",
+        "description": "選擇要編輯的內容",
+        "data": {
+          "action": "設定區段"
+        },
+        "data_description": {
+          "action": "選擇要編輯的設定區段"
+        }
+      },
+      "basic": {
+        "title": "基本設定",
+        "description": "編輯 URL、方法、逾時、間隔與 SSL 驗證",
+        "data": {
+          "url": "URL",
+          "method": "HTTP 方法",
+          "timeout": "逾時（秒）",
+          "interval": "更新間隔（秒）",
+          "retries": "發生錯誤時重試",
+          "verify_ssl": "驗證 SSL 憑證"
+        }
+      },
+      "headers": {
+        "title": "HTTP 標頭",
+        "description": "編輯 HTTP 標頭\n\n目前標頭：\n{headers}",
+        "data": {
+          "action": "操作"
+        },
+        "data_description": {
+          "action": "選擇要執行的動作"
+        }
+      },
+      "add_header": {
+        "title": "新增 HTTP 標頭",
+        "description": "新增 HTTP 標頭",
+        "data": {
+          "key": "標頭名稱",
+          "value": "標頭值"
+        }
+      },
+      "payload": {
+        "title": "HTTP 負載",
+        "description": "編輯請求負載",
+        "data": {
+          "content_type": "內容類型",
+          "payload": "負載（JSON/XML/文字）"
+        }
+      },
+      "sensors": {
+        "title": "感測器設定",
+        "description": "編輯感測器設定\n\n目前感測器：\n{sensors}",
+        "data": {
+          "action": "操作"
+        },
+        "data_description": {
+          "action": "選擇要執行的動作"
+        }
+      },
+      "select_sensor": {
+        "title": "選擇感測器",
+        "description": "選擇要編輯或刪除的感測器",
+        "data": {
+          "sensor": "感測器"
+        }
+      },
+      "edit_sensor": {
+        "title": "編輯感測器",
+        "description": "選擇對此感測器執行的動作：\n\n{sensor_info}",
+        "data": {
+          "action": "操作"
+        },
+        "data_description": {
+          "action": "選擇要對此感測器執行的動作"
+        }
+      },
+      "modify_sensor": {
+        "title": "修改感測器",
+        "description": "編輯感測器設定。擷取方法（JSON/XPath/CSS/RegEx）會根據回應內容類型自動偵測。",
+        "data": {
+          "sensor_name": "感測器名稱",
+          "sensor_state": "狀態選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
+          "sensor_icon": "圖示選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
+          "sensor_color": "顏色選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
+          "sensor_device_class": "裝置類別",
+          "sensor_unit": "計量單位",
+          "tracker_latitude": "緯度選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
+          "tracker_longitude": "經度選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
+          "tracker_location_name": "位置名稱選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
+          "tracker_source_type": "來源類型"
+        }
+      },
+      "add_sensor": {
+        "title": "新增感測器",
+        "description": "選擇感測器類型並提供名稱",
+        "data": {
+          "sensor_name": "感測器名稱",
+          "sensor_type": "感測器類型"
+        }
+      },
+      "sensor_config": {
+        "title": "感測器設定",
+        "description": "設定感測器參數。擷取方法（JSON/XPath/CSS/RegEx）會根據回應內容類型自動偵測。",
+        "data": {
+          "sensor_state": "狀態選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
+          "sensor_icon": "圖示選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
+          "sensor_color": "顏色選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
+          "sensor_device_class": "裝置類別",
+          "sensor_unit": "計量單位",
+          "tracker_latitude": "緯度選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
+          "tracker_longitude": "經度選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
+          "tracker_location_name": "位置名稱選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
+          "tracker_source_type": "來源類型"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "URL 格式無效",
+      "no_sensors": "至少必須設定一個感測器"
+    },
+    "abort": {
+      "no_sensors": "未設定任何感測器"
+    }
+  },
+  "selector": {
+    "action": {
+      "options": {
+        "basic": "編輯基本設定（URL、方法、逾時、間隔、SSL）",
+        "headers": "編輯 HTTP 標頭",
+        "sensors": "編輯感測器設定",
+        "payload": "編輯請求負載",
+        "add": "新增",
+        "done": "完成",
+        "clear": "全部清除",
+        "save": "儲存變更",
+        "edit": "編輯",
+        "delete": "刪除",
+        "back": "返回"
+      }
+    },
+    "sensor": {
+      "options": {}
+    },
+    "tracker_source_type": {
+      "options": {
+        "gps": "GPS",
+        "router": "路由器",
+        "bluetooth": "Bluetooth",
+        "bluetooth_le": "Bluetooth LE",
+        "none": "無（預設）"
+      }
+    },
+    "sensor_type": {
+      "options": {
+        "sensor": "感測器",
+        "binary_sensor": "二元感測器",
+        "number": "數值",
+        "device_tracker": "裝置追蹤器"
+      }
+    }
+  }
+}
