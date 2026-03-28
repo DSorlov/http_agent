@@ -6,12 +6,12 @@ import asyncio
 from datetime import timedelta
 import json
 import logging
+import re
 from typing import Any
 from xml.etree import ElementTree as ET
 
 import aiohttp
 from bs4 import BeautifulSoup
-import re
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.template import Template
@@ -23,6 +23,7 @@ from .const import (
     CONF_INTERVAL,
     CONF_METHOD,
     CONF_PAYLOAD,
+    CONF_RETRIES,
     CONF_SENSOR_COLOR,
     CONF_SENSOR_DEVICE_CLASS,
     CONF_SENSOR_ICON,
@@ -39,6 +40,7 @@ from .const import (
     CONF_URL,
     CONF_VERIFY_SSL,
     DEFAULT_INTERVAL,
+    DEFAULT_RETRIES,
     DEFAULT_TIMEOUT,
     DEFAULT_VERIFY_SSL,
     DOMAIN,
@@ -87,6 +89,7 @@ class HTTPAgentCoordinator(DataUpdateCoordinator):
         self.url = entry_data[CONF_URL]
         self.method = entry_data[CONF_METHOD]
         self.timeout = entry_data.get(CONF_TIMEOUT, DEFAULT_TIMEOUT)
+        self.retries = entry_data.get(CONF_RETRIES, DEFAULT_RETRIES)
         self.verify_ssl = entry_data.get(CONF_VERIFY_SSL, DEFAULT_VERIFY_SSL)
         self.headers = {h["key"]: h["value"] for h in entry_data.get(CONF_HEADERS, [])}
         self.payload = entry_data.get(CONF_PAYLOAD, "")
@@ -144,75 +147,140 @@ class HTTPAgentCoordinator(DataUpdateCoordinator):
                         kwargs["data"] = rendered_payload
                 else:
                     kwargs["data"] = rendered_payload
+            total_attempts = max(1, int(self.retries) + 1)
 
-            async with self.session.request(self.method, **kwargs) as response:
-                response_text = await response.text()
+            for attempt in range(1, total_attempts + 1):
+                try:
+                    async with self.session.request(self.method, **kwargs) as response:
+                        response_text = await response.text()
 
-                _LOGGER.debug(
-                    "HTTP request to %s returned status %s",
-                    rendered_url,
-                    response.status,
-                )
+                        # Retry on empty response or non-2xx status
+                        if (
+                            not response_text
+                            or response.status < 200
+                            or response.status >= 300
+                        ):
+                            error_msg = f"HTTP {response.status}"
+                            if not response_text:
+                                error_msg = "Empty response"
 
-                # Create custom response object for templates
-                http_response = HTTPResponse(
-                    text=response_text,
-                    status=response.status,
-                    headers=dict(response.headers),
-                )
+                            _LOGGER.debug(
+                                "HTTP request attempt %s/%s failed for %s: %s",
+                                attempt,
+                                total_attempts,
+                                rendered_url,
+                                error_msg,
+                            )
 
-                # Extract sensor data
-                sensor_data = {}
-                for sensor_config in self.sensors_config:
-                    sensor_name = sensor_config[CONF_SENSOR_NAME]
-                    sensor_type = sensor_config.get(CONF_SENSOR_TYPE, "sensor")
+                            if attempt == total_attempts:
+                                raise UpdateFailed(
+                                    f"Failed to fetch data after {attempt} attempts: {error_msg}"
+                                )
 
-                    # Base sensor values
-                    sensor_values = {
-                        "type": sensor_type,
-                        "state": self._extract_value_auto(
-                            http_response, sensor_config.get(CONF_SENSOR_STATE, "")
-                        ),
-                        "icon": self._extract_value_auto(
-                            http_response, sensor_config.get(CONF_SENSOR_ICON, "")
-                        ),
-                        "color": self._extract_value_auto(
-                            http_response, sensor_config.get(CONF_SENSOR_COLOR, "")
-                        ),
-                        "device_class": sensor_config.get(CONF_SENSOR_DEVICE_CLASS, ""),
-                        "unit": sensor_config.get(CONF_SENSOR_UNIT, ""),
-                    }
+                            # wait 1s before next attempt
+                            await asyncio.sleep(1)
 
-                    # Add device tracker specific data
-                    if sensor_type == "device_tracker":
-                        sensor_values.update(
-                            {
-                                "latitude": self._extract_value_auto(
-                                    http_response,
-                                    sensor_config.get(CONF_TRACKER_LATITUDE, ""),
-                                ),
-                                "longitude": self._extract_value_auto(
-                                    http_response,
-                                    sensor_config.get(CONF_TRACKER_LONGITUDE, ""),
-                                ),
-                                "location_name": self._extract_value_auto(
-                                    http_response,
-                                    sensor_config.get(CONF_TRACKER_LOCATION_NAME, ""),
-                                ),
-                                "source_type": sensor_config.get(
-                                    CONF_TRACKER_SOURCE_TYPE, "gps"
-                                ),
-                            }
+                            continue
+
+                        _LOGGER.debug(
+                            "HTTP request to %s returned status %s",
+                            rendered_url,
+                            response.status,
                         )
 
-                    sensor_data[sensor_name] = sensor_values
+                        # Create custom response object for templates
+                        http_response = HTTPResponse(
+                            text=response_text,
+                            status=response.status,
+                            headers=dict(response.headers),
+                        )
 
-                return sensor_data
+                        # Extract sensor data
+                        sensor_data = {}
+                        for sensor_config in self.sensors_config:
+                            sensor_name = sensor_config[CONF_SENSOR_NAME]
+                            sensor_type = sensor_config.get(CONF_SENSOR_TYPE, "sensor")
 
-        except asyncio.TimeoutError as err:
-            raise UpdateFailed(f"Timeout while fetching data: {err}") from err
-        except aiohttp.ClientError as err:
-            raise UpdateFailed(f"Error fetching data: {err}") from err
+                            # Base sensor values
+                            sensor_values = {
+                                "type": sensor_type,
+                                "state": self._extract_value_auto(
+                                    http_response,
+                                    sensor_config.get(CONF_SENSOR_STATE, ""),
+                                ),
+                                "icon": self._extract_value_auto(
+                                    http_response,
+                                    sensor_config.get(CONF_SENSOR_ICON, ""),
+                                ),
+                                "color": self._extract_value_auto(
+                                    http_response,
+                                    sensor_config.get(CONF_SENSOR_COLOR, ""),
+                                ),
+                                "device_class": sensor_config.get(
+                                    CONF_SENSOR_DEVICE_CLASS, ""
+                                ),
+                                "unit": sensor_config.get(CONF_SENSOR_UNIT, ""),
+                            }
+
+                            # Add device tracker specific data
+                            if sensor_type == "device_tracker":
+                                sensor_values.update(
+                                    {
+                                        "latitude": self._extract_value_auto(
+                                            http_response,
+                                            sensor_config.get(
+                                                CONF_TRACKER_LATITUDE, ""
+                                            ),
+                                        ),
+                                        "longitude": self._extract_value_auto(
+                                            http_response,
+                                            sensor_config.get(
+                                                CONF_TRACKER_LONGITUDE, ""
+                                            ),
+                                        ),
+                                        "location_name": self._extract_value_auto(
+                                            http_response,
+                                            sensor_config.get(
+                                                CONF_TRACKER_LOCATION_NAME, ""
+                                            ),
+                                        ),
+                                        "source_type": sensor_config.get(
+                                            CONF_TRACKER_SOURCE_TYPE, "gps"
+                                        ),
+                                    }
+                                )
+
+                            sensor_data[sensor_name] = sensor_values
+
+                        return sensor_data
+
+                except (asyncio.TimeoutError, aiohttp.ClientError) as err:
+                    err_detail = str(err) or type(err).__name__
+                    _LOGGER.debug(
+                        "HTTP request attempt %s/%s failed for %s: %s",
+                        attempt,
+                        total_attempts,
+                        rendered_url,
+                        err_detail,
+                    )
+                    if attempt == total_attempts:
+                        if isinstance(err, asyncio.TimeoutError):
+                            raise UpdateFailed(
+                                f"Timeout while fetching data after {attempt} attempts"
+                            ) from err
+                        raise UpdateFailed(
+                            f"Error fetching data after {attempt} attempts: {err_detail}"
+                        ) from err
+
+                    # wait 1s before next attempt if this was not a timeout
+                    if not isinstance(err, asyncio.TimeoutError):
+                        await asyncio.sleep(1)
+
+            # Prevent linter errors. Should never reach here - loop always returns or raises
+            raise UpdateFailed("Failed to fetch data")
+
+        except UpdateFailed:
+            raise
         except Exception as err:
             raise UpdateFailed(f"Unexpected error: {err}") from err
 
@@ -348,7 +416,7 @@ class HTTPAgentCoordinator(DataUpdateCoordinator):
 
         last_slash = selector.rfind("/")
         pattern = selector[1:last_slash]
-        flags_str = selector[last_slash + 1:]
+        flags_str = selector[last_slash + 1 :]
 
         flag_map = {
             "i": re.I,
@@ -376,7 +444,9 @@ class HTTPAgentCoordinator(DataUpdateCoordinator):
                 if match.lastindex == 1:
                     return match.group(1)
                 elif match.lastindex > 1:
-                    return "|".join(match.group(i) for i in range(1, match.lastindex + 1))
+                    return "|".join(
+                        match.group(i) for i in range(1, match.lastindex + 1)
+                    )
         except Exception:
             pass
 

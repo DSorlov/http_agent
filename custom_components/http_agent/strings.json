@@ -9,6 +9,7 @@
           "method": "HTTP Method",
           "timeout": "Timeout (seconds)",
           "interval": "Update Interval (seconds)",
+          "retries": "Retries on error",
           "verify_ssl": "Verify SSL Certificate"
         }
       },
@@ -101,6 +102,7 @@
           "method": "HTTP Method",
           "timeout": "Timeout (seconds)",
           "interval": "Update Interval (seconds)",
+          "retries": "Retries on error",
           "verify_ssl": "Verify SSL Certificate"
         }
       },

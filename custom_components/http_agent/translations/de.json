@@ -9,6 +9,7 @@
           "method": "HTTP-Methode",
           "timeout": "Zeitüberschreitung (Sekunden)",
           "interval": "Aktualisierungsintervall (Sekunden)",
+          "retries": "Wiederholungsversuche bei Fehlern",
           "verify_ssl": "SSL-Zertifikat verifizieren"
         }
       },
@@ -101,6 +102,7 @@
           "method": "HTTP-Methode",
           "timeout": "Zeitüberschreitung (Sekunden)",
           "interval": "Aktualisierungsintervall (Sekunden)",
+          "retries": "Wiederholungsversuche bei Fehlern",
           "verify_ssl": "SSL-Zertifikat verifizieren"
         }
       },
