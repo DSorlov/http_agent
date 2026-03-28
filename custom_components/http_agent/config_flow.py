@@ -278,6 +278,10 @@ class HTTPAgentConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             sensor_config = dict(self.current_sensor)
             sensor_config.update(user_input)
 
+            # HA forms can return None for empty optional text fields.
+            if sensor_config.get(CONF_SENSOR_UNIT) is None:
+                sensor_config[CONF_SENSOR_UNIT] = ""
+
             # Add optional fields that may not be in user_input
             optional_fields = [
                 CONF_SENSOR_STATE,
@@ -665,11 +669,12 @@ class HTTPAgentOptionsFlow(config_entries.OptionsFlow):
                 sensor_config[CONF_SENSOR_DEVICE_CLASS] = user_input[
                     CONF_SENSOR_DEVICE_CLASS
                 ]
-            if user_input.get(CONF_SENSOR_UNIT):
-                sensor_config[CONF_SENSOR_UNIT] = user_input[CONF_SENSOR_UNIT]
+
+            sensor_type = sensor_config[CONF_SENSOR_TYPE]
+            if sensor_type in ("sensor", "number"):
+                sensor_config[CONF_SENSOR_UNIT] = user_input.get(CONF_SENSOR_UNIT) or ""
 
             # Add tracker fields if it's a device tracker
-            sensor_type = sensor_config[CONF_SENSOR_TYPE]
             if sensor_type == "device_tracker":
                 if user_input.get(CONF_TRACKER_LATITUDE):
                     sensor_config[CONF_TRACKER_LATITUDE] = user_input[
@@ -719,7 +724,7 @@ class HTTPAgentOptionsFlow(config_entries.OptionsFlow):
                 )
             ] = vol.In(device_classes)
             schema_dict[
-                vol.Optional(CONF_SENSOR_UNIT, default=sensor.get(CONF_SENSOR_UNIT, ""))
+                vol.Optional(CONF_SENSOR_UNIT)
             ] = str
         elif sensor_type == "binary_sensor":
             device_classes = {"": ""} | {dc: dc for dc in BINARY_SENSOR_DEVICE_CLASSES}
@@ -738,7 +743,7 @@ class HTTPAgentOptionsFlow(config_entries.OptionsFlow):
                 )
             ] = vol.In(device_classes)
             schema_dict[
-                vol.Optional(CONF_SENSOR_UNIT, default=sensor.get(CONF_SENSOR_UNIT, ""))
+                vol.Optional(CONF_SENSOR_UNIT)
             ] = str
         elif sensor_type == "device_tracker":
             # Add device tracker specific fields
@@ -767,10 +772,13 @@ class HTTPAgentOptionsFlow(config_entries.OptionsFlow):
             ] = vol.In(["none", "gps", "router", "bluetooth", "bluetooth_le"])
 
         schema = vol.Schema(schema_dict)
+        suggested_values: dict[str, Any] = {}
+        if sensor_type in ("sensor", "number"):
+            suggested_values[CONF_SENSOR_UNIT] = sensor.get(CONF_SENSOR_UNIT) or ""
 
         return self.async_show_form(
             step_id="modify_sensor",
-            data_schema=schema,
+            data_schema=self.add_suggested_values_to_schema(schema, suggested_values),
         )
 
     async def async_step_add_sensor(
@@ -805,6 +813,10 @@ class HTTPAgentOptionsFlow(config_entries.OptionsFlow):
             # Merge with existing sensor data
             sensor_config = dict(self.current_sensor)
             sensor_config.update(user_input)
+
+            # HA forms can return None for empty optional text fields.
+            if sensor_config.get(CONF_SENSOR_UNIT) is None:
+                sensor_config[CONF_SENSOR_UNIT] = ""
 
             # Add optional fields that may not be in user_input
             optional_fields = [
