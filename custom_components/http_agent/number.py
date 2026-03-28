@@ -20,6 +20,7 @@ from .const import (
     DOMAIN,
 )
 from .coordinator import HTTPAgentCoordinator
+from .helpers import get_sensor_config
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -69,16 +70,7 @@ class HTTPAgentNumber(CoordinatorEntity, NumberEntity):
         # Number entities are read-only for HTTP Agent
         self._attr_mode = "box"
 
-        # Find sensor config
-        self.sensor_config = None
-        data = dict(entry.data)
-        if entry.options:
-            data.update(entry.options)
-
-        for config in data[CONF_SENSORS]:
-            if config[CONF_SENSOR_NAME] == sensor_name:
-                self.sensor_config = config
-                break
+        self.sensor_config = get_sensor_config(entry, sensor_name)
 
     @property
     def name(self) -> str:
