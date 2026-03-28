@@ -9,6 +9,7 @@
           "method": "HTTP-metodi",
           "timeout": "Aikakatkaisu (sekuntia)",
           "interval": "Päivitysväli (sekuntia)",
+          "retries": "Uudelleenyritykset virheen sattuessa",
           "verify_ssl": "Vahvista SSL-varmenne"
         }
       },
@@ -101,6 +102,7 @@
           "method": "HTTP-metodi",
           "timeout": "Aikakatkaisu (sekuntia)",
           "interval": "Päivitysväli (sekuntia)",
+          "retries": "Uudelleenyritykset virheen sattuessa",
           "verify_ssl": "Vahvista SSL-varmenne"
         }
       },

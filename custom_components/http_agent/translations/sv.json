@@ -9,6 +9,7 @@
           "method": "HTTP-metod",
           "timeout": "Timeout (sekunder)",
           "interval": "Uppdateringsintervall (sekunder)",
+          "retries": "Försök igen vid fel",
           "verify_ssl": "Verifiera SSL-certifikat"
         }
       },
@@ -101,6 +102,7 @@
           "method": "HTTP-metod",
           "timeout": "Timeout (sekunder)",
           "interval": "Uppdateringsintervall (sekunder)",
+          "retries": "Försök igen vid fel",
           "verify_ssl": "Verifiera SSL-certifikat"
         }
       },

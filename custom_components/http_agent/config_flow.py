@@ -19,6 +19,7 @@ from .const import (
     CONF_INTERVAL,
     CONF_METHOD,
     CONF_PAYLOAD,
+    CONF_RETRIES,
     CONF_SENSOR_COLOR,
     CONF_SENSOR_DEVICE_CLASS,
     CONF_SENSOR_ICON,
@@ -37,6 +38,7 @@ from .const import (
     CONTENT_TYPES,
     DEFAULT_INTERVAL,
     DEFAULT_METHOD,
+    DEFAULT_RETRIES,
     DEFAULT_TIMEOUT,
     DEFAULT_VERIFY_SSL,
     DOMAIN,
@@ -87,6 +89,9 @@ class HTTPAgentConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 vol.Required(CONF_METHOD, default=DEFAULT_METHOD): vol.In(HTTP_METHODS),
                 vol.Optional(CONF_TIMEOUT, default=DEFAULT_TIMEOUT): vol.All(
                     vol.Coerce(int), vol.Range(min=1, max=300)
+                ),
+                vol.Required(CONF_RETRIES, default=DEFAULT_RETRIES): vol.All(
+                    vol.Coerce(int), vol.Range(min=0, max=10)
                 ),
                 vol.Optional(CONF_INTERVAL, default=DEFAULT_INTERVAL): vol.All(
                     vol.Coerce(int), vol.Range(min=5, max=86400)
@@ -430,6 +435,10 @@ class HTTPAgentOptionsFlow(config_entries.OptionsFlow):
                 vol.Optional(
                     CONF_TIMEOUT, default=self.data.get(CONF_TIMEOUT, DEFAULT_TIMEOUT)
                 ): vol.All(vol.Coerce(int), vol.Range(min=1, max=300)),
+                vol.Required(
+                    CONF_RETRIES,
+                    default=self.data.get(CONF_RETRIES, DEFAULT_RETRIES),
+                ): vol.All(vol.Coerce(int), vol.Range(min=0, max=10)),
                 vol.Optional(
                     CONF_INTERVAL,
                     default=self.data.get(CONF_INTERVAL, DEFAULT_INTERVAL),

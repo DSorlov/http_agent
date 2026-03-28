@@ -6,6 +6,7 @@ DOMAIN: Final = "http_agent"
 
 # Default values
 DEFAULT_TIMEOUT = 10
+DEFAULT_RETRIES = 0
 DEFAULT_INTERVAL = 60
 DEFAULT_METHOD = "GET"
 DEFAULT_VERIFY_SSL = True
@@ -14,6 +15,7 @@ DEFAULT_VERIFY_SSL = True
 CONF_URL = "url"
 CONF_METHOD = "method"
 CONF_TIMEOUT = "timeout"
+CONF_RETRIES = "retries"
 CONF_INTERVAL = "interval"
 CONF_VERIFY_SSL = "verify_ssl"
 CONF_HEADERS = "headers"
