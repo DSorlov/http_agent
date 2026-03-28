@@ -723,9 +723,7 @@ class HTTPAgentOptionsFlow(config_entries.OptionsFlow):
                     default=sensor.get(CONF_SENSOR_DEVICE_CLASS, ""),
                 )
             ] = vol.In(device_classes)
-            schema_dict[
-                vol.Optional(CONF_SENSOR_UNIT)
-            ] = str
+            schema_dict[vol.Optional(CONF_SENSOR_UNIT)] = str
         elif sensor_type == "binary_sensor":
             device_classes = {"": ""} | {dc: dc for dc in BINARY_SENSOR_DEVICE_CLASSES}
             schema_dict[
@@ -742,9 +740,7 @@ class HTTPAgentOptionsFlow(config_entries.OptionsFlow):
                     default=sensor.get(CONF_SENSOR_DEVICE_CLASS, ""),
                 )
             ] = vol.In(device_classes)
-            schema_dict[
-                vol.Optional(CONF_SENSOR_UNIT)
-            ] = str
+            schema_dict[vol.Optional(CONF_SENSOR_UNIT)] = str
         elif sensor_type == "device_tracker":
             # Add device tracker specific fields
             schema_dict[
