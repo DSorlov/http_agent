@@ -1,0 +1,247 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Konfigurace HTTP Agent",
+        "description": "Nakonfigurujte HTTP endpoint",
+        "data": {
+          "url": "URL",
+          "method": "HTTP metoda",
+          "timeout": "Timeout (sekundy)",
+          "interval": "Interval aktualizace (sekundy)",
+          "retries": "Opakovani pri chybe",
+          "verify_ssl": "Overit SSL certifikat"
+        }
+      },
+      "headers": {
+        "title": "HTTP hlavicky",
+        "description": "Nastavte HTTP hlavicky\n\nAktualni hlavicky:\n{headers}",
+        "data": {
+          "action": "Akce"
+        },
+        "data_description": {
+          "action": "Vyberte akci k provedeni"
+        }
+      },
+      "add_header": {
+        "title": "Pridat HTTP hlavicku",
+        "description": "Pridat novou HTTP hlavicku",
+        "data": {
+          "key": "Nazev hlavicky",
+          "value": "Hodnota hlavicky"
+        }
+      },
+      "payload": {
+        "title": "HTTP telo",
+        "description": "Nakonfigurujte telo pozadavku",
+        "data": {
+          "content_type": "Typ obsahu",
+          "payload": "Telo (JSON/XML/Text)"
+        }
+      },
+      "sensors": {
+        "title": "Konfigurace senzoru",
+        "description": "Nastavte senzory pro extrakci dat\n\nAktualni senzory:\n{sensors}",
+        "data": {
+          "action": "Akce"
+        },
+        "data_description": {
+          "action": "Vyberte akci k provedeni"
+        }
+      },
+      "add_sensor": {
+        "title": "Pridat senzor",
+        "description": "Vyberte typ senzoru a zadejte nazev",
+        "data": {
+          "sensor_name": "Nazev senzoru",
+          "sensor_type": "Typ senzoru"
+        }
+      },
+      "sensor_config": {
+        "title": "Konfigurace senzoru",
+        "description": "Nakonfigurujte nastaveni senzoru. Metoda extrakce (JSON/XPath/CSS/RegEx) bude automaticky detekovana podle typu obsahu odpovedi.",
+        "data": {
+          "sensor_state": "Vyber stavu (JSON/XPath/CSS/RegEx - automaticky detekovano)",
+          "sensor_icon": "Vyber ikony (JSON/XPath/CSS/RegEx - automaticky detekovano)",
+          "sensor_color": "Vyber barvy (JSON/XPath/CSS/RegEx - automaticky detekovano)",
+          "sensor_device_class": "Trida zarizeni",
+          "sensor_unit": "Jednotka mereni",
+          "tracker_latitude": "Vyber zemepisne sirky (JSON/XPath/CSS/RegEx - automaticky detekovano)",
+          "tracker_longitude": "Vyber zemepisne delky (JSON/XPath/CSS/RegEx - automaticky detekovano)",
+          "tracker_location_name": "Vyber nazvu polohy (JSON/XPath/CSS/RegEx - automaticky detekovano)",
+          "tracker_source_type": "Typ zdroje"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Neplatny format URL",
+      "no_sensors": "Musi byt nakonfigurovan alespon jeden senzor"
+    },
+    "abort": {
+      "already_configured": "Tento HTTP endpoint je jiz nakonfigurovan",
+      "no_sensors": "Nebyly nakonfigurovany zadne senzory"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Konfigurace HTTP Agent",
+        "description": "Vyberte, co chcete upravit",
+        "data": {
+          "action": "Sekce konfigurace"
+        },
+        "data_description": {
+          "action": "Vyberte sekci konfigurace k uprave"
+        }
+      },
+      "basic": {
+        "title": "Zakladni nastaveni",
+        "description": "Upravit URL, metodu, timeout, interval a SSL overeni",
+        "data": {
+          "url": "URL",
+          "method": "HTTP metoda",
+          "timeout": "Timeout (sekundy)",
+          "interval": "Interval aktualizace (sekundy)",
+          "retries": "Opakovani pri chybe",
+          "verify_ssl": "Overit SSL certifikat"
+        }
+      },
+      "headers": {
+        "title": "HTTP hlavicky",
+        "description": "Upravit HTTP hlavicky\n\nAktualni hlavicky:\n{headers}",
+        "data": {
+          "action": "Akce"
+        },
+        "data_description": {
+          "action": "Vyberte akci k provedeni"
+        }
+      },
+      "add_header": {
+        "title": "Pridat HTTP hlavicku",
+        "description": "Pridat novou HTTP hlavicku",
+        "data": {
+          "key": "Nazev hlavicky",
+          "value": "Hodnota hlavicky"
+        }
+      },
+      "payload": {
+        "title": "HTTP telo",
+        "description": "Upravit telo pozadavku",
+        "data": {
+          "content_type": "Typ obsahu",
+          "payload": "Telo (JSON/XML/Text)"
+        }
+      },
+      "sensors": {
+        "title": "Konfigurace senzoru",
+        "description": "Upravit konfiguraci senzoru\n\nAktualni senzory:\n{sensors}",
+        "data": {
+          "action": "Akce"
+        },
+        "data_description": {
+          "action": "Vyberte akci k provedeni"
+        }
+      },
+      "select_sensor": {
+        "title": "Vyberte senzor",
+        "description": "Vyberte senzor pro upravu nebo smazani",
+        "data": {
+          "sensor": "Senzor"
+        }
+      },
+      "edit_sensor": {
+        "title": "Upravit senzor",
+        "description": "Vyberte, co delat s timto senzorem:\n\n{sensor_info}",
+        "data": {
+          "action": "Akce"
+        },
+        "data_description": {
+          "action": "Vyberte akci pro tento senzor"
+        }
+      },
+      "modify_sensor": {
+        "title": "Upravit senzor",
+        "description": "Upravte konfiguraci senzoru. Metoda extrakce (JSON/XPath/CSS/RegEx) bude automaticky detekovana podle typu obsahu odpovedi.",
+        "data": {
+          "sensor_name": "Nazev senzoru",
+          "sensor_state": "Vyber stavu (JSON/XPath/CSS/RegEx - automaticky detekovano)",
+          "sensor_icon": "Vyber ikony (JSON/XPath/CSS/RegEx - automaticky detekovano)",
+          "sensor_color": "Vyber barvy (JSON/XPath/CSS/RegEx - automaticky detekovano)",
+          "sensor_device_class": "Trida zarizeni",
+          "sensor_unit": "Jednotka mereni",
+          "tracker_latitude": "Vyber zemepisne sirky (JSON/XPath/CSS/RegEx - automaticky detekovano)",
+          "tracker_longitude": "Vyber zemepisne delky (JSON/XPath/CSS/RegEx - automaticky detekovano)",
+          "tracker_location_name": "Vyber nazvu polohy (JSON/XPath/CSS/RegEx - automaticky detekovano)",
+          "tracker_source_type": "Typ zdroje"
+        }
+      },
+      "add_sensor": {
+        "title": "Pridat senzor",
+        "description": "Vyberte typ senzoru a zadejte nazev",
+        "data": {
+          "sensor_name": "Nazev senzoru",
+          "sensor_type": "Typ senzoru"
+        }
+      },
+      "sensor_config": {
+        "title": "Konfigurace senzoru",
+        "description": "Nakonfigurujte nastaveni senzoru. Metoda extrakce (JSON/XPath/CSS/RegEx) bude automaticky detekovana podle typu obsahu odpovedi.",
+        "data": {
+          "sensor_state": "Vyber stavu (JSON/XPath/CSS/RegEx - automaticky detekovano)",
+          "sensor_icon": "Vyber ikony (JSON/XPath/CSS/RegEx - automaticky detekovano)",
+          "sensor_color": "Vyber barvy (JSON/XPath/CSS/RegEx - automaticky detekovano)",
+          "sensor_device_class": "Trida zarizeni",
+          "sensor_unit": "Jednotka mereni",
+          "tracker_latitude": "Vyber zemepisne sirky (JSON/XPath/CSS/RegEx - automaticky detekovano)",
+          "tracker_longitude": "Vyber zemepisne delky (JSON/XPath/CSS/RegEx - automaticky detekovano)",
+          "tracker_location_name": "Vyber nazvu polohy (JSON/XPath/CSS/RegEx - automaticky detekovano)",
+          "tracker_source_type": "Typ zdroje"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Neplatny format URL",
+      "no_sensors": "Musi byt nakonfigurovan alespon jeden senzor"
+    },
+    "abort": {
+      "no_sensors": "Nebyly nakonfigurovany zadne senzory"
+    }
+  },
+  "selector": {
+    "action": {
+      "options": {
+        "basic": "Upravit zakladni nastaveni (URL, metoda, timeout, interval, SSL)",
+        "headers": "Upravit HTTP hlavicky",
+        "sensors": "Upravit konfiguraci senzoru",
+        "payload": "Upravit telo pozadavku",
+        "add": "Pridat",
+        "done": "Hotovo",
+        "clear": "Vymazat vse",
+        "save": "Ulozit zmeny",
+        "edit": "Upravit",
+        "delete": "Smazat",
+        "back": "Zpet"
+      }
+    },
+    "sensor": {
+      "options": {}
+    },
+    "tracker_source_type": {
+      "options": {
+        "gps": "GPS",
+        "router": "Router",
+        "bluetooth": "Bluetooth",
+        "bluetooth_le": "Bluetooth LE",
+        "none": "Zadne (vychozi)"
+      }
+    },
+    "sensor_type": {
+      "options": {
+        "sensor": "Senzor",
+        "binary_sensor": "Binarni senzor",
+        "number": "Cislo",
+        "device_tracker": "Sledovani zarizeni"
+      }
+    }
+  }
+}

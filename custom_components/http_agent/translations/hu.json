@@ -1,0 +1,247 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "HTTP Agent konfiguracio",
+        "description": "HTTP vegpont beallitasa",
+        "data": {
+          "url": "URL",
+          "method": "HTTP modszer",
+          "timeout": "Timeout (masodperc)",
+          "interval": "Frissitesi intervallum (masodperc)",
+          "retries": "Ujraprobalas hiba eseten",
+          "verify_ssl": "SSL tanusitvany ellenorzese"
+        }
+      },
+      "headers": {
+        "title": "HTTP fejlecek",
+        "description": "HTTP fejlecek beallitasa\n\nAktualis fejlecek:\n{headers}",
+        "data": {
+          "action": "Muvelet"
+        },
+        "data_description": {
+          "action": "Valasszon vegrehajtando muveletet"
+        }
+      },
+      "add_header": {
+        "title": "HTTP fejlec hozzaadasa",
+        "description": "Uj HTTP fejlec hozzaadasa",
+        "data": {
+          "key": "Fejlec neve",
+          "value": "Fejlec erteke"
+        }
+      },
+      "payload": {
+        "title": "HTTP payload",
+        "description": "Keres payload beallitasa",
+        "data": {
+          "content_type": "Tartalomtipus",
+          "payload": "Payload (JSON/XML/Szoveg)"
+        }
+      },
+      "sensors": {
+        "title": "Erzekelo konfiguracio",
+        "description": "Erzekelok beallitasa adatok kinyeresehez\n\nAktualis erzekelok:\n{sensors}",
+        "data": {
+          "action": "Muvelet"
+        },
+        "data_description": {
+          "action": "Valasszon vegrehajtando muveletet"
+        }
+      },
+      "add_sensor": {
+        "title": "Erzekelo hozzaadasa",
+        "description": "Valassza ki az erzekelo tipusat es adjon nevet",
+        "data": {
+          "sensor_name": "Erzekelo neve",
+          "sensor_type": "Erzekelo tipusa"
+        }
+      },
+      "sensor_config": {
+        "title": "Erzekelo konfiguracio",
+        "description": "Allitsa be az erzekelo beallitasait. A kinyeresi mod (JSON/XPath/CSS/RegEx) automatikusan felismeresre kerul a valasz tartalomtípusa alapjan.",
+        "data": {
+          "sensor_state": "Allapot valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
+          "sensor_icon": "Ikon valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
+          "sensor_color": "Szin valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
+          "sensor_device_class": "Eszkozosztaly",
+          "sensor_unit": "Meroegyseg",
+          "tracker_latitude": "Szelesseg valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
+          "tracker_longitude": "Hosszusag valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
+          "tracker_location_name": "Helynev valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
+          "tracker_source_type": "Forras tipusa"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Ervenytelen URL formatum",
+      "no_sensors": "Legalabb egy erzekelot be kell allitani"
+    },
+    "abort": {
+      "already_configured": "Ez a HTTP vegpont mar be van allitva",
+      "no_sensors": "Nincs konfiguralt erzekelo"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "HTTP Agent konfiguracio",
+        "description": "Valassza ki, mit szerkeszt",
+        "data": {
+          "action": "Konfiguracios szakasz"
+        },
+        "data_description": {
+          "action": "Valasszon konfiguracios szakaszt szerkeszteshez"
+        }
+      },
+      "basic": {
+        "title": "Alapbeallitasok",
+        "description": "URL, modszer, timeout, intervallum es SSL ellenorzes szerkesztese",
+        "data": {
+          "url": "URL",
+          "method": "HTTP modszer",
+          "timeout": "Timeout (masodperc)",
+          "interval": "Frissitesi intervallum (masodperc)",
+          "retries": "Ujraprobalas hiba eseten",
+          "verify_ssl": "SSL tanusitvany ellenorzese"
+        }
+      },
+      "headers": {
+        "title": "HTTP fejlecek",
+        "description": "HTTP fejlecek szerkesztese\n\nAktualis fejlecek:\n{headers}",
+        "data": {
+          "action": "Muvelet"
+        },
+        "data_description": {
+          "action": "Valasszon vegrehajtando muveletet"
+        }
+      },
+      "add_header": {
+        "title": "HTTP fejlec hozzaadasa",
+        "description": "Uj HTTP fejlec hozzaadasa",
+        "data": {
+          "key": "Fejlec neve",
+          "value": "Fejlec erteke"
+        }
+      },
+      "payload": {
+        "title": "HTTP payload",
+        "description": "Keres payload szerkesztese",
+        "data": {
+          "content_type": "Tartalomtipus",
+          "payload": "Payload (JSON/XML/Szoveg)"
+        }
+      },
+      "sensors": {
+        "title": "Erzekelo konfiguracio",
+        "description": "Erzekelo konfiguracio szerkesztese\n\nAktualis erzekelok:\n{sensors}",
+        "data": {
+          "action": "Muvelet"
+        },
+        "data_description": {
+          "action": "Valasszon vegrehajtando muveletet"
+        }
+      },
+      "select_sensor": {
+        "title": "Erzekelo kivalasztasa",
+        "description": "Valasszon erzekelot szerkeszteshez vagy torleshez",
+        "data": {
+          "sensor": "Erzekelo"
+        }
+      },
+      "edit_sensor": {
+        "title": "Erzekelo szerkesztese",
+        "description": "Valassza ki, mit tegyen ezzel az erzekelovel:\n\n{sensor_info}",
+        "data": {
+          "action": "Muvelet"
+        },
+        "data_description": {
+          "action": "Valasszon muveletet ehhez az erzekelohoz"
+        }
+      },
+      "modify_sensor": {
+        "title": "Erzekelo modositas",
+        "description": "Szerkessze az erzekelo konfiguraciojat. A kinyeresi mod (JSON/XPath/CSS/RegEx) automatikusan felismeresre kerul a valasz tartalomtípusa alapjan.",
+        "data": {
+          "sensor_name": "Erzekelo neve",
+          "sensor_state": "Allapot valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
+          "sensor_icon": "Ikon valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
+          "sensor_color": "Szin valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
+          "sensor_device_class": "Eszkozosztaly",
+          "sensor_unit": "Meroegyseg",
+          "tracker_latitude": "Szelesseg valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
+          "tracker_longitude": "Hosszusag valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
+          "tracker_location_name": "Helynev valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
+          "tracker_source_type": "Forras tipusa"
+        }
+      },
+      "add_sensor": {
+        "title": "Erzekelo hozzaadasa",
+        "description": "Valassza ki az erzekelo tipusat es adjon nevet",
+        "data": {
+          "sensor_name": "Erzekelo neve",
+          "sensor_type": "Erzekelo tipusa"
+        }
+      },
+      "sensor_config": {
+        "title": "Erzekelo konfiguracio",
+        "description": "Allitsa be az erzekelo beallitasait. A kinyeresi mod (JSON/XPath/CSS/RegEx) automatikusan felismeresre kerul a valasz tartalomtípusa alapjan.",
+        "data": {
+          "sensor_state": "Allapot valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
+          "sensor_icon": "Ikon valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
+          "sensor_color": "Szin valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
+          "sensor_device_class": "Eszkozosztaly",
+          "sensor_unit": "Meroegyseg",
+          "tracker_latitude": "Szelesseg valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
+          "tracker_longitude": "Hosszusag valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
+          "tracker_location_name": "Helynev valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
+          "tracker_source_type": "Forras tipusa"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Ervenytelen URL formatum",
+      "no_sensors": "Legalabb egy erzekelot be kell allitani"
+    },
+    "abort": {
+      "no_sensors": "Nincs konfiguralt erzekelo"
+    }
+  },
+  "selector": {
+    "action": {
+      "options": {
+        "basic": "Alapbeallitasok szerkesztese (URL, modszer, timeout, intervallum, SSL)",
+        "headers": "HTTP fejlecek szerkesztese",
+        "sensors": "Erzekelo konfiguracio szerkesztese",
+        "payload": "Keres payload szerkesztese",
+        "add": "Hozzaadas",
+        "done": "Kesz",
+        "clear": "Osszes torlese",
+        "save": "Valtoztatasok mentese",
+        "edit": "Szerkesztes",
+        "delete": "Torles",
+        "back": "Vissza"
+      }
+    },
+    "sensor": {
+      "options": {}
+    },
+    "tracker_source_type": {
+      "options": {
+        "gps": "GPS",
+        "router": "Router",
+        "bluetooth": "Bluetooth",
+        "bluetooth_le": "Bluetooth LE",
+        "none": "Nincs (alapertelmezett)"
+      }
+    },
+    "sensor_type": {
+      "options": {
+        "sensor": "Erzekelo",
+        "binary_sensor": "Binaris erzekelo",
+        "number": "Szam",
+        "device_tracker": "Eszkozkoveto"
+      }
+    }
+  }
+}

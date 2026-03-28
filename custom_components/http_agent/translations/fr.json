@@ -1,0 +1,247 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configuration de HTTP Agent",
+        "description": "Configurer le point de terminaison HTTP",
+        "data": {
+          "url": "URL",
+          "method": "Méthode HTTP",
+          "timeout": "Délai d'expiration (secondes)",
+          "interval": "Intervalle de mise à jour (secondes)",
+          "retries": "Nouvelles tentatives en cas d'erreur",
+          "verify_ssl": "Vérifier le certificat SSL"
+        }
+      },
+      "headers": {
+        "title": "En-têtes HTTP",
+        "description": "Configurer les en-têtes HTTP\n\nEn-têtes actuels :\n{headers}",
+        "data": {
+          "action": "Action"
+        },
+        "data_description": {
+          "action": "Sélectionnez une action à effectuer"
+        }
+      },
+      "add_header": {
+        "title": "Ajouter un en-tête HTTP",
+        "description": "Ajouter un nouvel en-tête HTTP",
+        "data": {
+          "key": "Nom de l'en-tête",
+          "value": "Valeur de l'en-tête"
+        }
+      },
+      "payload": {
+        "title": "Charge utile HTTP",
+        "description": "Configurer la charge utile de la requête",
+        "data": {
+          "content_type": "Type de contenu",
+          "payload": "Charge utile (JSON/XML/Texte)"
+        }
+      },
+      "sensors": {
+        "title": "Configuration des capteurs",
+        "description": "Configurer les capteurs pour extraire des données\n\nCapteurs actuels :\n{sensors}",
+        "data": {
+          "action": "Action"
+        },
+        "data_description": {
+          "action": "Sélectionnez une action à effectuer"
+        }
+      },
+      "add_sensor": {
+        "title": "Ajouter un capteur",
+        "description": "Choisissez le type de capteur et indiquez un nom",
+        "data": {
+          "sensor_name": "Nom du capteur",
+          "sensor_type": "Type de capteur"
+        }
+      },
+      "sensor_config": {
+        "title": "Configuration du capteur",
+        "description": "Configurez les paramètres du capteur. La méthode d'extraction (JSON/XPath/CSS/RegEx) sera détectée automatiquement selon le type de contenu de la réponse.",
+        "data": {
+          "sensor_state": "Sélecteur d'état (JSON/XPath/CSS/RegEx - détection automatique)",
+          "sensor_icon": "Sélecteur d'icône (JSON/XPath/CSS/RegEx - détection automatique)",
+          "sensor_color": "Sélecteur de couleur (JSON/XPath/CSS/RegEx - détection automatique)",
+          "sensor_device_class": "Classe d'appareil",
+          "sensor_unit": "Unité de mesure",
+          "tracker_latitude": "Sélecteur de latitude (JSON/XPath/CSS/RegEx - détection automatique)",
+          "tracker_longitude": "Sélecteur de longitude (JSON/XPath/CSS/RegEx - détection automatique)",
+          "tracker_location_name": "Sélecteur de nom d'emplacement (JSON/XPath/CSS/RegEx - détection automatique)",
+          "tracker_source_type": "Type de source"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Format d'URL invalide",
+      "no_sensors": "Au moins un capteur doit être configuré"
+    },
+    "abort": {
+      "already_configured": "Ce point de terminaison HTTP est déjà configuré",
+      "no_sensors": "Aucun capteur n'a été configuré"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Configuration de HTTP Agent",
+        "description": "Choisissez ce que vous voulez modifier",
+        "data": {
+          "action": "Section de configuration"
+        },
+        "data_description": {
+          "action": "Sélectionnez une section de configuration à modifier"
+        }
+      },
+      "basic": {
+        "title": "Paramètres de base",
+        "description": "Modifier l'URL, la méthode, le délai d'expiration, l'intervalle et la vérification SSL",
+        "data": {
+          "url": "URL",
+          "method": "Méthode HTTP",
+          "timeout": "Délai d'expiration (secondes)",
+          "interval": "Intervalle de mise à jour (secondes)",
+          "retries": "Nouvelles tentatives en cas d'erreur",
+          "verify_ssl": "Vérifier le certificat SSL"
+        }
+      },
+      "headers": {
+        "title": "En-têtes HTTP",
+        "description": "Modifier les en-têtes HTTP\n\nEn-têtes actuels :\n{headers}",
+        "data": {
+          "action": "Action"
+        },
+        "data_description": {
+          "action": "Sélectionnez une action à effectuer"
+        }
+      },
+      "add_header": {
+        "title": "Ajouter un en-tête HTTP",
+        "description": "Ajouter un nouvel en-tête HTTP",
+        "data": {
+          "key": "Nom de l'en-tête",
+          "value": "Valeur de l'en-tête"
+        }
+      },
+      "payload": {
+        "title": "Charge utile HTTP",
+        "description": "Modifier la charge utile de la requête",
+        "data": {
+          "content_type": "Type de contenu",
+          "payload": "Charge utile (JSON/XML/Texte)"
+        }
+      },
+      "sensors": {
+        "title": "Configuration des capteurs",
+        "description": "Modifier la configuration des capteurs\n\nCapteurs actuels :\n{sensors}",
+        "data": {
+          "action": "Action"
+        },
+        "data_description": {
+          "action": "Sélectionnez une action à effectuer"
+        }
+      },
+      "select_sensor": {
+        "title": "Sélectionner un capteur",
+        "description": "Choisissez un capteur à modifier ou à supprimer",
+        "data": {
+          "sensor": "Capteur"
+        }
+      },
+      "edit_sensor": {
+        "title": "Modifier le capteur",
+        "description": "Choisissez quoi faire avec ce capteur :\n\n{sensor_info}",
+        "data": {
+          "action": "Action"
+        },
+        "data_description": {
+          "action": "Sélectionnez une action à effectuer sur ce capteur"
+        }
+      },
+      "modify_sensor": {
+        "title": "Modifier le capteur",
+        "description": "Modifiez la configuration du capteur. La méthode d'extraction (JSON/XPath/CSS/RegEx) sera détectée automatiquement selon le type de contenu de la réponse.",
+        "data": {
+          "sensor_name": "Nom du capteur",
+          "sensor_state": "Sélecteur d'état (JSON/XPath/CSS/RegEx - détection automatique)",
+          "sensor_icon": "Sélecteur d'icône (JSON/XPath/CSS/RegEx - détection automatique)",
+          "sensor_color": "Sélecteur de couleur (JSON/XPath/CSS/RegEx - détection automatique)",
+          "sensor_device_class": "Classe d'appareil",
+          "sensor_unit": "Unité de mesure",
+          "tracker_latitude": "Sélecteur de latitude (JSON/XPath/CSS/RegEx - détection automatique)",
+          "tracker_longitude": "Sélecteur de longitude (JSON/XPath/CSS/RegEx - détection automatique)",
+          "tracker_location_name": "Sélecteur de nom d'emplacement (JSON/XPath/CSS/RegEx - détection automatique)",
+          "tracker_source_type": "Type de source"
+        }
+      },
+      "add_sensor": {
+        "title": "Ajouter un capteur",
+        "description": "Choisissez le type de capteur et indiquez un nom",
+        "data": {
+          "sensor_name": "Nom du capteur",
+          "sensor_type": "Type de capteur"
+        }
+      },
+      "sensor_config": {
+        "title": "Configuration du capteur",
+        "description": "Configurez les paramètres du capteur. La méthode d'extraction (JSON/XPath/CSS/RegEx) sera détectée automatiquement selon le type de contenu de la réponse.",
+        "data": {
+          "sensor_state": "Sélecteur d'état (JSON/XPath/CSS/RegEx - détection automatique)",
+          "sensor_icon": "Sélecteur d'icône (JSON/XPath/CSS/RegEx - détection automatique)",
+          "sensor_color": "Sélecteur de couleur (JSON/XPath/CSS/RegEx - détection automatique)",
+          "sensor_device_class": "Classe d'appareil",
+          "sensor_unit": "Unité de mesure",
+          "tracker_latitude": "Sélecteur de latitude (JSON/XPath/CSS/RegEx - détection automatique)",
+          "tracker_longitude": "Sélecteur de longitude (JSON/XPath/CSS/RegEx - détection automatique)",
+          "tracker_location_name": "Sélecteur de nom d'emplacement (JSON/XPath/CSS/RegEx - détection automatique)",
+          "tracker_source_type": "Type de source"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Format d'URL invalide",
+      "no_sensors": "Au moins un capteur doit être configuré"
+    },
+    "abort": {
+      "no_sensors": "Aucun capteur n'a été configuré"
+    }
+  },
+  "selector": {
+    "action": {
+      "options": {
+        "basic": "Modifier les paramètres de base (URL, méthode, délai, intervalle, SSL)",
+        "headers": "Modifier les en-têtes HTTP",
+        "sensors": "Modifier la configuration des capteurs",
+        "payload": "Modifier la charge utile de la requête",
+        "add": "Ajouter",
+        "done": "Terminé",
+        "clear": "Tout effacer",
+        "save": "Enregistrer les modifications",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "back": "Retour"
+      }
+    },
+    "sensor": {
+      "options": {}
+    },
+    "tracker_source_type": {
+      "options": {
+        "gps": "GPS",
+        "router": "Routeur",
+        "bluetooth": "Bluetooth",
+        "bluetooth_le": "Bluetooth LE",
+        "none": "Aucun (par défaut)"
+      }
+    },
+    "sensor_type": {
+      "options": {
+        "sensor": "Capteur",
+        "binary_sensor": "Capteur binaire",
+        "number": "Nombre",
+        "device_tracker": "Suivi d'appareil"
+      }
+    }
+  }
+}

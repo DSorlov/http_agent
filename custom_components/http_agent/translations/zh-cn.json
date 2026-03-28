@@ -1,0 +1,247 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "HTTP Agent 配置",
+        "description": "配置 HTTP 端点",
+        "data": {
+          "url": "URL",
+          "method": "HTTP 方法",
+          "timeout": "超时（秒）",
+          "interval": "更新间隔（秒）",
+          "retries": "出错时重试",
+          "verify_ssl": "验证 SSL 证书"
+        }
+      },
+      "headers": {
+        "title": "HTTP 标头",
+        "description": "配置 HTTP 标头\n\n当前标头：\n{headers}",
+        "data": {
+          "action": "操作"
+        },
+        "data_description": {
+          "action": "选择要执行的操作"
+        }
+      },
+      "add_header": {
+        "title": "添加 HTTP 标头",
+        "description": "添加新的 HTTP 标头",
+        "data": {
+          "key": "标头名称",
+          "value": "标头值"
+        }
+      },
+      "payload": {
+        "title": "HTTP 负载",
+        "description": "配置请求负载",
+        "data": {
+          "content_type": "内容类型",
+          "payload": "负载（JSON/XML/文本）"
+        }
+      },
+      "sensors": {
+        "title": "传感器配置",
+        "description": "配置传感器以提取数据\n\n当前传感器：\n{sensors}",
+        "data": {
+          "action": "操作"
+        },
+        "data_description": {
+          "action": "选择要执行的操作"
+        }
+      },
+      "add_sensor": {
+        "title": "添加传感器",
+        "description": "选择传感器类型并提供名称",
+        "data": {
+          "sensor_name": "传感器名称",
+          "sensor_type": "传感器类型"
+        }
+      },
+      "sensor_config": {
+        "title": "传感器配置",
+        "description": "配置传感器设置。提取方法（JSON/XPath/CSS/RegEx）将根据响应内容类型自动检测。",
+        "data": {
+          "sensor_state": "状态选择器（JSON/XPath/CSS/RegEx - 自动检测）",
+          "sensor_icon": "图标选择器（JSON/XPath/CSS/RegEx - 自动检测）",
+          "sensor_color": "颜色选择器（JSON/XPath/CSS/RegEx - 自动检测）",
+          "sensor_device_class": "设备类别",
+          "sensor_unit": "计量单位",
+          "tracker_latitude": "纬度选择器（JSON/XPath/CSS/RegEx - 自动检测）",
+          "tracker_longitude": "经度选择器（JSON/XPath/CSS/RegEx - 自动检测）",
+          "tracker_location_name": "位置名称选择器（JSON/XPath/CSS/RegEx - 自动检测）",
+          "tracker_source_type": "来源类型"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "无效的 URL 格式",
+      "no_sensors": "必须至少配置一个传感器"
+    },
+    "abort": {
+      "already_configured": "此 HTTP 端点已配置",
+      "no_sensors": "未配置任何传感器"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "HTTP Agent 配置",
+        "description": "选择要编辑的内容",
+        "data": {
+          "action": "配置部分"
+        },
+        "data_description": {
+          "action": "选择要编辑的配置部分"
+        }
+      },
+      "basic": {
+        "title": "基本设置",
+        "description": "编辑 URL、方法、超时、间隔和 SSL 验证",
+        "data": {
+          "url": "URL",
+          "method": "HTTP 方法",
+          "timeout": "超时（秒）",
+          "interval": "更新间隔（秒）",
+          "retries": "出错时重试",
+          "verify_ssl": "验证 SSL 证书"
+        }
+      },
+      "headers": {
+        "title": "HTTP 标头",
+        "description": "编辑 HTTP 标头\n\n当前标头：\n{headers}",
+        "data": {
+          "action": "操作"
+        },
+        "data_description": {
+          "action": "选择要执行的操作"
+        }
+      },
+      "add_header": {
+        "title": "添加 HTTP 标头",
+        "description": "添加新的 HTTP 标头",
+        "data": {
+          "key": "标头名称",
+          "value": "标头值"
+        }
+      },
+      "payload": {
+        "title": "HTTP 负载",
+        "description": "编辑请求负载",
+        "data": {
+          "content_type": "内容类型",
+          "payload": "负载（JSON/XML/文本）"
+        }
+      },
+      "sensors": {
+        "title": "传感器配置",
+        "description": "编辑传感器配置\n\n当前传感器：\n{sensors}",
+        "data": {
+          "action": "操作"
+        },
+        "data_description": {
+          "action": "选择要执行的操作"
+        }
+      },
+      "select_sensor": {
+        "title": "选择传感器",
+        "description": "选择要编辑或删除的传感器",
+        "data": {
+          "sensor": "传感器"
+        }
+      },
+      "edit_sensor": {
+        "title": "编辑传感器",
+        "description": "选择对此传感器执行的操作：\n\n{sensor_info}",
+        "data": {
+          "action": "操作"
+        },
+        "data_description": {
+          "action": "选择对此传感器执行的操作"
+        }
+      },
+      "modify_sensor": {
+        "title": "修改传感器",
+        "description": "编辑传感器配置。提取方法（JSON/XPath/CSS/RegEx）将根据响应内容类型自动检测。",
+        "data": {
+          "sensor_name": "传感器名称",
+          "sensor_state": "状态选择器（JSON/XPath/CSS/RegEx - 自动检测）",
+          "sensor_icon": "图标选择器（JSON/XPath/CSS/RegEx - 自动检测）",
+          "sensor_color": "颜色选择器（JSON/XPath/CSS/RegEx - 自动检测）",
+          "sensor_device_class": "设备类别",
+          "sensor_unit": "计量单位",
+          "tracker_latitude": "纬度选择器（JSON/XPath/CSS/RegEx - 自动检测）",
+          "tracker_longitude": "经度选择器（JSON/XPath/CSS/RegEx - 自动检测）",
+          "tracker_location_name": "位置名称选择器（JSON/XPath/CSS/RegEx - 自动检测）",
+          "tracker_source_type": "来源类型"
+        }
+      },
+      "add_sensor": {
+        "title": "添加传感器",
+        "description": "选择传感器类型并提供名称",
+        "data": {
+          "sensor_name": "传感器名称",
+          "sensor_type": "传感器类型"
+        }
+      },
+      "sensor_config": {
+        "title": "传感器配置",
+        "description": "配置传感器设置。提取方法（JSON/XPath/CSS/RegEx）将根据响应内容类型自动检测。",
+        "data": {
+          "sensor_state": "状态选择器（JSON/XPath/CSS/RegEx - 自动检测）",
+          "sensor_icon": "图标选择器（JSON/XPath/CSS/RegEx - 自动检测）",
+          "sensor_color": "颜色选择器（JSON/XPath/CSS/RegEx - 自动检测）",
+          "sensor_device_class": "设备类别",
+          "sensor_unit": "计量单位",
+          "tracker_latitude": "纬度选择器（JSON/XPath/CSS/RegEx - 自动检测）",
+          "tracker_longitude": "经度选择器（JSON/XPath/CSS/RegEx - 自动检测）",
+          "tracker_location_name": "位置名称选择器（JSON/XPath/CSS/RegEx - 自动检测）",
+          "tracker_source_type": "来源类型"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "无效的 URL 格式",
+      "no_sensors": "必须至少配置一个传感器"
+    },
+    "abort": {
+      "no_sensors": "未配置任何传感器"
+    }
+  },
+  "selector": {
+    "action": {
+      "options": {
+        "basic": "编辑基本设置（URL、方法、超时、间隔、SSL）",
+        "headers": "编辑 HTTP 标头",
+        "sensors": "编辑传感器配置",
+        "payload": "编辑请求负载",
+        "add": "添加",
+        "done": "完成",
+        "clear": "全部清除",
+        "save": "保存更改",
+        "edit": "编辑",
+        "delete": "删除",
+        "back": "返回"
+      }
+    },
+    "sensor": {
+      "options": {}
+    },
+    "tracker_source_type": {
+      "options": {
+        "gps": "GPS",
+        "router": "路由器",
+        "bluetooth": "Bluetooth",
+        "bluetooth_le": "Bluetooth LE",
+        "none": "无（默认）"
+      }
+    },
+    "sensor_type": {
+      "options": {
+        "sensor": "传感器",
+        "binary_sensor": "二进制传感器",
+        "number": "数值",
+        "device_tracker": "设备追踪器"
+      }
+    }
+  }
+}

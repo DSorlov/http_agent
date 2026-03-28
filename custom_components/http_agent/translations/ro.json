@@ -1,0 +1,247 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configurare HTTP Agent",
+        "description": "Configureaza endpoint-ul HTTP",
+        "data": {
+          "url": "URL",
+          "method": "Metoda HTTP",
+          "timeout": "Timeout (secunde)",
+          "interval": "Interval de actualizare (secunde)",
+          "retries": "Reincercari la eroare",
+          "verify_ssl": "Verifica certificatul SSL"
+        }
+      },
+      "headers": {
+        "title": "Headere HTTP",
+        "description": "Configureaza headerele HTTP\n\nHeadere curente:\n{headers}",
+        "data": {
+          "action": "Actiune"
+        },
+        "data_description": {
+          "action": "Selecteaza o actiune"
+        }
+      },
+      "add_header": {
+        "title": "Adauga header HTTP",
+        "description": "Adauga un header HTTP nou",
+        "data": {
+          "key": "Nume header",
+          "value": "Valoare header"
+        }
+      },
+      "payload": {
+        "title": "Payload HTTP",
+        "description": "Configureaza payload-ul cererii",
+        "data": {
+          "content_type": "Tip continut",
+          "payload": "Payload (JSON/XML/Text)"
+        }
+      },
+      "sensors": {
+        "title": "Configurare senzori",
+        "description": "Configureaza senzorii pentru extragerea datelor\n\nSenzori curenti:\n{sensors}",
+        "data": {
+          "action": "Actiune"
+        },
+        "data_description": {
+          "action": "Selecteaza o actiune"
+        }
+      },
+      "add_sensor": {
+        "title": "Adauga senzor",
+        "description": "Alege tipul senzorului si ofera un nume",
+        "data": {
+          "sensor_name": "Nume senzor",
+          "sensor_type": "Tip senzor"
+        }
+      },
+      "sensor_config": {
+        "title": "Configurare senzor",
+        "description": "Configureaza setarile senzorului. Metoda de extragere (JSON/XPath/CSS/RegEx) va fi detectata automat pe baza tipului de continut al raspunsului.",
+        "data": {
+          "sensor_state": "Selector stare (JSON/XPath/CSS/RegEx - detectat automat)",
+          "sensor_icon": "Selector pictograma (JSON/XPath/CSS/RegEx - detectat automat)",
+          "sensor_color": "Selector culoare (JSON/XPath/CSS/RegEx - detectat automat)",
+          "sensor_device_class": "Clasa dispozitiv",
+          "sensor_unit": "Unitate de masura",
+          "tracker_latitude": "Selector latitudine (JSON/XPath/CSS/RegEx - detectat automat)",
+          "tracker_longitude": "Selector longitudine (JSON/XPath/CSS/RegEx - detectat automat)",
+          "tracker_location_name": "Selector nume locatie (JSON/XPath/CSS/RegEx - detectat automat)",
+          "tracker_source_type": "Tip sursa"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Format URL invalid",
+      "no_sensors": "Trebuie configurat cel putin un senzor"
+    },
+    "abort": {
+      "already_configured": "Acest endpoint HTTP este deja configurat",
+      "no_sensors": "Nu au fost configurati senzori"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Configurare HTTP Agent",
+        "description": "Alege ce sa editezi",
+        "data": {
+          "action": "Sectiune configurare"
+        },
+        "data_description": {
+          "action": "Selecteaza o sectiune de configurare pentru editare"
+        }
+      },
+      "basic": {
+        "title": "Setari de baza",
+        "description": "Editeaza URL, metoda, timeout, intervalul si verificarea SSL",
+        "data": {
+          "url": "URL",
+          "method": "Metoda HTTP",
+          "timeout": "Timeout (secunde)",
+          "interval": "Interval de actualizare (secunde)",
+          "retries": "Reincercari la eroare",
+          "verify_ssl": "Verifica certificatul SSL"
+        }
+      },
+      "headers": {
+        "title": "Headere HTTP",
+        "description": "Editeaza headerele HTTP\n\nHeadere curente:\n{headers}",
+        "data": {
+          "action": "Actiune"
+        },
+        "data_description": {
+          "action": "Selecteaza o actiune"
+        }
+      },
+      "add_header": {
+        "title": "Adauga header HTTP",
+        "description": "Adauga un header HTTP nou",
+        "data": {
+          "key": "Nume header",
+          "value": "Valoare header"
+        }
+      },
+      "payload": {
+        "title": "Payload HTTP",
+        "description": "Editeaza payload-ul cererii",
+        "data": {
+          "content_type": "Tip continut",
+          "payload": "Payload (JSON/XML/Text)"
+        }
+      },
+      "sensors": {
+        "title": "Configurare senzori",
+        "description": "Editeaza configuratia senzorilor\n\nSenzori curenti:\n{sensors}",
+        "data": {
+          "action": "Actiune"
+        },
+        "data_description": {
+          "action": "Selecteaza o actiune"
+        }
+      },
+      "select_sensor": {
+        "title": "Selecteaza senzor",
+        "description": "Alege un senzor pentru editare sau stergere",
+        "data": {
+          "sensor": "Senzor"
+        }
+      },
+      "edit_sensor": {
+        "title": "Editeaza senzor",
+        "description": "Alege ce sa faci cu acest senzor:\n\n{sensor_info}",
+        "data": {
+          "action": "Actiune"
+        },
+        "data_description": {
+          "action": "Selecteaza o actiune pentru acest senzor"
+        }
+      },
+      "modify_sensor": {
+        "title": "Modifica senzor",
+        "description": "Editeaza configuratia senzorului. Metoda de extragere (JSON/XPath/CSS/RegEx) va fi detectata automat pe baza tipului de continut al raspunsului.",
+        "data": {
+          "sensor_name": "Nume senzor",
+          "sensor_state": "Selector stare (JSON/XPath/CSS/RegEx - detectat automat)",
+          "sensor_icon": "Selector pictograma (JSON/XPath/CSS/RegEx - detectat automat)",
+          "sensor_color": "Selector culoare (JSON/XPath/CSS/RegEx - detectat automat)",
+          "sensor_device_class": "Clasa dispozitiv",
+          "sensor_unit": "Unitate de masura",
+          "tracker_latitude": "Selector latitudine (JSON/XPath/CSS/RegEx - detectat automat)",
+          "tracker_longitude": "Selector longitudine (JSON/XPath/CSS/RegEx - detectat automat)",
+          "tracker_location_name": "Selector nume locatie (JSON/XPath/CSS/RegEx - detectat automat)",
+          "tracker_source_type": "Tip sursa"
+        }
+      },
+      "add_sensor": {
+        "title": "Adauga senzor",
+        "description": "Alege tipul senzorului si ofera un nume",
+        "data": {
+          "sensor_name": "Nume senzor",
+          "sensor_type": "Tip senzor"
+        }
+      },
+      "sensor_config": {
+        "title": "Configurare senzor",
+        "description": "Configureaza setarile senzorului. Metoda de extragere (JSON/XPath/CSS/RegEx) va fi detectata automat pe baza tipului de continut al raspunsului.",
+        "data": {
+          "sensor_state": "Selector stare (JSON/XPath/CSS/RegEx - detectat automat)",
+          "sensor_icon": "Selector pictograma (JSON/XPath/CSS/RegEx - detectat automat)",
+          "sensor_color": "Selector culoare (JSON/XPath/CSS/RegEx - detectat automat)",
+          "sensor_device_class": "Clasa dispozitiv",
+          "sensor_unit": "Unitate de masura",
+          "tracker_latitude": "Selector latitudine (JSON/XPath/CSS/RegEx - detectat automat)",
+          "tracker_longitude": "Selector longitudine (JSON/XPath/CSS/RegEx - detectat automat)",
+          "tracker_location_name": "Selector nume locatie (JSON/XPath/CSS/RegEx - detectat automat)",
+          "tracker_source_type": "Tip sursa"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Format URL invalid",
+      "no_sensors": "Trebuie configurat cel putin un senzor"
+    },
+    "abort": {
+      "no_sensors": "Nu au fost configurati senzori"
+    }
+  },
+  "selector": {
+    "action": {
+      "options": {
+        "basic": "Editeaza setarile de baza (URL, metoda, timeout, interval, SSL)",
+        "headers": "Editeaza headerele HTTP",
+        "sensors": "Editeaza configuratia senzorilor",
+        "payload": "Editeaza payload-ul cererii",
+        "add": "Adauga",
+        "done": "Gata",
+        "clear": "Sterge tot",
+        "save": "Salveaza modificarile",
+        "edit": "Editeaza",
+        "delete": "Sterge",
+        "back": "Inapoi"
+      }
+    },
+    "sensor": {
+      "options": {}
+    },
+    "tracker_source_type": {
+      "options": {
+        "gps": "GPS",
+        "router": "Router",
+        "bluetooth": "Bluetooth",
+        "bluetooth_le": "Bluetooth LE",
+        "none": "Niciunul (implicit)"
+      }
+    },
+    "sensor_type": {
+      "options": {
+        "sensor": "Senzor",
+        "binary_sensor": "Senzor binar",
+        "number": "Numar",
+        "device_tracker": "Tracker dispozitiv"
+      }
+    }
+  }
+}

@@ -1,0 +1,247 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Ρύθμιση HTTP Agent",
+        "description": "Ρυθμίστε το HTTP endpoint",
+        "data": {
+          "url": "URL",
+          "method": "Μέθοδος HTTP",
+          "timeout": "Χρονικό όριο (δευτερόλεπτα)",
+          "interval": "Διάστημα ενημέρωσης (δευτερόλεπτα)",
+          "retries": "Επαναλήψεις σε σφάλμα",
+          "verify_ssl": "Επαλήθευση πιστοποιητικού SSL"
+        }
+      },
+      "headers": {
+        "title": "Κεφαλίδες HTTP",
+        "description": "Ρύθμιση κεφαλίδων HTTP\n\nΤρέχουσες κεφαλίδες:\n{headers}",
+        "data": {
+          "action": "Ενέργεια"
+        },
+        "data_description": {
+          "action": "Επιλέξτε ενέργεια"
+        }
+      },
+      "add_header": {
+        "title": "Προσθήκη κεφαλίδας HTTP",
+        "description": "Προσθήκη νέας κεφαλίδας HTTP",
+        "data": {
+          "key": "Όνομα κεφαλίδας",
+          "value": "Τιμή κεφαλίδας"
+        }
+      },
+      "payload": {
+        "title": "Payload HTTP",
+        "description": "Ρυθμίστε το payload του αιτήματος",
+        "data": {
+          "content_type": "Τύπος περιεχομένου",
+          "payload": "Payload (JSON/XML/Κείμενο)"
+        }
+      },
+      "sensors": {
+        "title": "Ρύθμιση αισθητήρων",
+        "description": "Ρύθμιση αισθητήρων για εξαγωγή δεδομένων\n\nΤρέχοντες αισθητήρες:\n{sensors}",
+        "data": {
+          "action": "Ενέργεια"
+        },
+        "data_description": {
+          "action": "Επιλέξτε ενέργεια"
+        }
+      },
+      "add_sensor": {
+        "title": "Προσθήκη αισθητήρα",
+        "description": "Επιλέξτε τύπο αισθητήρα και δώστε όνομα",
+        "data": {
+          "sensor_name": "Όνομα αισθητήρα",
+          "sensor_type": "Τύπος αισθητήρα"
+        }
+      },
+      "sensor_config": {
+        "title": "Ρύθμιση αισθητήρα",
+        "description": "Ρυθμίστε τις επιλογές του αισθητήρα. Η μέθοδος εξαγωγής (JSON/XPath/CSS/RegEx) θα ανιχνευτεί αυτόματα με βάση τον τύπο περιεχομένου της απόκρισης.",
+        "data": {
+          "sensor_state": "Επιλογέας κατάστασης (JSON/XPath/CSS/RegEx - αυτόματη ανίχνευση)",
+          "sensor_icon": "Επιλογέας εικονιδίου (JSON/XPath/CSS/RegEx - αυτόματη ανίχνευση)",
+          "sensor_color": "Επιλογέας χρώματος (JSON/XPath/CSS/RegEx - αυτόματη ανίχνευση)",
+          "sensor_device_class": "Κλάση συσκευής",
+          "sensor_unit": "Μονάδα μέτρησης",
+          "tracker_latitude": "Επιλογέας γεωγραφικού πλάτους (JSON/XPath/CSS/RegEx - αυτόματη ανίχνευση)",
+          "tracker_longitude": "Επιλογέας γεωγραφικού μήκους (JSON/XPath/CSS/RegEx - αυτόματη ανίχνευση)",
+          "tracker_location_name": "Επιλογέας ονόματος τοποθεσίας (JSON/XPath/CSS/RegEx - αυτόματη ανίχνευση)",
+          "tracker_source_type": "Τύπος πηγής"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Μη έγκυρη μορφή URL",
+      "no_sensors": "Πρέπει να διαμορφωθεί τουλάχιστον ένας αισθητήρας"
+    },
+    "abort": {
+      "already_configured": "Αυτό το HTTP endpoint είναι ήδη ρυθμισμένο",
+      "no_sensors": "Δεν ρυθμίστηκαν αισθητήρες"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Ρύθμιση HTTP Agent",
+        "description": "Επιλέξτε τι να επεξεργαστείτε",
+        "data": {
+          "action": "Ενότητα ρύθμισης"
+        },
+        "data_description": {
+          "action": "Επιλέξτε ενότητα ρύθμισης για επεξεργασία"
+        }
+      },
+      "basic": {
+        "title": "Βασικές ρυθμίσεις",
+        "description": "Επεξεργασία URL, μεθόδου, timeout, διαστήματος και επαλήθευσης SSL",
+        "data": {
+          "url": "URL",
+          "method": "Μέθοδος HTTP",
+          "timeout": "Χρονικό όριο (δευτερόλεπτα)",
+          "interval": "Διάστημα ενημέρωσης (δευτερόλεπτα)",
+          "retries": "Επαναλήψεις σε σφάλμα",
+          "verify_ssl": "Επαλήθευση πιστοποιητικού SSL"
+        }
+      },
+      "headers": {
+        "title": "Κεφαλίδες HTTP",
+        "description": "Επεξεργασία κεφαλίδων HTTP\n\nΤρέχουσες κεφαλίδες:\n{headers}",
+        "data": {
+          "action": "Ενέργεια"
+        },
+        "data_description": {
+          "action": "Επιλέξτε ενέργεια"
+        }
+      },
+      "add_header": {
+        "title": "Προσθήκη κεφαλίδας HTTP",
+        "description": "Προσθήκη νέας κεφαλίδας HTTP",
+        "data": {
+          "key": "Όνομα κεφαλίδας",
+          "value": "Τιμή κεφαλίδας"
+        }
+      },
+      "payload": {
+        "title": "Payload HTTP",
+        "description": "Επεξεργασία payload του αιτήματος",
+        "data": {
+          "content_type": "Τύπος περιεχομένου",
+          "payload": "Payload (JSON/XML/Κείμενο)"
+        }
+      },
+      "sensors": {
+        "title": "Ρύθμιση αισθητήρων",
+        "description": "Επεξεργασία ρυθμίσεων αισθητήρων\n\nΤρέχοντες αισθητήρες:\n{sensors}",
+        "data": {
+          "action": "Ενέργεια"
+        },
+        "data_description": {
+          "action": "Επιλέξτε ενέργεια"
+        }
+      },
+      "select_sensor": {
+        "title": "Επιλογή αισθητήρα",
+        "description": "Επιλέξτε αισθητήρα για επεξεργασία ή διαγραφή",
+        "data": {
+          "sensor": "Αισθητήρας"
+        }
+      },
+      "edit_sensor": {
+        "title": "Επεξεργασία αισθητήρα",
+        "description": "Επιλέξτε τι να κάνετε με αυτόν τον αισθητήρα:\n\n{sensor_info}",
+        "data": {
+          "action": "Ενέργεια"
+        },
+        "data_description": {
+          "action": "Επιλέξτε ενέργεια για αυτόν τον αισθητήρα"
+        }
+      },
+      "modify_sensor": {
+        "title": "Τροποποίηση αισθητήρα",
+        "description": "Επεξεργαστείτε τη ρύθμιση του αισθητήρα. Η μέθοδος εξαγωγής (JSON/XPath/CSS/RegEx) θα ανιχνευτεί αυτόματα με βάση τον τύπο περιεχομένου της απόκρισης.",
+        "data": {
+          "sensor_name": "Όνομα αισθητήρα",
+          "sensor_state": "Επιλογέας κατάστασης (JSON/XPath/CSS/RegEx - αυτόματη ανίχνευση)",
+          "sensor_icon": "Επιλογέας εικονιδίου (JSON/XPath/CSS/RegEx - αυτόματη ανίχνευση)",
+          "sensor_color": "Επιλογέας χρώματος (JSON/XPath/CSS/RegEx - αυτόματη ανίχνευση)",
+          "sensor_device_class": "Κλάση συσκευής",
+          "sensor_unit": "Μονάδα μέτρησης",
+          "tracker_latitude": "Επιλογέας γεωγραφικού πλάτους (JSON/XPath/CSS/RegEx - αυτόματη ανίχνευση)",
+          "tracker_longitude": "Επιλογέας γεωγραφικού μήκους (JSON/XPath/CSS/RegEx - αυτόματη ανίχνευση)",
+          "tracker_location_name": "Επιλογέας ονόματος τοποθεσίας (JSON/XPath/CSS/RegEx - αυτόματη ανίχνευση)",
+          "tracker_source_type": "Τύπος πηγής"
+        }
+      },
+      "add_sensor": {
+        "title": "Προσθήκη αισθητήρα",
+        "description": "Επιλέξτε τύπο αισθητήρα και δώστε όνομα",
+        "data": {
+          "sensor_name": "Όνομα αισθητήρα",
+          "sensor_type": "Τύπος αισθητήρα"
+        }
+      },
+      "sensor_config": {
+        "title": "Ρύθμιση αισθητήρα",
+        "description": "Ρυθμίστε τις επιλογές του αισθητήρα. Η μέθοδος εξαγωγής (JSON/XPath/CSS/RegEx) θα ανιχνευτεί αυτόματα με βάση τον τύπο περιεχομένου της απόκρισης.",
+        "data": {
+          "sensor_state": "Επιλογέας κατάστασης (JSON/XPath/CSS/RegEx - αυτόματη ανίχνευση)",
+          "sensor_icon": "Επιλογέας εικονιδίου (JSON/XPath/CSS/RegEx - αυτόματη ανίχνευση)",
+          "sensor_color": "Επιλογέας χρώματος (JSON/XPath/CSS/RegEx - αυτόματη ανίχνευση)",
+          "sensor_device_class": "Κλάση συσκευής",
+          "sensor_unit": "Μονάδα μέτρησης",
+          "tracker_latitude": "Επιλογέας γεωγραφικού πλάτους (JSON/XPath/CSS/RegEx - αυτόματη ανίχνευση)",
+          "tracker_longitude": "Επιλογέας γεωγραφικού μήκους (JSON/XPath/CSS/RegEx - αυτόματη ανίχνευση)",
+          "tracker_location_name": "Επιλογέας ονόματος τοποθεσίας (JSON/XPath/CSS/RegEx - αυτόματη ανίχνευση)",
+          "tracker_source_type": "Τύπος πηγής"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Μη έγκυρη μορφή URL",
+      "no_sensors": "Πρέπει να διαμορφωθεί τουλάχιστον ένας αισθητήρας"
+    },
+    "abort": {
+      "no_sensors": "Δεν ρυθμίστηκαν αισθητήρες"
+    }
+  },
+  "selector": {
+    "action": {
+      "options": {
+        "basic": "Επεξεργασία βασικών ρυθμίσεων (URL, μέθοδος, timeout, διάστημα, SSL)",
+        "headers": "Επεξεργασία κεφαλίδων HTTP",
+        "sensors": "Επεξεργασία ρυθμίσεων αισθητήρων",
+        "payload": "Επεξεργασία payload αιτήματος",
+        "add": "Προσθήκη",
+        "done": "Ολοκληρώθηκε",
+        "clear": "Εκκαθάριση όλων",
+        "save": "Αποθήκευση αλλαγών",
+        "edit": "Επεξεργασία",
+        "delete": "Διαγραφή",
+        "back": "Πίσω"
+      }
+    },
+    "sensor": {
+      "options": {}
+    },
+    "tracker_source_type": {
+      "options": {
+        "gps": "GPS",
+        "router": "Router",
+        "bluetooth": "Bluetooth",
+        "bluetooth_le": "Bluetooth LE",
+        "none": "Κανένα (προεπιλογή)"
+      }
+    },
+    "sensor_type": {
+      "options": {
+        "sensor": "Αισθητήρας",
+        "binary_sensor": "Δυαδικός αισθητήρας",
+        "number": "Αριθμός",
+        "device_tracker": "Παρακολούθηση συσκευής"
+      }
+    }
+  }
+}

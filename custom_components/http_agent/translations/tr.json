@@ -1,0 +1,247 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "HTTP Agent yapilandirmasi",
+        "description": "HTTP uc noktasini yapilandir",
+        "data": {
+          "url": "URL",
+          "method": "HTTP yontemi",
+          "timeout": "Zaman asimi (saniye)",
+          "interval": "Guncelleme araligi (saniye)",
+          "retries": "Hata durumunda yeniden dene",
+          "verify_ssl": "SSL sertifikasini dogrula"
+        }
+      },
+      "headers": {
+        "title": "HTTP basliklari",
+        "description": "HTTP basliklarini yapilandir\n\nGuncel basliklar:\n{headers}",
+        "data": {
+          "action": "Eylem"
+        },
+        "data_description": {
+          "action": "Yapilacak bir eylem secin"
+        }
+      },
+      "add_header": {
+        "title": "HTTP basligi ekle",
+        "description": "Yeni HTTP basligi ekle",
+        "data": {
+          "key": "Baslik adi",
+          "value": "Baslik degeri"
+        }
+      },
+      "payload": {
+        "title": "HTTP yuk",
+        "description": "Istek yukunu yapilandir",
+        "data": {
+          "content_type": "Icerik turu",
+          "payload": "Yuk (JSON/XML/Metin)"
+        }
+      },
+      "sensors": {
+        "title": "Sensor yapilandirmasi",
+        "description": "Veri cikarmak icin sensorleri yapilandir\n\nGuncel sensorler:\n{sensors}",
+        "data": {
+          "action": "Eylem"
+        },
+        "data_description": {
+          "action": "Yapilacak bir eylem secin"
+        }
+      },
+      "add_sensor": {
+        "title": "Sensor ekle",
+        "description": "Sensor turunu secin ve bir ad girin",
+        "data": {
+          "sensor_name": "Sensor adi",
+          "sensor_type": "Sensor tipi"
+        }
+      },
+      "sensor_config": {
+        "title": "Sensor yapilandirmasi",
+        "description": "Sensor ayarlarini yapilandirin. Cikarma yontemi (JSON/XPath/CSS/RegEx), yanit icerik turune gore otomatik olarak algilanacaktir.",
+        "data": {
+          "sensor_state": "Durum secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
+          "sensor_icon": "Simge secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
+          "sensor_color": "Renk secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
+          "sensor_device_class": "Cihaz sinifi",
+          "sensor_unit": "Olcum birimi",
+          "tracker_latitude": "Enlem secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
+          "tracker_longitude": "Boylam secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
+          "tracker_location_name": "Konum adi secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
+          "tracker_source_type": "Kaynak tipi"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Gecersiz URL bicimi",
+      "no_sensors": "En az bir sensor yapilandirilmalidir"
+    },
+    "abort": {
+      "already_configured": "Bu HTTP uc noktasi zaten yapilandirildi",
+      "no_sensors": "Hic sensor yapilandirilmadi"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "HTTP Agent yapilandirmasi",
+        "description": "Neyi duzenleyeceginizi secin",
+        "data": {
+          "action": "Yapilandirma bolumu"
+        },
+        "data_description": {
+          "action": "Duzenlemek icin bir yapilandirma bolumu secin"
+        }
+      },
+      "basic": {
+        "title": "Temel ayarlar",
+        "description": "URL, yontem, zaman asimi, aralik ve SSL dogrulamasini duzenle",
+        "data": {
+          "url": "URL",
+          "method": "HTTP yontemi",
+          "timeout": "Zaman asimi (saniye)",
+          "interval": "Guncelleme araligi (saniye)",
+          "retries": "Hata durumunda yeniden dene",
+          "verify_ssl": "SSL sertifikasini dogrula"
+        }
+      },
+      "headers": {
+        "title": "HTTP basliklari",
+        "description": "HTTP basliklarini duzenle\n\nGuncel basliklar:\n{headers}",
+        "data": {
+          "action": "Eylem"
+        },
+        "data_description": {
+          "action": "Yapilacak bir eylem secin"
+        }
+      },
+      "add_header": {
+        "title": "HTTP basligi ekle",
+        "description": "Yeni HTTP basligi ekle",
+        "data": {
+          "key": "Baslik adi",
+          "value": "Baslik degeri"
+        }
+      },
+      "payload": {
+        "title": "HTTP yuk",
+        "description": "Istek yukunu duzenle",
+        "data": {
+          "content_type": "Icerik turu",
+          "payload": "Yuk (JSON/XML/Metin)"
+        }
+      },
+      "sensors": {
+        "title": "Sensor yapilandirmasi",
+        "description": "Sensor yapilandirmasini duzenle\n\nGuncel sensorler:\n{sensors}",
+        "data": {
+          "action": "Eylem"
+        },
+        "data_description": {
+          "action": "Yapilacak bir eylem secin"
+        }
+      },
+      "select_sensor": {
+        "title": "Sensor sec",
+        "description": "Duzenlemek veya silmek icin bir sensor secin",
+        "data": {
+          "sensor": "Sensor"
+        }
+      },
+      "edit_sensor": {
+        "title": "Sensoru duzenle",
+        "description": "Bu sensor ile ne yapilacagini secin:\n\n{sensor_info}",
+        "data": {
+          "action": "Eylem"
+        },
+        "data_description": {
+          "action": "Bu sensor uzerinde yapilacak eylemi secin"
+        }
+      },
+      "modify_sensor": {
+        "title": "Sensoru degistir",
+        "description": "Sensor yapilandirmasini duzenleyin. Cikarma yontemi (JSON/XPath/CSS/RegEx), yanit icerik turune gore otomatik olarak algilanacaktir.",
+        "data": {
+          "sensor_name": "Sensor adi",
+          "sensor_state": "Durum secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
+          "sensor_icon": "Simge secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
+          "sensor_color": "Renk secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
+          "sensor_device_class": "Cihaz sinifi",
+          "sensor_unit": "Olcum birimi",
+          "tracker_latitude": "Enlem secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
+          "tracker_longitude": "Boylam secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
+          "tracker_location_name": "Konum adi secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
+          "tracker_source_type": "Kaynak tipi"
+        }
+      },
+      "add_sensor": {
+        "title": "Sensor ekle",
+        "description": "Sensor turunu secin ve bir ad girin",
+        "data": {
+          "sensor_name": "Sensor adi",
+          "sensor_type": "Sensor tipi"
+        }
+      },
+      "sensor_config": {
+        "title": "Sensor yapilandirmasi",
+        "description": "Sensor ayarlarini yapilandirin. Cikarma yontemi (JSON/XPath/CSS/RegEx), yanit icerik turune gore otomatik olarak algilanacaktir.",
+        "data": {
+          "sensor_state": "Durum secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
+          "sensor_icon": "Simge secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
+          "sensor_color": "Renk secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
+          "sensor_device_class": "Cihaz sinifi",
+          "sensor_unit": "Olcum birimi",
+          "tracker_latitude": "Enlem secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
+          "tracker_longitude": "Boylam secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
+          "tracker_location_name": "Konum adi secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
+          "tracker_source_type": "Kaynak tipi"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Gecersiz URL bicimi",
+      "no_sensors": "En az bir sensor yapilandirilmalidir"
+    },
+    "abort": {
+      "no_sensors": "Hic sensor yapilandirilmadi"
+    }
+  },
+  "selector": {
+    "action": {
+      "options": {
+        "basic": "Temel ayarlari duzenle (URL, yontem, zaman asimi, aralik, SSL)",
+        "headers": "HTTP basliklarini duzenle",
+        "sensors": "Sensor yapilandirmasini duzenle",
+        "payload": "Istek yukunu duzenle",
+        "add": "Ekle",
+        "done": "Tamam",
+        "clear": "Tumunu temizle",
+        "save": "Degisiklikleri kaydet",
+        "edit": "Duzenle",
+        "delete": "Sil",
+        "back": "Geri"
+      }
+    },
+    "sensor": {
+      "options": {}
+    },
+    "tracker_source_type": {
+      "options": {
+        "gps": "GPS",
+        "router": "Yonlendirici",
+        "bluetooth": "Bluetooth",
+        "bluetooth_le": "Bluetooth LE",
+        "none": "Yok (varsayilan)"
+      }
+    },
+    "sensor_type": {
+      "options": {
+        "sensor": "Sensor",
+        "binary_sensor": "Ikili sensor",
+        "number": "Sayi",
+        "device_tracker": "Cihaz izleyici"
+      }
+    }
+  }
+}
