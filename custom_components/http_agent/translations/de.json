@@ -15,12 +15,10 @@
       },
       "headers": {
         "title": "HTTP-Header",
-        "description": "HTTP-Header konfigurieren\n\nAktuelle Header:\n{headers}",
-        "data": {
-          "action": "Aktion"
-        },
-        "data_description": {
-          "action": "Select an action to perform"
+        "description": "HTTP-Header konfigurieren.\n\nAktuelle Header:\n{headers}",
+        "menu_options": {
+          "add_header": "Header hinzufügen",
+          "headers_done": "Weiter"
         }
       },
       "add_header": {
@@ -41,12 +39,10 @@
       },
       "sensors": {
         "title": "Sensor-Konfiguration",
-        "description": "Sensoren zur Datenextraktion konfigurieren\n\nAktuelle Sensoren:\n{sensors}",
-        "data": {
-          "action": "Aktion"
-        },
-        "data_description": {
-          "action": "Select an action to perform"
+        "description": "Sensoren zur Datenextraktion konfigurieren.\n\nAktuelle Sensoren:\n{sensors}",
+        "menu_options": {
+          "add_sensor": "Sensor hinzufügen",
+          "sensors_done": "Fertigstellen"
         }
       },
       "add_sensor": {
@@ -61,14 +57,14 @@
         "title": "Sensor-Konfiguration",
         "description": "Sensor-Einstellungen konfigurieren. Die Extraktionsmethode (JSON/XPath/CSS/RegEx) wird automatisch basierend auf dem Antwort-Inhaltstyp erkannt.",
         "data": {
-          "sensor_state": "Zustandswähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
-          "sensor_icon": "Symbol-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
-          "sensor_color": "Farb-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
+          "sensor_state": "Zustandswähler (JSON/XPath/CSS/RegEx - automatisch erkannt)",
+          "sensor_icon": "Symbol-Wähler (JSON/XPath/CSS/RegEx - automatisch erkannt)",
+          "sensor_color": "Farb-Wähler (JSON/XPath/CSS/RegEx - automatisch erkannt)",
           "sensor_device_class": "Geräteklasse",
           "sensor_unit": "Maßeinheit",
-          "tracker_latitude": "Breitengrad-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
-          "tracker_longitude": "Längengrad-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
-          "tracker_location_name": "Standortname-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
+          "tracker_latitude": "Breitengrad-Wähler (JSON/XPath/CSS/RegEx - automatisch erkannt)",
+          "tracker_longitude": "Längengrad-Wähler (JSON/XPath/CSS/RegEx - automatisch erkannt)",
+          "tracker_location_name": "Standortname-Wähler (JSON/XPath/CSS/RegEx - automatisch erkannt)",
           "tracker_source_type": "Quellentyp"
         }
       }
@@ -87,11 +83,11 @@
       "init": {
         "title": "HTTP Agent Konfiguration",
         "description": "Wählen Sie, was bearbeitet werden soll",
-        "data": {
-          "action": "Konfigurationsbereich"
-        },
-        "data_description": {
-          "action": "Select a configuration section to edit"
+        "menu_options": {
+          "basic": "Grundeinstellungen bearbeiten (URL, Methode, Zeitüberschreitung, Intervall, SSL)",
+          "headers": "HTTP-Header bearbeiten",
+          "payload": "Anfrage-Nutzlast bearbeiten",
+          "sensors": "Sensor-Konfiguration bearbeiten"
         }
       },
       "basic": {
@@ -108,12 +104,11 @@
       },
       "headers": {
         "title": "HTTP-Header",
-        "description": "HTTP-Header bearbeiten\n\nAktuelle Header:\n{headers}",
-        "data": {
-          "action": "Aktion"
-        },
-        "data_description": {
-          "action": "Select an action to perform"
+        "description": "HTTP-Header bearbeiten.\n\nAktuelle Header:\n{headers}",
+        "menu_options": {
+          "add_header": "Header hinzufügen",
+          "clear_headers": "Alle Header löschen",
+          "headers_done": "Speichern"
         }
       },
       "add_header": {
@@ -134,12 +129,12 @@
       },
       "sensors": {
         "title": "Sensor-Konfiguration",
-        "description": "Sensor-Konfiguration bearbeiten\n\nAktuelle Sensoren:\n{sensors}",
-        "data": {
-          "action": "Aktion"
-        },
-        "data_description": {
-          "action": "Select an action to perform"
+        "description": "Sensor-Konfiguration bearbeiten.\n\nAktuelle Sensoren:\n{sensors}",
+        "menu_options": {
+          "add_sensor": "Sensor hinzufügen",
+          "select_sensor": "Einen Sensor bearbeiten",
+          "clear_sensors": "Alle Sensoren löschen",
+          "sensors_done": "Speichern"
         }
       },
       "select_sensor": {
@@ -152,11 +147,10 @@
       "edit_sensor": {
         "title": "Sensor bearbeiten",
         "description": "Wählen Sie, was mit diesem Sensor gemacht werden soll:\n\n{sensor_info}",
-        "data": {
-          "action": "Aktion"
-        },
-        "data_description": {
-          "action": "Select an action to perform on this sensor"
+        "menu_options": {
+          "modify_sensor": "Sensor bearbeiten",
+          "delete_sensor": "Sensor löschen",
+          "edit_back": "Zurück"
         }
       },
       "modify_sensor": {
@@ -164,14 +158,14 @@
         "description": "Sensor-Konfiguration bearbeiten. Die Extraktionsmethode (JSON/XPath/CSS/RegEx) wird automatisch basierend auf dem Antwort-Inhaltstyp erkannt.",
         "data": {
           "sensor_name": "Sensor-Name",
-          "sensor_state": "Zustandswähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
-          "sensor_icon": "Symbol-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
-          "sensor_color": "Farb-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
+          "sensor_state": "Zustandswähler (JSON/XPath/CSS/RegEx - automatisch erkannt)",
+          "sensor_icon": "Symbol-Wähler (JSON/XPath/CSS/RegEx - automatisch erkannt)",
+          "sensor_color": "Farb-Wähler (JSON/XPath/CSS/RegEx - automatisch erkannt)",
           "sensor_device_class": "Geräteklasse",
           "sensor_unit": "Maßeinheit",
-          "tracker_latitude": "Breitengrad-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
-          "tracker_longitude": "Längengrad-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
-          "tracker_location_name": "Standortname-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
+          "tracker_latitude": "Breitengrad-Wähler (JSON/XPath/CSS/RegEx - automatisch erkannt)",
+          "tracker_longitude": "Längengrad-Wähler (JSON/XPath/CSS/RegEx - automatisch erkannt)",
+          "tracker_location_name": "Standortname-Wähler (JSON/XPath/CSS/RegEx - automatisch erkannt)",
           "tracker_source_type": "Quellentyp"
         }
       },
@@ -187,14 +181,14 @@
         "title": "Sensor-Konfiguration",
         "description": "Sensor-Einstellungen konfigurieren. Die Extraktionsmethode (JSON/XPath/CSS/RegEx) wird automatisch basierend auf dem Antwort-Inhaltstyp erkannt.",
         "data": {
-          "sensor_state": "Zustandswähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
-          "sensor_icon": "Symbol-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
-          "sensor_color": "Farb-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
+          "sensor_state": "Zustandswähler (JSON/XPath/CSS/RegEx - automatisch erkannt)",
+          "sensor_icon": "Symbol-Wähler (JSON/XPath/CSS/RegEx - automatisch erkannt)",
+          "sensor_color": "Farb-Wähler (JSON/XPath/CSS/RegEx - automatisch erkannt)",
           "sensor_device_class": "Geräteklasse",
           "sensor_unit": "Maßeinheit",
-          "tracker_latitude": "Breitengrad-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
-          "tracker_longitude": "Längengrad-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
-          "tracker_location_name": "Standortname-Wähler (JSON\/XPath\/CSS\/RegEx - automatisch erkannt)",
+          "tracker_latitude": "Breitengrad-Wähler (JSON/XPath/CSS/RegEx - automatisch erkannt)",
+          "tracker_longitude": "Längengrad-Wähler (JSON/XPath/CSS/RegEx - automatisch erkannt)",
+          "tracker_location_name": "Standortname-Wähler (JSON/XPath/CSS/RegEx - automatisch erkannt)",
           "tracker_source_type": "Quellentyp"
         }
       }
@@ -208,24 +202,6 @@
     }
   },
   "selector": {
-    "action": {
-      "options": {
-        "basic": "Grundeinstellungen bearbeiten (URL, Methode, Zeitüberschreitung, Intervall, SSL)",
-        "headers": "HTTP-Header bearbeiten",
-        "sensors": "Sensor-Konfiguration bearbeiten",
-        "payload": "Anfrage-Nutzlast bearbeiten",
-        "add": "Hinzufügen",
-        "done": "Fertig",
-        "clear": "Alle löschen",
-        "save": "Änderungen speichern",
-        "edit": "Bearbeiten",
-        "delete": "Löschen",
-        "back": "Zurück"
-      }
-    },
-    "sensor": {
-      "options": {}
-    },
     "sensor_type": {
       "options": {
         "sensor": "Sensor",
@@ -236,11 +212,11 @@
     },
     "tracker_source_type": {
       "options": {
+        "none": "Keine (Standard)",
         "gps": "GPS",
         "router": "Router",
         "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE",
-        "none": "Keine (Standard)"
+        "bluetooth_le": "Bluetooth LE"
       }
     }
   }

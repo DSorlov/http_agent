@@ -15,12 +15,10 @@
       },
       "headers": {
         "title": "HTTP Headers",
-        "description": "Configure HTTP headers\n\nCurrent headers:\n{headers}",
-        "data": {
-          "action": "Action"
-        },
-        "data_description": {
-          "action": "Select an action to perform"
+        "description": "Configure HTTP headers.\n\nCurrent headers:\n{headers}",
+        "menu_options": {
+          "add_header": "Add header",
+          "headers_done": "Continue"
         }
       },
       "add_header": {
@@ -41,12 +39,10 @@
       },
       "sensors": {
         "title": "Sensors Configuration",
-        "description": "Configure sensors to extract data\n\nCurrent sensors:\n{sensors}",
-        "data": {
-          "action": "Action"
-        },
-        "data_description": {
-          "action": "Select an action to perform"
+        "description": "Configure sensors to extract data.\n\nCurrent sensors:\n{sensors}",
+        "menu_options": {
+          "add_sensor": "Add sensor",
+          "sensors_done": "Finish"
         }
       },
       "add_sensor": {
@@ -61,14 +57,14 @@
         "title": "Sensor Configuration",
         "description": "Configure the sensor settings. The extraction method (JSON/XPath/CSS/RegEx) will be automatically detected based on the response content type.",
         "data": {
-          "sensor_state": "State Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
-          "sensor_icon": "Icon Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
-          "sensor_color": "Color Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
+          "sensor_state": "State Selector (JSON/XPath/CSS/RegEx - auto-detected)",
+          "sensor_icon": "Icon Selector (JSON/XPath/CSS/RegEx - auto-detected)",
+          "sensor_color": "Color Selector (JSON/XPath/CSS/RegEx - auto-detected)",
           "sensor_device_class": "Device Class",
           "sensor_unit": "Unit of Measurement",
-          "tracker_latitude": "Latitude Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
-          "tracker_longitude": "Longitude Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
-          "tracker_location_name": "Location Name Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
+          "tracker_latitude": "Latitude Selector (JSON/XPath/CSS/RegEx - auto-detected)",
+          "tracker_longitude": "Longitude Selector (JSON/XPath/CSS/RegEx - auto-detected)",
+          "tracker_location_name": "Location Name Selector (JSON/XPath/CSS/RegEx - auto-detected)",
           "tracker_source_type": "Source Type"
         }
       }
@@ -87,11 +83,11 @@
       "init": {
         "title": "HTTP Agent Configuration",
         "description": "Choose what to edit",
-        "data": {
-          "action": "Configuration Section"
-        },
-        "data_description": {
-          "action": "Select a configuration section to edit"
+        "menu_options": {
+          "basic": "Edit basic settings (URL, method, timeout, interval, SSL)",
+          "headers": "Edit HTTP headers",
+          "payload": "Edit request payload",
+          "sensors": "Edit sensors configuration"
         }
       },
       "basic": {
@@ -108,12 +104,11 @@
       },
       "headers": {
         "title": "HTTP Headers",
-        "description": "Edit HTTP headers\n\nCurrent headers:\n{headers}",
-        "data": {
-          "action": "Action"
-        },
-        "data_description": {
-          "action": "Select an action to perform"
+        "description": "Edit HTTP headers.\n\nCurrent headers:\n{headers}",
+        "menu_options": {
+          "add_header": "Add header",
+          "clear_headers": "Clear all headers",
+          "headers_done": "Save"
         }
       },
       "add_header": {
@@ -134,12 +129,12 @@
       },
       "sensors": {
         "title": "Sensors Configuration",
-        "description": "Edit sensors configuration\n\nCurrent sensors:\n{sensors}",
-        "data": {
-          "action": "Action"
-        },
-        "data_description": {
-          "action": "Select an action to perform"
+        "description": "Edit sensors configuration.\n\nCurrent sensors:\n{sensors}",
+        "menu_options": {
+          "add_sensor": "Add sensor",
+          "select_sensor": "Edit a sensor",
+          "clear_sensors": "Clear all sensors",
+          "sensors_done": "Save"
         }
       },
       "select_sensor": {
@@ -152,11 +147,10 @@
       "edit_sensor": {
         "title": "Edit Sensor",
         "description": "Choose what to do with this sensor:\n\n{sensor_info}",
-        "data": {
-          "action": "Action"
-        },
-        "data_description": {
-          "action": "Select an action to perform on this sensor"
+        "menu_options": {
+          "modify_sensor": "Edit sensor",
+          "delete_sensor": "Delete sensor",
+          "edit_back": "Back"
         }
       },
       "modify_sensor": {
@@ -164,14 +158,14 @@
         "description": "Edit sensor configuration. The extraction method (JSON/XPath/CSS/RegEx) will be automatically detected based on the response content type.",
         "data": {
           "sensor_name": "Sensor Name",
-          "sensor_state": "State Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
-          "sensor_icon": "Icon Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
-          "sensor_color": "Color Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
+          "sensor_state": "State Selector (JSON/XPath/CSS/RegEx - auto-detected)",
+          "sensor_icon": "Icon Selector (JSON/XPath/CSS/RegEx - auto-detected)",
+          "sensor_color": "Color Selector (JSON/XPath/CSS/RegEx - auto-detected)",
           "sensor_device_class": "Device Class",
           "sensor_unit": "Unit of Measurement",
-          "tracker_latitude": "Latitude Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
-          "tracker_longitude": "Longitude Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
-          "tracker_location_name": "Location Name Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
+          "tracker_latitude": "Latitude Selector (JSON/XPath/CSS/RegEx - auto-detected)",
+          "tracker_longitude": "Longitude Selector (JSON/XPath/CSS/RegEx - auto-detected)",
+          "tracker_location_name": "Location Name Selector (JSON/XPath/CSS/RegEx - auto-detected)",
           "tracker_source_type": "Source Type"
         }
       },
@@ -187,14 +181,14 @@
         "title": "Sensor Configuration",
         "description": "Configure the sensor settings. The extraction method (JSON/XPath/CSS/RegEx) will be automatically detected based on the response content type.",
         "data": {
-          "sensor_state": "State Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
-          "sensor_icon": "Icon Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
-          "sensor_color": "Color Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
+          "sensor_state": "State Selector (JSON/XPath/CSS/RegEx - auto-detected)",
+          "sensor_icon": "Icon Selector (JSON/XPath/CSS/RegEx - auto-detected)",
+          "sensor_color": "Color Selector (JSON/XPath/CSS/RegEx - auto-detected)",
           "sensor_device_class": "Device Class",
           "sensor_unit": "Unit of Measurement",
-          "tracker_latitude": "Latitude Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
-          "tracker_longitude": "Longitude Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
-          "tracker_location_name": "Location Name Selector (JSON\/XPath\/CSS\/RegEx - auto-detected)",
+          "tracker_latitude": "Latitude Selector (JSON/XPath/CSS/RegEx - auto-detected)",
+          "tracker_longitude": "Longitude Selector (JSON/XPath/CSS/RegEx - auto-detected)",
+          "tracker_location_name": "Location Name Selector (JSON/XPath/CSS/RegEx - auto-detected)",
           "tracker_source_type": "Source Type"
         }
       }
@@ -208,39 +202,21 @@
     }
   },
   "selector": {
-    "action": {
-      "options": {
-        "basic": "Edit basic settings (URL, method, timeout, interval, SSL)",
-        "headers": "Edit HTTP headers",
-        "sensors": "Edit sensors configuration",
-        "payload": "Edit request payload",
-        "add": "Add",
-        "done": "Done",
-        "clear": "Clear all",
-        "save": "Save changes",
-        "edit": "Edit",
-        "delete": "Delete",
-        "back": "Back"
-      }
-    },
-    "sensor": {
-      "options": {}
-    },
-    "tracker_source_type": {
-      "options": {
-        "gps": "GPS",
-        "router": "Router",
-        "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE",
-        "none": "None (default)"
-      }
-    },
     "sensor_type": {
       "options": {
         "sensor": "Sensor",
         "binary_sensor": "Binary Sensor",
         "number": "Number",
         "device_tracker": "Device Tracker"
+      }
+    },
+    "tracker_source_type": {
+      "options": {
+        "none": "None (default)",
+        "gps": "GPS",
+        "router": "Router",
+        "bluetooth": "Bluetooth",
+        "bluetooth_le": "Bluetooth LE"
       }
     }
   }

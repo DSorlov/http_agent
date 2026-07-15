@@ -12,14 +12,17 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import (
-    CONF_SENSOR_DEVICE_CLASS,
     CONF_SENSOR_NAME,
     CONF_SENSOR_TYPE,
     CONF_SENSORS,
-    DOMAIN,
 )
 from .coordinator import HTTPAgentCoordinator
-from .helpers import get_sensor_config
+from .helpers import (
+    build_device_info,
+    get_device_class,
+    get_sensor_config,
+    merge_entry_data,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -30,12 +33,10 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up HTTP Agent binary sensors from a config entry."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
+    coordinator = entry.runtime_data
 
     # Merge config data with options
-    data = dict(entry.data)
-    if entry.options:
-        data.update(entry.options)
+    data = merge_entry_data(entry)
 
     sensors = []
     for sensor_config in data[CONF_SENSORS]:
@@ -65,13 +66,10 @@ class HTTPAgentBinarySensor(CoordinatorEntity, BinarySensorEntity):
         # Entity properties
         self._attr_name = sensor_name
         self._attr_unique_id = f"{entry.entry_id}_{sensor_name}"
+        self._attr_device_info = build_device_info(entry)
 
         self.sensor_config = get_sensor_config(entry, sensor_name)
-
-    @property
-    def name(self) -> str:
-        """Return the name of the sensor."""
-        return self.sensor_name
+        self._attr_device_class = get_device_class(self.sensor_config)
 
     @property
     def is_on(self) -> bool | None:
@@ -96,13 +94,6 @@ class HTTPAgentBinarySensor(CoordinatorEntity, BinarySensorEntity):
             return state > 0
 
         return bool(state)
-
-    @property
-    def device_class(self) -> str | None:
-        """Return the device class of the binary sensor."""
-        if self.sensor_config:
-            return self.sensor_config.get(CONF_SENSOR_DEVICE_CLASS)
-        return None
 
     @property
     def icon(self) -> str | None:
@@ -133,19 +124,3 @@ class HTTPAgentBinarySensor(CoordinatorEntity, BinarySensorEntity):
             attributes["color"] = sensor_data["color"]
 
         return attributes
-
-    @property
-    def device_info(self) -> dict[str, Any]:
-        """Return device information."""
-        return {
-            "identifiers": {(DOMAIN, self.entry.entry_id)},
-            "name": self.entry.title,
-            "manufacturer": "HTTP Agent",
-            "model": "HTTP Binary Sensor",
-            "sw_version": "1.0.0",
-        }
-
-    @property
-    def available(self) -> bool:
-        """Return True if entity is available."""
-        return self.coordinator.last_update_success

@@ -15,12 +15,10 @@
       },
       "headers": {
         "title": "HTTP-headere",
-        "description": "Konfigurer HTTP-headere\n\nNuværende headere:\n{headers}",
-        "data": {
-          "action": "Handling"
-        },
-        "data_description": {
-          "action": "Select an action to perform"
+        "description": "Konfigurer HTTP-headere.\n\nNuværende headere:\n{headers}",
+        "menu_options": {
+          "add_header": "Tilføj header",
+          "headers_done": "Fortsæt"
         }
       },
       "add_header": {
@@ -41,12 +39,10 @@
       },
       "sensors": {
         "title": "Sensor-konfiguration",
-        "description": "Konfigurer sensorer til at udtrække data\n\nNuværende sensorer:\n{sensors}",
-        "data": {
-          "action": "Handling"
-        },
-        "data_description": {
-          "action": "Select an action to perform"
+        "description": "Konfigurer sensorer til at udtrække data.\n\nNuværende sensorer:\n{sensors}",
+        "menu_options": {
+          "add_sensor": "Tilføj sensor",
+          "sensors_done": "Afslut"
         }
       },
       "add_sensor": {
@@ -61,14 +57,14 @@
         "title": "Sensor-konfiguration",
         "description": "Konfigurer sensorindstillingerne. Udvindingsmetoden (JSON/XPath/CSS/RegEx) vil automatisk blive registreret baseret på svarets indholdstype.",
         "data": {
-          "sensor_state": "Tilstandsvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
-          "sensor_icon": "Ikonvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
-          "sensor_color": "Farvevælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
+          "sensor_state": "Tilstandsvælger (JSON/XPath/CSS/RegEx - auto-registreret)",
+          "sensor_icon": "Ikonvælger (JSON/XPath/CSS/RegEx - auto-registreret)",
+          "sensor_color": "Farvevælger (JSON/XPath/CSS/RegEx - auto-registreret)",
           "sensor_device_class": "Enhedsklasse",
           "sensor_unit": "Måleenhed",
-          "tracker_latitude": "Breddegradvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
-          "tracker_longitude": "Længdegradvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
-          "tracker_location_name": "Lokationsnavnvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
+          "tracker_latitude": "Breddegradvælger (JSON/XPath/CSS/RegEx - auto-registreret)",
+          "tracker_longitude": "Længdegradvælger (JSON/XPath/CSS/RegEx - auto-registreret)",
+          "tracker_location_name": "Lokationsnavnvælger (JSON/XPath/CSS/RegEx - auto-registreret)",
           "tracker_source_type": "Kildetype"
         }
       }
@@ -87,11 +83,11 @@
       "init": {
         "title": "HTTP Agent Konfiguration",
         "description": "Vælg hvad der skal redigeres",
-        "data": {
-          "action": "Konfigurationssektion"
-        },
-        "data_description": {
-          "action": "Select a configuration section to edit"
+        "menu_options": {
+          "basic": "Rediger grundindstillinger (URL, metode, timeout, interval, SSL)",
+          "headers": "Rediger HTTP-headere",
+          "payload": "Rediger anmodnings-payload",
+          "sensors": "Rediger sensor-konfiguration"
         }
       },
       "basic": {
@@ -108,12 +104,11 @@
       },
       "headers": {
         "title": "HTTP-headere",
-        "description": "Rediger HTTP-headere\n\nNuværende headere:\n{headers}",
-        "data": {
-          "action": "Handling"
-        },
-        "data_description": {
-          "action": "Select an action to perform"
+        "description": "Rediger HTTP-headere.\n\nNuværende headere:\n{headers}",
+        "menu_options": {
+          "add_header": "Tilføj header",
+          "clear_headers": "Ryd alle headere",
+          "headers_done": "Gem"
         }
       },
       "add_header": {
@@ -134,12 +129,12 @@
       },
       "sensors": {
         "title": "Sensor-konfiguration",
-        "description": "Rediger sensor-konfiguration\n\nNuværende sensorer:\n{sensors}",
-        "data": {
-          "action": "Handling"
-        },
-        "data_description": {
-          "action": "Select an action to perform"
+        "description": "Rediger sensor-konfiguration.\n\nNuværende sensorer:\n{sensors}",
+        "menu_options": {
+          "add_sensor": "Tilføj sensor",
+          "select_sensor": "Rediger en sensor",
+          "clear_sensors": "Ryd alle sensorer",
+          "sensors_done": "Gem"
         }
       },
       "select_sensor": {
@@ -152,11 +147,10 @@
       "edit_sensor": {
         "title": "Rediger sensor",
         "description": "Vælg hvad der skal gøres med denne sensor:\n\n{sensor_info}",
-        "data": {
-          "action": "Handling"
-        },
-        "data_description": {
-          "action": "Select an action to perform on this sensor"
+        "menu_options": {
+          "modify_sensor": "Rediger sensor",
+          "delete_sensor": "Slet sensor",
+          "edit_back": "Tilbage"
         }
       },
       "modify_sensor": {
@@ -164,14 +158,14 @@
         "description": "Rediger sensor-konfiguration. Udvindingsmetoden (JSON/XPath/CSS/RegEx) vil automatisk blive registreret baseret på svarets indholdstype.",
         "data": {
           "sensor_name": "Sensornavn",
-          "sensor_state": "Tilstandsvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
-          "sensor_icon": "Ikonvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
-          "sensor_color": "Farvevælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
+          "sensor_state": "Tilstandsvælger (JSON/XPath/CSS/RegEx - auto-registreret)",
+          "sensor_icon": "Ikonvælger (JSON/XPath/CSS/RegEx - auto-registreret)",
+          "sensor_color": "Farvevælger (JSON/XPath/CSS/RegEx - auto-registreret)",
           "sensor_device_class": "Enhedsklasse",
           "sensor_unit": "Måleenhed",
-          "tracker_latitude": "Breddegradvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
-          "tracker_longitude": "Længdegradvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
-          "tracker_location_name": "Lokationsnavnvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
+          "tracker_latitude": "Breddegradvælger (JSON/XPath/CSS/RegEx - auto-registreret)",
+          "tracker_longitude": "Længdegradvælger (JSON/XPath/CSS/RegEx - auto-registreret)",
+          "tracker_location_name": "Lokationsnavnvælger (JSON/XPath/CSS/RegEx - auto-registreret)",
           "tracker_source_type": "Kildetype"
         }
       },
@@ -187,14 +181,14 @@
         "title": "Sensor-konfiguration",
         "description": "Konfigurer sensorindstillingerne. Udvindingsmetoden (JSON/XPath/CSS/RegEx) vil automatisk blive registreret baseret på svarets indholdstype.",
         "data": {
-          "sensor_state": "Tilstandsvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
-          "sensor_icon": "Ikonvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
-          "sensor_color": "Farvevælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
+          "sensor_state": "Tilstandsvælger (JSON/XPath/CSS/RegEx - auto-registreret)",
+          "sensor_icon": "Ikonvælger (JSON/XPath/CSS/RegEx - auto-registreret)",
+          "sensor_color": "Farvevælger (JSON/XPath/CSS/RegEx - auto-registreret)",
           "sensor_device_class": "Enhedsklasse",
           "sensor_unit": "Måleenhed",
-          "tracker_latitude": "Breddegradvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
-          "tracker_longitude": "Længdegradvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
-          "tracker_location_name": "Lokationsnavnvælger (JSON\/XPath\/CSS\/RegEx - auto-registreret)",
+          "tracker_latitude": "Breddegradvælger (JSON/XPath/CSS/RegEx - auto-registreret)",
+          "tracker_longitude": "Længdegradvælger (JSON/XPath/CSS/RegEx - auto-registreret)",
+          "tracker_location_name": "Lokationsnavnvælger (JSON/XPath/CSS/RegEx - auto-registreret)",
           "tracker_source_type": "Kildetype"
         }
       }
@@ -208,24 +202,6 @@
     }
   },
   "selector": {
-    "action": {
-      "options": {
-        "basic": "Rediger grundindstillinger (URL, metode, timeout, interval, SSL)",
-        "headers": "Rediger HTTP-headere",
-        "sensors": "Rediger sensor-konfiguration",
-        "payload": "Rediger anmodnings-payload",
-        "add": "Tilføj",
-        "done": "Færdig",
-        "clear": "Ryd alle",
-        "save": "Gem ændringer",
-        "edit": "Rediger",
-        "delete": "Slet",
-        "back": "Tilbage"
-      }
-    },
-    "sensor": {
-      "options": {}
-    },
     "sensor_type": {
       "options": {
         "sensor": "Sensor",
@@ -236,11 +212,11 @@
     },
     "tracker_source_type": {
       "options": {
+        "none": "Ingen (standard)",
         "gps": "GPS",
         "router": "Router",
         "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE",
-        "none": "Ingen (standard)"
+        "bluetooth_le": "Bluetooth LE"
       }
     }
   }

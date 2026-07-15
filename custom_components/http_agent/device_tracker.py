@@ -16,10 +16,9 @@ from .const import (
     CONF_SENSOR_NAME,
     CONF_SENSOR_TYPE,
     CONF_SENSORS,
-    DOMAIN,
 )
 from .coordinator import HTTPAgentCoordinator
-from .helpers import get_sensor_config
+from .helpers import build_device_info, get_sensor_config, merge_entry_data
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -30,12 +29,10 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up HTTP Agent device trackers from a config entry."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
+    coordinator = entry.runtime_data
 
     # Merge config data with options
-    data = dict(entry.data)
-    if entry.options:
-        data.update(entry.options)
+    data = merge_entry_data(entry)
 
     trackers = []
     for sensor_config in data[CONF_SENSORS]:
@@ -65,13 +62,9 @@ class HTTPAgentDeviceTracker(CoordinatorEntity, TrackerEntity):
         # Entity properties
         self._attr_name = sensor_name
         self._attr_unique_id = f"{entry.entry_id}_{sensor_name}"
+        self._attr_device_info = build_device_info(entry)
 
         self.sensor_config = get_sensor_config(entry, sensor_name)
-
-    @property
-    def name(self) -> str:
-        """Return the name of the device tracker."""
-        return self.sensor_name
 
     @property
     def latitude(self) -> float | None:
@@ -182,19 +175,3 @@ class HTTPAgentDeviceTracker(CoordinatorEntity, TrackerEntity):
             attributes["raw_longitude"] = sensor_data["longitude"]
 
         return attributes
-
-    @property
-    def device_info(self) -> dict[str, Any]:
-        """Return device information."""
-        return {
-            "identifiers": {(DOMAIN, self.entry.entry_id)},
-            "name": self.entry.title,
-            "manufacturer": "HTTP Agent",
-            "model": "HTTP Device Tracker",
-            "sw_version": "1.0.0",
-        }
-
-    @property
-    def available(self) -> bool:
-        """Return True if entity is available."""
-        return self.coordinator.last_update_success

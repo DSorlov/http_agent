@@ -1,0 +1,223 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "HTTP Agent 設定",
+        "description": "HTTP エンドポイントを設定",
+        "data": {
+          "url": "URL",
+          "method": "HTTP メソッド",
+          "timeout": "タイムアウト（秒）",
+          "interval": "更新間隔（秒）",
+          "retries": "エラー時に再試行",
+          "verify_ssl": "SSL 証明書を検証"
+        }
+      },
+      "headers": {
+        "title": "HTTP ヘッダー",
+        "description": "HTTP ヘッダーを設定\n\n現在のヘッダー:\n{headers}",
+        "menu_options": {
+          "add_header": "追加",
+          "headers_done": "完了"
+        }
+      },
+      "add_header": {
+        "title": "HTTP ヘッダーを追加",
+        "description": "新しい HTTP ヘッダーを追加",
+        "data": {
+          "key": "ヘッダー名",
+          "value": "ヘッダー値"
+        }
+      },
+      "payload": {
+        "title": "HTTP ペイロード",
+        "description": "リクエストペイロードを設定",
+        "data": {
+          "content_type": "コンテンツタイプ",
+          "payload": "ペイロード（JSON/XML/テキスト）"
+        }
+      },
+      "sensors": {
+        "title": "センサー設定",
+        "description": "データ抽出用センサーを設定\n\n現在のセンサー:\n{sensors}",
+        "menu_options": {
+          "add_sensor": "追加",
+          "sensors_done": "完了"
+        }
+      },
+      "add_sensor": {
+        "title": "センサーを追加",
+        "description": "センサータイプを選択し、名前を入力してください",
+        "data": {
+          "sensor_name": "センサー名",
+          "sensor_type": "センサータイプ"
+        }
+      },
+      "sensor_config": {
+        "title": "センサー設定",
+        "description": "センサー設定を構成します。抽出方法（JSON/XPath/CSS/RegEx）はレスポンスのコンテンツタイプに基づいて自動検出されます。",
+        "data": {
+          "sensor_state": "状態セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
+          "sensor_icon": "アイコンセレクター（JSON/XPath/CSS/RegEx - 自動検出）",
+          "sensor_color": "色セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
+          "sensor_device_class": "デバイスクラス",
+          "sensor_unit": "測定単位",
+          "tracker_latitude": "緯度セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
+          "tracker_longitude": "経度セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
+          "tracker_location_name": "位置名セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
+          "tracker_source_type": "ソースタイプ"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "無効な URL 形式",
+      "no_sensors": "少なくとも 1 つのセンサーを設定する必要があります"
+    },
+    "abort": {
+      "already_configured": "この HTTP エンドポイントは既に設定されています",
+      "no_sensors": "センサーは設定されていません"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "HTTP Agent 設定",
+        "description": "編集する項目を選択",
+        "menu_options": {
+          "basic": "基本設定を編集（URL、メソッド、タイムアウト、間隔、SSL）",
+          "headers": "HTTP ヘッダーを編集",
+          "payload": "リクエストペイロードを編集",
+          "sensors": "センサー設定を編集"
+        }
+      },
+      "basic": {
+        "title": "基本設定",
+        "description": "URL、メソッド、タイムアウト、間隔、SSL 検証を編集",
+        "data": {
+          "url": "URL",
+          "method": "HTTP メソッド",
+          "timeout": "タイムアウト（秒）",
+          "interval": "更新間隔（秒）",
+          "retries": "エラー時に再試行",
+          "verify_ssl": "SSL 証明書を検証"
+        }
+      },
+      "headers": {
+        "title": "HTTP ヘッダー",
+        "description": "HTTP ヘッダーを編集\n\n現在のヘッダー:\n{headers}",
+        "menu_options": {
+          "add_header": "追加",
+          "clear_headers": "すべてクリア",
+          "headers_done": "変更を保存"
+        }
+      },
+      "add_header": {
+        "title": "HTTP ヘッダーを追加",
+        "description": "新しい HTTP ヘッダーを追加",
+        "data": {
+          "key": "ヘッダー名",
+          "value": "ヘッダー値"
+        }
+      },
+      "payload": {
+        "title": "HTTP ペイロード",
+        "description": "リクエストペイロードを編集",
+        "data": {
+          "content_type": "コンテンツタイプ",
+          "payload": "ペイロード（JSON/XML/テキスト）"
+        }
+      },
+      "sensors": {
+        "title": "センサー設定",
+        "description": "センサー設定を編集\n\n現在のセンサー:\n{sensors}",
+        "menu_options": {
+          "add_sensor": "追加",
+          "select_sensor": "編集",
+          "clear_sensors": "すべてクリア",
+          "sensors_done": "変更を保存"
+        }
+      },
+      "select_sensor": {
+        "title": "センサーを選択",
+        "description": "編集または削除するセンサーを選択",
+        "data": {
+          "sensor": "センサー"
+        }
+      },
+      "edit_sensor": {
+        "title": "センサーを編集",
+        "description": "このセンサーに対して行う操作を選択:\n\n{sensor_info}",
+        "menu_options": {
+          "modify_sensor": "編集",
+          "delete_sensor": "削除",
+          "edit_back": "戻る"
+        }
+      },
+      "modify_sensor": {
+        "title": "センサーを変更",
+        "description": "センサー設定を編集します。抽出方法（JSON/XPath/CSS/RegEx）はレスポンスのコンテンツタイプに基づいて自動検出されます。",
+        "data": {
+          "sensor_name": "センサー名",
+          "sensor_state": "状態セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
+          "sensor_icon": "アイコンセレクター（JSON/XPath/CSS/RegEx - 自動検出）",
+          "sensor_color": "色セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
+          "sensor_device_class": "デバイスクラス",
+          "sensor_unit": "測定単位",
+          "tracker_latitude": "緯度セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
+          "tracker_longitude": "経度セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
+          "tracker_location_name": "位置名セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
+          "tracker_source_type": "ソースタイプ"
+        }
+      },
+      "add_sensor": {
+        "title": "センサーを追加",
+        "description": "センサータイプを選択し、名前を入力してください",
+        "data": {
+          "sensor_name": "センサー名",
+          "sensor_type": "センサータイプ"
+        }
+      },
+      "sensor_config": {
+        "title": "センサー設定",
+        "description": "センサー設定を構成します。抽出方法（JSON/XPath/CSS/RegEx）はレスポンスのコンテンツタイプに基づいて自動検出されます。",
+        "data": {
+          "sensor_state": "状態セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
+          "sensor_icon": "アイコンセレクター（JSON/XPath/CSS/RegEx - 自動検出）",
+          "sensor_color": "色セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
+          "sensor_device_class": "デバイスクラス",
+          "sensor_unit": "測定単位",
+          "tracker_latitude": "緯度セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
+          "tracker_longitude": "経度セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
+          "tracker_location_name": "位置名セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
+          "tracker_source_type": "ソースタイプ"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "無効な URL 形式",
+      "no_sensors": "少なくとも 1 つのセンサーを設定する必要があります"
+    },
+    "abort": {
+      "no_sensors": "センサーは設定されていません"
+    }
+  },
+  "selector": {
+    "sensor_type": {
+      "options": {
+        "sensor": "センサー",
+        "binary_sensor": "バイナリセンサー",
+        "number": "数値",
+        "device_tracker": "デバイストラッカー"
+      }
+    },
+    "tracker_source_type": {
+      "options": {
+        "none": "なし（デフォルト）",
+        "gps": "GPS",
+        "router": "ルーター",
+        "bluetooth": "Bluetooth",
+        "bluetooth_le": "Bluetooth LE"
+      }
+    }
+  }
+}

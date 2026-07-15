@@ -9,8 +9,21 @@ from urllib.parse import urlparse
 import voluptuous as vol
 
 from homeassistant import config_entries
+from homeassistant.config_entries import ConfigFlowResult
 from homeassistant.core import callback
-from homeassistant.data_entry_flow import FlowResult
+from homeassistant.helpers.selector import (
+    BooleanSelector,
+    NumberSelector,
+    NumberSelectorConfig,
+    NumberSelectorMode,
+    SelectSelector,
+    SelectSelectorConfig,
+    SelectSelectorMode,
+    TemplateSelector,
+    TextSelector,
+    TextSelectorConfig,
+    TextSelectorType,
+)
 
 from .const import (
     BINARY_SENSOR_DEVICE_CLASSES,
@@ -51,303 +64,407 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
+SOURCE_TYPES = ["none", "gps", "router", "bluetooth", "bluetooth_le"]
 
+# Optional sensor fields that should always be present on a stored sensor config
+_OPTIONAL_SENSOR_FIELDS = (
+    CONF_SENSOR_STATE,
+    CONF_SENSOR_ICON,
+    CONF_SENSOR_COLOR,
+    CONF_SENSOR_DEVICE_CLASS,
+    CONF_SENSOR_UNIT,
+    CONF_TRACKER_LATITUDE,
+    CONF_TRACKER_LONGITUDE,
+    CONF_TRACKER_LOCATION_NAME,
+    CONF_TRACKER_SOURCE_TYPE,
+)
+
+
+# ---------------------------------------------------------------------------
+# Schema builders (shared between config and options flows)
+# ---------------------------------------------------------------------------
+def _basic_schema(defaults: dict[str, Any]) -> vol.Schema:
+    """Return the schema for the basic connection settings."""
+    return vol.Schema(
+        {
+            vol.Required(CONF_URL, default=defaults.get(CONF_URL, "")): TextSelector(
+                TextSelectorConfig(type=TextSelectorType.URL)
+            ),
+            vol.Required(
+                CONF_METHOD, default=defaults.get(CONF_METHOD, DEFAULT_METHOD)
+            ): SelectSelector(
+                SelectSelectorConfig(
+                    options=HTTP_METHODS, mode=SelectSelectorMode.DROPDOWN
+                )
+            ),
+            vol.Optional(
+                CONF_TIMEOUT, default=defaults.get(CONF_TIMEOUT, DEFAULT_TIMEOUT)
+            ): NumberSelector(
+                NumberSelectorConfig(
+                    min=1,
+                    max=300,
+                    step=1,
+                    mode=NumberSelectorMode.BOX,
+                    unit_of_measurement="s",
+                )
+            ),
+            vol.Required(
+                CONF_RETRIES, default=defaults.get(CONF_RETRIES, DEFAULT_RETRIES)
+            ): NumberSelector(
+                NumberSelectorConfig(min=0, max=10, step=1, mode=NumberSelectorMode.BOX)
+            ),
+            vol.Optional(
+                CONF_INTERVAL, default=defaults.get(CONF_INTERVAL, DEFAULT_INTERVAL)
+            ): NumberSelector(
+                NumberSelectorConfig(
+                    min=5,
+                    max=86400,
+                    step=1,
+                    mode=NumberSelectorMode.BOX,
+                    unit_of_measurement="s",
+                )
+            ),
+            vol.Optional(
+                CONF_VERIFY_SSL,
+                default=defaults.get(CONF_VERIFY_SSL, DEFAULT_VERIFY_SSL),
+            ): BooleanSelector(),
+        }
+    )
+
+
+def _payload_schema(defaults: dict[str, Any]) -> vol.Schema:
+    """Return the schema for the request payload settings."""
+    return vol.Schema(
+        {
+            vol.Required(
+                CONF_CONTENT_TYPE,
+                default=defaults.get(CONF_CONTENT_TYPE, "application/json"),
+            ): SelectSelector(
+                SelectSelectorConfig(
+                    options=CONTENT_TYPES, mode=SelectSelectorMode.DROPDOWN
+                )
+            ),
+            vol.Optional(
+                CONF_PAYLOAD, default=defaults.get(CONF_PAYLOAD, "")
+            ): TemplateSelector(),
+        }
+    )
+
+
+def _header_schema() -> vol.Schema:
+    """Return the schema for adding a header."""
+    return vol.Schema(
+        {
+            vol.Required("key"): TextSelector(),
+            vol.Required("value"): TextSelector(),
+        }
+    )
+
+
+def _add_sensor_schema(defaults: dict[str, Any] | None = None) -> vol.Schema:
+    """Return the schema for choosing a sensor name and type."""
+    defaults = defaults or {}
+    return vol.Schema(
+        {
+            vol.Required(
+                CONF_SENSOR_NAME, default=defaults.get(CONF_SENSOR_NAME, "")
+            ): TextSelector(),
+            vol.Required(
+                CONF_SENSOR_TYPE, default=defaults.get(CONF_SENSOR_TYPE, "sensor")
+            ): SelectSelector(
+                SelectSelectorConfig(
+                    options=list(SENSOR_TYPES.keys()),
+                    mode=SelectSelectorMode.DROPDOWN,
+                    translation_key="sensor_type",
+                )
+            ),
+        }
+    )
+
+
+def _device_class_selector(classes: set[str]) -> SelectSelector:
+    """Return a dropdown selector for a device class, including a 'none' option."""
+    return SelectSelector(
+        SelectSelectorConfig(
+            options=["none", *sorted(classes)],
+            mode=SelectSelectorMode.DROPDOWN,
+        )
+    )
+
+
+def _sensor_config_schema(
+    sensor_type: str,
+    sensor: dict[str, Any] | None = None,
+    include_name: bool = False,
+) -> vol.Schema:
+    """Return the configuration schema for a specific sensor type."""
+    sensor = sensor or {}
+    schema: dict[Any, Any] = {}
+
+    if include_name:
+        schema[
+            vol.Required(CONF_SENSOR_NAME, default=sensor.get(CONF_SENSOR_NAME, ""))
+        ] = TextSelector()
+
+    schema[
+        vol.Required(CONF_SENSOR_STATE, default=sensor.get(CONF_SENSOR_STATE, ""))
+    ] = TextSelector()
+    schema[vol.Optional(CONF_SENSOR_ICON, default=sensor.get(CONF_SENSOR_ICON, ""))] = (
+        TextSelector()
+    )
+    schema[
+        vol.Optional(CONF_SENSOR_COLOR, default=sensor.get(CONF_SENSOR_COLOR, ""))
+    ] = TextSelector()
+
+    if sensor_type in ("sensor", "number"):
+        classes = (
+            SENSOR_DEVICE_CLASSES if sensor_type == "sensor" else NUMBER_DEVICE_CLASSES
+        )
+        schema[
+            vol.Optional(
+                CONF_SENSOR_DEVICE_CLASS,
+                default=sensor.get(CONF_SENSOR_DEVICE_CLASS) or "none",
+            )
+        ] = _device_class_selector(classes)
+        schema[
+            vol.Optional(CONF_SENSOR_UNIT, default=sensor.get(CONF_SENSOR_UNIT) or "")
+        ] = TextSelector()
+    elif sensor_type == "binary_sensor":
+        schema[
+            vol.Optional(
+                CONF_SENSOR_DEVICE_CLASS,
+                default=sensor.get(CONF_SENSOR_DEVICE_CLASS) or "none",
+            )
+        ] = _device_class_selector(BINARY_SENSOR_DEVICE_CLASSES)
+    elif sensor_type == "device_tracker":
+        schema[
+            vol.Required(
+                CONF_TRACKER_LATITUDE, default=sensor.get(CONF_TRACKER_LATITUDE, "")
+            )
+        ] = TextSelector()
+        schema[
+            vol.Required(
+                CONF_TRACKER_LONGITUDE, default=sensor.get(CONF_TRACKER_LONGITUDE, "")
+            )
+        ] = TextSelector()
+        schema[
+            vol.Optional(
+                CONF_TRACKER_LOCATION_NAME,
+                default=sensor.get(CONF_TRACKER_LOCATION_NAME, ""),
+            )
+        ] = TextSelector()
+        schema[
+            vol.Optional(
+                CONF_TRACKER_SOURCE_TYPE,
+                default=sensor.get(CONF_TRACKER_SOURCE_TYPE) or "gps",
+            )
+        ] = SelectSelector(
+            SelectSelectorConfig(
+                options=SOURCE_TYPES,
+                mode=SelectSelectorMode.DROPDOWN,
+                translation_key="tracker_source_type",
+            )
+        )
+
+    return vol.Schema(schema)
+
+
+# ---------------------------------------------------------------------------
+# Shared helpers
+# ---------------------------------------------------------------------------
+def _validate_url(url: str) -> bool:
+    """Return True if the URL has a scheme and host."""
+    try:
+        parsed = urlparse(url)
+        return bool(parsed.scheme and parsed.netloc)
+    except ValueError:
+        return False
+
+
+def _finalize_sensor_config(
+    base: dict[str, Any], user_input: dict[str, Any]
+) -> dict[str, Any]:
+    """Merge user input into a sensor config and normalize values."""
+    sensor_config = dict(base)
+    sensor_config.update(user_input)
+
+    # HA forms can return None for empty optional text fields.
+    if sensor_config.get(CONF_SENSOR_UNIT) is None:
+        sensor_config[CONF_SENSOR_UNIT] = ""
+
+    # Normalize the "no device class" sentinel to an empty string.
+    if sensor_config.get(CONF_SENSOR_DEVICE_CLASS) in (None, "none"):
+        sensor_config[CONF_SENSOR_DEVICE_CLASS] = ""
+
+    for field in _OPTIONAL_SENSOR_FIELDS:
+        sensor_config.setdefault(field, "")
+
+    return sensor_config
+
+
+def _header_list(headers: list[dict[str, str]]) -> str:
+    """Return a bullet list of configured headers."""
+    if not headers:
+        return "_None_"
+    return "\n".join(f"• {h['key']}: {h['value']}" for h in headers)
+
+
+def _sensor_list(sensors: list[dict[str, Any]]) -> str:
+    """Return a bullet list of configured sensors."""
+    if not sensors:
+        return "_None_"
+    return "\n".join(
+        f"• {s[CONF_SENSOR_NAME]} "
+        f"({SENSOR_TYPES.get(s.get(CONF_SENSOR_TYPE, 'sensor'), 'Sensor')})"
+        for s in sensors
+    )
+
+
+# ---------------------------------------------------------------------------
+# Config flow
+# ---------------------------------------------------------------------------
 class HTTPAgentConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for HTTP Agent."""
 
     VERSION = 1
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the config flow."""
-        self.data = {}
-        self.headers = []
-        self.sensors = []
-        self.current_sensor = None
+        self.data: dict[str, Any] = {}
+        self.headers: list[dict[str, str]] = []
+        self.sensors: list[dict[str, Any]] = []
+        self.current_sensor: dict[str, Any] | None = None
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Handle the initial step - URL configuration."""
-        errors = {}
+        errors: dict[str, str] = {}
 
         if user_input is not None:
-            # Validate URL
-            try:
-                parsed = urlparse(user_input[CONF_URL])
-                if not parsed.scheme or not parsed.netloc:
-                    errors["base"] = "invalid_url"
-            except Exception:
+            if not _validate_url(user_input[CONF_URL]):
                 errors["base"] = "invalid_url"
 
             if not errors:
                 self.data.update(user_input)
                 return await self.async_step_headers()
 
-        schema = vol.Schema(
-            {
-                vol.Required(CONF_URL): str,
-                vol.Required(CONF_METHOD, default=DEFAULT_METHOD): vol.In(HTTP_METHODS),
-                vol.Optional(CONF_TIMEOUT, default=DEFAULT_TIMEOUT): vol.All(
-                    vol.Coerce(int), vol.Range(min=1, max=300)
-                ),
-                vol.Required(CONF_RETRIES, default=DEFAULT_RETRIES): vol.All(
-                    vol.Coerce(int), vol.Range(min=0, max=10)
-                ),
-                vol.Optional(CONF_INTERVAL, default=DEFAULT_INTERVAL): vol.All(
-                    vol.Coerce(int), vol.Range(min=5, max=86400)
-                ),
-                vol.Optional(CONF_VERIFY_SSL, default=DEFAULT_VERIFY_SSL): bool,
-            }
-        )
-
         return self.async_show_form(
             step_id="user",
-            data_schema=schema,
+            data_schema=_basic_schema(self.data),
             errors=errors,
         )
 
     async def async_step_headers(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
-        """Handle headers configuration."""
-        if user_input is not None:
-            action = user_input.get("action")
-
-            if action == "add":
-                return await self.async_step_add_header()
-            elif action == "done":
-                self.data[CONF_HEADERS] = self.headers
-                # Check if we need payload step
-                if self.data[CONF_METHOD] in HTTP_METHODS_WITH_PAYLOAD:
-                    return await self.async_step_payload()
-                else:
-                    return await self.async_step_sensors()
-
-        header_list = (
-            "\n".join([f"• {h['key']}: {h['value']}" for h in self.headers])
-            if self.headers
-            else ""
-        )
-
-        schema = vol.Schema(
-            {
-                vol.Required("action"): vol.In(["add", "done"]),
-            }
-        )
-
-        return self.async_show_form(
+    ) -> ConfigFlowResult:
+        """Show the headers menu."""
+        return self.async_show_menu(
             step_id="headers",
-            data_schema=schema,
-            description_placeholders={"headers": header_list},
+            menu_options=["add_header", "headers_done"],
+            description_placeholders={"headers": _header_list(self.headers)},
         )
 
     async def async_step_add_header(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Add a header."""
         if user_input is not None:
             self.headers.append(
-                {
-                    "key": user_input["key"],
-                    "value": user_input["value"],
-                }
+                {"key": user_input["key"], "value": user_input["value"]}
             )
             return await self.async_step_headers()
 
-        schema = vol.Schema(
-            {
-                vol.Required("key"): str,
-                vol.Required("value"): str,
-            }
-        )
+        return self.async_show_form(step_id="add_header", data_schema=_header_schema())
 
-        return self.async_show_form(
-            step_id="add_header",
-            data_schema=schema,
-        )
+    async def async_step_headers_done(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Store headers and continue to the next step."""
+        self.data[CONF_HEADERS] = self.headers
+        if self.data[CONF_METHOD] in HTTP_METHODS_WITH_PAYLOAD:
+            return await self.async_step_payload()
+        return await self.async_step_sensors()
 
     async def async_step_payload(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Handle payload configuration."""
         if user_input is not None:
             self.data[CONF_CONTENT_TYPE] = user_input[CONF_CONTENT_TYPE]
             self.data[CONF_PAYLOAD] = user_input.get(CONF_PAYLOAD, "")
             return await self.async_step_sensors()
 
-        schema = vol.Schema(
-            {
-                vol.Required(CONF_CONTENT_TYPE, default="application/json"): vol.In(
-                    {ct: ct for ct in CONTENT_TYPES}
-                ),
-                vol.Optional(CONF_PAYLOAD, default=""): str,
-            }
-        )
-
         return self.async_show_form(
-            step_id="payload",
-            data_schema=schema,
+            step_id="payload", data_schema=_payload_schema(self.data)
         )
 
     async def async_step_sensors(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
-        """Handle sensors configuration."""
-        if user_input is not None:
-            action = user_input.get("action")
-
-            if action == "add":
-                return await self.async_step_add_sensor()
-            elif action == "done":
-                if not self.sensors:
-                    return self.async_abort(reason="no_sensors")
-
-                self.data[CONF_SENSORS] = self.sensors
-
-                # Create unique ID based on URL including query parameters
-                parsed_url = urlparse(self.data[CONF_URL])
-                unique_id = (
-                    f"{parsed_url.netloc}{parsed_url.path}{parsed_url.query}".replace(
-                        "/", "_"
-                    )
-                    .replace(".", "_")
-                    .replace("?", "_")
-                    .replace("&", "_")
-                    .replace("=", "_")
-                )
-
-                await self.async_set_unique_id(unique_id)
-                self._abort_if_unique_id_configured()
-
-                # Create title from URL
-                title = f"HTTP Agent - {parsed_url.netloc}"
-
-                return self.async_create_entry(
-                    title=title,
-                    data=self.data,
-                )
-
-        sensor_list = (
-            "\n".join(
-                [
-                    f"• {s[CONF_SENSOR_NAME]} ({SENSOR_TYPES.get(s.get(CONF_SENSOR_TYPE, 'sensor'), 'Sensor')})"
-                    for s in self.sensors
-                ]
-            )
-            if self.sensors
-            else ""
-        )
-
-        schema = vol.Schema(
-            {
-                vol.Required("action"): vol.In(["add", "done"]),
-            }
-        )
-
-        return self.async_show_form(
+    ) -> ConfigFlowResult:
+        """Show the sensors menu."""
+        return self.async_show_menu(
             step_id="sensors",
-            data_schema=schema,
-            description_placeholders={"sensors": sensor_list},
+            menu_options=["add_sensor", "sensors_done"],
+            description_placeholders={"sensors": _sensor_list(self.sensors)},
         )
 
     async def async_step_add_sensor(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Select sensor type and name."""
         if user_input is not None:
-            # Store sensor type and name for the next step
             self.current_sensor = {
                 CONF_SENSOR_NAME: user_input[CONF_SENSOR_NAME],
                 CONF_SENSOR_TYPE: user_input[CONF_SENSOR_TYPE],
             }
             return await self.async_step_sensor_config()
 
-        schema = vol.Schema(
-            {
-                vol.Required(CONF_SENSOR_NAME): str,
-                vol.Required(CONF_SENSOR_TYPE): vol.In(SENSOR_TYPES),
-            }
-        )
-
         return self.async_show_form(
-            step_id="add_sensor",
-            data_schema=schema,
+            step_id="add_sensor", data_schema=_add_sensor_schema()
         )
 
     async def async_step_sensor_config(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Configure sensor specific settings."""
+        assert self.current_sensor is not None
+        sensor_type = self.current_sensor[CONF_SENSOR_TYPE]
+
         if user_input is not None:
-            # Merge with existing sensor data
-            sensor_config = dict(self.current_sensor)
-            sensor_config.update(user_input)
-
-            # HA forms can return None for empty optional text fields.
-            if sensor_config.get(CONF_SENSOR_UNIT) is None:
-                sensor_config[CONF_SENSOR_UNIT] = ""
-
-            # Add optional fields that may not be in user_input
-            optional_fields = [
-                CONF_SENSOR_STATE,
-                CONF_SENSOR_ICON,
-                CONF_SENSOR_COLOR,
-                CONF_SENSOR_DEVICE_CLASS,
-                CONF_SENSOR_UNIT,
-                CONF_TRACKER_LATITUDE,
-                CONF_TRACKER_LONGITUDE,
-                CONF_TRACKER_LOCATION_NAME,
-                CONF_TRACKER_SOURCE_TYPE,
-            ]
-            for field in optional_fields:
-                if field not in sensor_config:
-                    sensor_config[field] = user_input.get(field, "")
-
-            self.sensors.append(sensor_config)
-            # Clean up temporary data
+            self.sensors.append(
+                _finalize_sensor_config(self.current_sensor, user_input)
+            )
             self.current_sensor = None
             return await self.async_step_sensors()
 
-        # Get sensor type to determine what fields to show
-        sensor_type = self.current_sensor[CONF_SENSOR_TYPE]
-
-        # Base schema with common fields
-        schema_dict = {
-            vol.Required(CONF_SENSOR_STATE): str,
-            vol.Optional(CONF_SENSOR_ICON, default=""): str,
-            vol.Optional(CONF_SENSOR_COLOR, default=""): str,
-        }
-
-        # Add device class selection based on sensor type
-        if sensor_type == "sensor":
-            schema_dict[vol.Optional(CONF_SENSOR_DEVICE_CLASS)] = vol.In(
-                ["none"] + list(SENSOR_DEVICE_CLASSES)
-            )
-            schema_dict[vol.Optional(CONF_SENSOR_UNIT, default="")] = str
-        elif sensor_type == "binary_sensor":
-            schema_dict[vol.Optional(CONF_SENSOR_DEVICE_CLASS)] = vol.In(
-                ["none"] + list(BINARY_SENSOR_DEVICE_CLASSES)
-            )
-        elif sensor_type == "number":
-            schema_dict[vol.Optional(CONF_SENSOR_DEVICE_CLASS)] = vol.In(
-                ["none"] + list(NUMBER_DEVICE_CLASSES)
-            )
-            schema_dict[vol.Optional(CONF_SENSOR_UNIT, default="")] = str
-        elif sensor_type == "device_tracker":
-            # Device tracker specific fields
-            schema_dict[vol.Required(CONF_TRACKER_LATITUDE)] = str
-            schema_dict[vol.Required(CONF_TRACKER_LONGITUDE)] = str
-            schema_dict[vol.Optional(CONF_TRACKER_LOCATION_NAME, default="")] = str
-            schema_dict[vol.Optional(CONF_TRACKER_SOURCE_TYPE, default="gps")] = vol.In(
-                ["none", "gps", "router", "bluetooth", "bluetooth_le"]
-            )
-
-        schema = vol.Schema(schema_dict)
-
         return self.async_show_form(
             step_id="sensor_config",
-            data_schema=schema,
+            data_schema=_sensor_config_schema(sensor_type),
         )
+
+    async def async_step_sensors_done(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Validate sensors and create the entry."""
+        if not self.sensors:
+            return self.async_abort(reason="no_sensors")
+
+        self.data[CONF_SENSORS] = self.sensors
+
+        parsed_url = urlparse(self.data[CONF_URL])
+        unique_id = (
+            f"{parsed_url.netloc}{parsed_url.path}{parsed_url.query}".replace("/", "_")
+            .replace(".", "_")
+            .replace("?", "_")
+            .replace("&", "_")
+            .replace("=", "_")
+        )
+        await self.async_set_unique_id(unique_id)
+        self._abort_if_unique_id_configured()
+
+        title = f"HTTP Agent - {parsed_url.netloc}"
+        return self.async_create_entry(title=title, data=self.data)
 
     @staticmethod
     @callback
@@ -358,241 +475,179 @@ class HTTPAgentConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return HTTPAgentOptionsFlow(config_entry)
 
 
+# ---------------------------------------------------------------------------
+# Options flow
+# ---------------------------------------------------------------------------
 class HTTPAgentOptionsFlow(config_entries.OptionsFlow):
     """Handle options flow for HTTP Agent."""
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
         """Initialize options flow."""
         super().__init__()
-        # Start with config entry data and overlay any existing options
-        self.data = dict(config_entry.data)
+        self._config_entry = config_entry
+
+        data = dict(config_entry.data)
         if config_entry.options:
-            self.data.update(config_entry.options)
-        self.headers = list(self.data.get(CONF_HEADERS, []))
-        self.sensors = list(self.data.get(CONF_SENSORS, []))
-        self.current_sensor = None
+            data.update(config_entry.options)
+
+        self._data: dict[str, Any] = data
+        self.headers: list[dict[str, str]] = list(data.get(CONF_HEADERS, []))
+        self.sensors: list[dict[str, Any]] = list(data.get(CONF_SENSORS, []))
+        self.current_sensor: dict[str, Any] | None = None
+        self.selected_sensor_index: int | None = None
+
+    def _save(self) -> ConfigFlowResult:
+        """Persist the current configuration as entry options."""
+        return self.async_create_entry(title="", data=self._data)
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
-        """Show main options menu."""
-        if user_input is not None:
-            action = user_input.get("action")
+    ) -> ConfigFlowResult:
+        """Show the main options menu."""
+        menu_options = ["basic", "headers"]
+        if self._data.get(CONF_METHOD, DEFAULT_METHOD) in HTTP_METHODS_WITH_PAYLOAD:
+            menu_options.append("payload")
+        menu_options.append("sensors")
 
-            if action == "basic":
-                return await self.async_step_basic()
-            elif action == "headers":
-                return await self.async_step_headers()
-            elif action == "payload":
-                return await self.async_step_payload()
-            elif action == "sensors":
-                return await self.async_step_sensors()
-
-        # Build options menu based on current method
-        options = ["basic", "headers", "sensors"]
-
-        # Add payload option only for methods that support it
-        if self.data.get(CONF_METHOD, DEFAULT_METHOD) in HTTP_METHODS_WITH_PAYLOAD:
-            options.insert(2, "payload")
-
-        schema = vol.Schema(
-            {
-                vol.Required("action"): vol.In(options),
-            }
-        )
-
-        return self.async_show_form(
-            step_id="init",
-            data_schema=schema,
-        )
+        return self.async_show_menu(step_id="init", menu_options=menu_options)
 
     async def async_step_basic(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Edit basic settings."""
-        errors = {}
+        errors: dict[str, str] = {}
 
         if user_input is not None:
-            # Validate URL
-            try:
-                parsed = urlparse(user_input[CONF_URL])
-                if not parsed.scheme or not parsed.netloc:
-                    errors["base"] = "invalid_url"
-            except Exception:
+            if not _validate_url(user_input[CONF_URL]):
                 errors["base"] = "invalid_url"
 
             if not errors:
-                self.data.update(user_input)
-                # Save as options, which will trigger reload
-                return self.async_create_entry(title="", data=self.data)
-
-        schema = vol.Schema(
-            {
-                vol.Required(CONF_URL, default=self.data.get(CONF_URL, "")): str,
-                vol.Required(
-                    CONF_METHOD, default=self.data.get(CONF_METHOD, DEFAULT_METHOD)
-                ): vol.In(HTTP_METHODS),
-                vol.Optional(
-                    CONF_TIMEOUT, default=self.data.get(CONF_TIMEOUT, DEFAULT_TIMEOUT)
-                ): vol.All(vol.Coerce(int), vol.Range(min=1, max=300)),
-                vol.Required(
-                    CONF_RETRIES,
-                    default=self.data.get(CONF_RETRIES, DEFAULT_RETRIES),
-                ): vol.All(vol.Coerce(int), vol.Range(min=0, max=10)),
-                vol.Optional(
-                    CONF_INTERVAL,
-                    default=self.data.get(CONF_INTERVAL, DEFAULT_INTERVAL),
-                ): vol.All(vol.Coerce(int), vol.Range(min=5, max=86400)),
-                vol.Optional(
-                    CONF_VERIFY_SSL,
-                    default=self.data.get(CONF_VERIFY_SSL, DEFAULT_VERIFY_SSL),
-                ): bool,
-            }
-        )
+                self._data.update(user_input)
+                return self._save()
 
         return self.async_show_form(
             step_id="basic",
-            data_schema=schema,
+            data_schema=_basic_schema(self._data),
             errors=errors,
         )
 
     async def async_step_headers(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
-        """Edit headers configuration."""
-        if user_input is not None:
-            action = user_input.get("action")
-
-            if action == "add":
-                return await self.async_step_add_header()
-            elif action == "clear":
-                self.headers = []
-                return await self.async_step_headers()
-            elif action == "done":
-                self.data[CONF_HEADERS] = self.headers
-                return self.async_create_entry(title="", data=self.data)
-
-        header_list = (
-            "\n".join([f"• {h['key']}: {h['value']}" for h in self.headers])
-            if self.headers
-            else ""
-        )
-
-        schema = vol.Schema(
-            {
-                vol.Required("action"): vol.In(["add", "clear", "done"]),
-            }
-        )
-
-        return self.async_show_form(
+    ) -> ConfigFlowResult:
+        """Show the headers menu."""
+        return self.async_show_menu(
             step_id="headers",
-            data_schema=schema,
-            description_placeholders={"headers": header_list},
+            menu_options=["add_header", "clear_headers", "headers_done"],
+            description_placeholders={"headers": _header_list(self.headers)},
         )
 
     async def async_step_add_header(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Add a header."""
         if user_input is not None:
             self.headers.append(
-                {
-                    "key": user_input["key"],
-                    "value": user_input["value"],
-                }
+                {"key": user_input["key"], "value": user_input["value"]}
             )
             return await self.async_step_headers()
 
-        schema = vol.Schema(
-            {
-                vol.Required("key"): str,
-                vol.Required("value"): str,
-            }
-        )
+        return self.async_show_form(step_id="add_header", data_schema=_header_schema())
 
-        return self.async_show_form(
-            step_id="add_header",
-            data_schema=schema,
-        )
+    async def async_step_clear_headers(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Clear all headers."""
+        self.headers = []
+        return await self.async_step_headers()
+
+    async def async_step_headers_done(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Save headers."""
+        self._data[CONF_HEADERS] = self.headers
+        return self._save()
 
     async def async_step_payload(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Edit payload configuration."""
         if user_input is not None:
-            self.data[CONF_CONTENT_TYPE] = user_input[CONF_CONTENT_TYPE]
-            self.data[CONF_PAYLOAD] = user_input.get(CONF_PAYLOAD, "")
-            return self.async_create_entry(title="", data=self.data)
-
-        schema = vol.Schema(
-            {
-                vol.Required(
-                    CONF_CONTENT_TYPE,
-                    default=self.data.get(CONF_CONTENT_TYPE, "application/json"),
-                ): vol.In({ct: ct for ct in CONTENT_TYPES}),
-                vol.Optional(
-                    CONF_PAYLOAD, default=self.data.get(CONF_PAYLOAD, "")
-                ): str,
-            }
-        )
+            self._data[CONF_CONTENT_TYPE] = user_input[CONF_CONTENT_TYPE]
+            self._data[CONF_PAYLOAD] = user_input.get(CONF_PAYLOAD, "")
+            return self._save()
 
         return self.async_show_form(
-            step_id="payload",
-            data_schema=schema,
+            step_id="payload", data_schema=_payload_schema(self._data)
         )
 
     async def async_step_sensors(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
-        """Edit sensors configuration."""
-        if user_input is not None:
-            action = user_input.get("action")
-
-            if action == "add":
-                return await self.async_step_add_sensor()
-            elif action == "edit":
-                return await self.async_step_select_sensor()
-            elif action == "clear":
-                self.sensors = []
-                return await self.async_step_sensors()
-            elif action == "done":
-                if not self.sensors:
-                    return self.async_abort(reason="no_sensors")
-                self.data[CONF_SENSORS] = self.sensors
-                return self.async_create_entry(title="", data=self.data)
-
-        sensor_list = (
-            "\n".join(
-                [
-                    f"• {s[CONF_SENSOR_NAME]} ({SENSOR_TYPES.get(s.get(CONF_SENSOR_TYPE, 'sensor'), 'Sensor')})"
-                    for s in self.sensors
-                ]
-            )
-            if self.sensors
-            else ""
-        )
-
-        # Build action options based on available sensors
-        actions = ["add", "done"]
+    ) -> ConfigFlowResult:
+        """Show the sensors menu."""
+        menu_options = ["add_sensor"]
         if self.sensors:
-            actions.insert(1, "edit")
-            actions.insert(2, "clear")
+            menu_options += ["select_sensor", "clear_sensors"]
+        menu_options.append("sensors_done")
 
-        schema = vol.Schema(
-            {
-                vol.Required("action"): vol.In(actions),
-            }
+        return self.async_show_menu(
+            step_id="sensors",
+            menu_options=menu_options,
+            description_placeholders={"sensors": _sensor_list(self.sensors)},
         )
+
+    async def async_step_add_sensor(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Select sensor type and name."""
+        if user_input is not None:
+            self.current_sensor = {
+                CONF_SENSOR_NAME: user_input[CONF_SENSOR_NAME],
+                CONF_SENSOR_TYPE: user_input[CONF_SENSOR_TYPE],
+            }
+            return await self.async_step_sensor_config()
 
         return self.async_show_form(
-            step_id="sensors",
-            data_schema=schema,
-            description_placeholders={"sensors": sensor_list},
+            step_id="add_sensor", data_schema=_add_sensor_schema()
         )
+
+    async def async_step_sensor_config(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Configure sensor specific settings."""
+        assert self.current_sensor is not None
+        sensor_type = self.current_sensor[CONF_SENSOR_TYPE]
+
+        if user_input is not None:
+            self.sensors.append(
+                _finalize_sensor_config(self.current_sensor, user_input)
+            )
+            self.current_sensor = None
+            return await self.async_step_sensors()
+
+        return self.async_show_form(
+            step_id="sensor_config",
+            data_schema=_sensor_config_schema(sensor_type),
+        )
+
+    async def async_step_clear_sensors(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Clear all sensors."""
+        self.sensors = []
+        return await self.async_step_sensors()
+
+    async def async_step_sensors_done(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Save sensors."""
+        if not self.sensors:
+            return self.async_abort(reason="no_sensors")
+        self._data[CONF_SENSORS] = self.sensors
+        return self._save()
 
     async def async_step_select_sensor(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Select a sensor to edit or delete."""
         if user_input is not None:
             selected_sensor = user_input["sensor"]
@@ -603,284 +658,77 @@ class HTTPAgentOptionsFlow(config_entries.OptionsFlow):
             )
             return await self.async_step_edit_sensor()
 
-        sensor_options = {
-            s[CONF_SENSOR_NAME]: s[CONF_SENSOR_NAME] for s in self.sensors
-        }
-
         schema = vol.Schema(
             {
-                vol.Required("sensor"): vol.In(sensor_options),
+                vol.Required("sensor"): SelectSelector(
+                    SelectSelectorConfig(
+                        options=[s[CONF_SENSOR_NAME] for s in self.sensors],
+                        mode=SelectSelectorMode.DROPDOWN,
+                    )
+                )
             }
         )
 
-        return self.async_show_form(
-            step_id="select_sensor",
-            data_schema=schema,
-        )
+        return self.async_show_form(step_id="select_sensor", data_schema=schema)
 
     async def async_step_edit_sensor(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
-        """Edit or delete a selected sensor."""
-        if user_input is not None:
-            action = user_input.get("action")
-
-            if action == "edit":
-                return await self.async_step_modify_sensor()
-            elif action == "delete":
-                # Remove the sensor
-                del self.sensors[self.selected_sensor_index]
-                return await self.async_step_sensors()
-            elif action == "back":
-                return await self.async_step_sensors()
-
+    ) -> ConfigFlowResult:
+        """Show the edit/delete menu for a selected sensor."""
+        assert self.selected_sensor_index is not None
         sensor = self.sensors[self.selected_sensor_index]
-        sensor_name = sensor[CONF_SENSOR_NAME]
-        sensor_type = sensor.get(CONF_SENSOR_TYPE, "sensor")
-        sensor_state = sensor.get(CONF_SENSOR_STATE, "")
-
-        # Build sensor info string
-        sensor_type_name = SENSOR_TYPES.get(sensor_type, "Sensor")
-        sensor_info = f"**{sensor_name}** ({sensor_type_name})\nState: `{sensor_state}`"
-
-        schema = vol.Schema(
-            {
-                vol.Required("action"): vol.In(["edit", "delete", "back"]),
-            }
+        sensor_type_name = SENSOR_TYPES.get(
+            sensor.get(CONF_SENSOR_TYPE, "sensor"), "Sensor"
+        )
+        sensor_info = (
+            f"**{sensor[CONF_SENSOR_NAME]}** ({sensor_type_name})\n"
+            f"State: `{sensor.get(CONF_SENSOR_STATE, '')}`"
         )
 
-        return self.async_show_form(
+        return self.async_show_menu(
             step_id="edit_sensor",
-            data_schema=schema,
-            description_placeholders={
-                "sensor_info": sensor_info,
-            },
+            menu_options=["modify_sensor", "delete_sensor", "edit_back"],
+            description_placeholders={"sensor_info": sensor_info},
         )
+
+    async def async_step_edit_back(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Return to the sensors menu."""
+        self.selected_sensor_index = None
+        return await self.async_step_sensors()
+
+    async def async_step_delete_sensor(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Delete the selected sensor."""
+        if self.selected_sensor_index is not None:
+            del self.sensors[self.selected_sensor_index]
+            self.selected_sensor_index = None
+        return await self.async_step_sensors()
 
     async def async_step_modify_sensor(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Modify the selected sensor."""
-        if user_input is not None:
-            # Update the sensor configuration - preserve sensor type
-            sensor_config = {
-                CONF_SENSOR_NAME: user_input[CONF_SENSOR_NAME],
-                CONF_SENSOR_TYPE: self.sensors[self.selected_sensor_index].get(
-                    CONF_SENSOR_TYPE, "sensor"
-                ),
-                CONF_SENSOR_STATE: user_input.get(CONF_SENSOR_STATE, ""),
-                CONF_SENSOR_ICON: user_input.get(CONF_SENSOR_ICON, ""),
-                CONF_SENSOR_COLOR: user_input.get(CONF_SENSOR_COLOR, ""),
-            }
-
-            # Add device class and unit if provided
-            if user_input.get(CONF_SENSOR_DEVICE_CLASS):
-                sensor_config[CONF_SENSOR_DEVICE_CLASS] = user_input[
-                    CONF_SENSOR_DEVICE_CLASS
-                ]
-
-            sensor_type = sensor_config[CONF_SENSOR_TYPE]
-            if sensor_type in ("sensor", "number"):
-                sensor_config[CONF_SENSOR_UNIT] = user_input.get(CONF_SENSOR_UNIT) or ""
-
-            # Add tracker fields if it's a device tracker
-            if sensor_type == "device_tracker":
-                if user_input.get(CONF_TRACKER_LATITUDE):
-                    sensor_config[CONF_TRACKER_LATITUDE] = user_input[
-                        CONF_TRACKER_LATITUDE
-                    ]
-                if user_input.get(CONF_TRACKER_LONGITUDE):
-                    sensor_config[CONF_TRACKER_LONGITUDE] = user_input[
-                        CONF_TRACKER_LONGITUDE
-                    ]
-                if user_input.get(CONF_TRACKER_LOCATION_NAME):
-                    sensor_config[CONF_TRACKER_LOCATION_NAME] = user_input[
-                        CONF_TRACKER_LOCATION_NAME
-                    ]
-                if user_input.get(CONF_TRACKER_SOURCE_TYPE):
-                    sensor_config[CONF_TRACKER_SOURCE_TYPE] = user_input[
-                        CONF_TRACKER_SOURCE_TYPE
-                    ]
-
-            self.sensors[self.selected_sensor_index] = sensor_config
-            return await self.async_step_sensors()
-
-        # Pre-fill with current sensor values
+        assert self.selected_sensor_index is not None
         sensor = self.sensors[self.selected_sensor_index]
         sensor_type = sensor.get(CONF_SENSOR_TYPE, "sensor")
 
-        # Build schema based on sensor type
-        schema_dict = {
-            vol.Required(CONF_SENSOR_NAME, default=sensor[CONF_SENSOR_NAME]): str,
-            vol.Optional(
-                CONF_SENSOR_STATE, default=sensor.get(CONF_SENSOR_STATE, "")
-            ): str,
-            vol.Optional(
-                CONF_SENSOR_ICON, default=sensor.get(CONF_SENSOR_ICON, "")
-            ): str,
-            vol.Optional(
-                CONF_SENSOR_COLOR, default=sensor.get(CONF_SENSOR_COLOR, "")
-            ): str,
-        }
-
-        # Add device class field based on sensor type
-        if sensor_type == "sensor":
-            device_classes = {"": ""} | {dc: dc for dc in SENSOR_DEVICE_CLASSES}
-            schema_dict[
-                vol.Optional(
-                    CONF_SENSOR_DEVICE_CLASS,
-                    default=sensor.get(CONF_SENSOR_DEVICE_CLASS, ""),
-                )
-            ] = vol.In(device_classes)
-            schema_dict[vol.Optional(CONF_SENSOR_UNIT)] = str
-        elif sensor_type == "binary_sensor":
-            device_classes = {"": ""} | {dc: dc for dc in BINARY_SENSOR_DEVICE_CLASSES}
-            schema_dict[
-                vol.Optional(
-                    CONF_SENSOR_DEVICE_CLASS,
-                    default=sensor.get(CONF_SENSOR_DEVICE_CLASS, ""),
-                )
-            ] = vol.In(device_classes)
-        elif sensor_type == "number":
-            device_classes = {"": ""} | {dc: dc for dc in NUMBER_DEVICE_CLASSES}
-            schema_dict[
-                vol.Optional(
-                    CONF_SENSOR_DEVICE_CLASS,
-                    default=sensor.get(CONF_SENSOR_DEVICE_CLASS, ""),
-                )
-            ] = vol.In(device_classes)
-            schema_dict[vol.Optional(CONF_SENSOR_UNIT)] = str
-        elif sensor_type == "device_tracker":
-            # Add device tracker specific fields
-            schema_dict[
-                vol.Optional(
-                    CONF_TRACKER_LATITUDE, default=sensor.get(CONF_TRACKER_LATITUDE, "")
-                )
-            ] = str
-            schema_dict[
-                vol.Optional(
-                    CONF_TRACKER_LONGITUDE,
-                    default=sensor.get(CONF_TRACKER_LONGITUDE, ""),
-                )
-            ] = str
-            schema_dict[
-                vol.Optional(
-                    CONF_TRACKER_LOCATION_NAME,
-                    default=sensor.get(CONF_TRACKER_LOCATION_NAME, ""),
-                )
-            ] = str
-            schema_dict[
-                vol.Optional(
-                    CONF_TRACKER_SOURCE_TYPE,
-                    default=sensor.get(CONF_TRACKER_SOURCE_TYPE, "none"),
-                )
-            ] = vol.In(["none", "gps", "router", "bluetooth", "bluetooth_le"])
-
-        schema = vol.Schema(schema_dict)
-        suggested_values: dict[str, Any] = {}
-        if sensor_type in ("sensor", "number"):
-            suggested_values[CONF_SENSOR_UNIT] = sensor.get(CONF_SENSOR_UNIT) or ""
+        if user_input is not None:
+            base = {
+                CONF_SENSOR_NAME: user_input.get(
+                    CONF_SENSOR_NAME, sensor[CONF_SENSOR_NAME]
+                ),
+                CONF_SENSOR_TYPE: sensor_type,
+            }
+            self.sensors[self.selected_sensor_index] = _finalize_sensor_config(
+                base, user_input
+            )
+            self.selected_sensor_index = None
+            return await self.async_step_sensors()
 
         return self.async_show_form(
             step_id="modify_sensor",
-            data_schema=self.add_suggested_values_to_schema(schema, suggested_values),
-        )
-
-    async def async_step_add_sensor(
-        self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
-        """Select sensor type and name."""
-        if user_input is not None:
-            # Store sensor type and name for the next step
-            self.current_sensor = {
-                CONF_SENSOR_NAME: user_input[CONF_SENSOR_NAME],
-                CONF_SENSOR_TYPE: user_input[CONF_SENSOR_TYPE],
-            }
-            return await self.async_step_sensor_config()
-
-        schema = vol.Schema(
-            {
-                vol.Required(CONF_SENSOR_NAME): str,
-                vol.Required(CONF_SENSOR_TYPE): vol.In(SENSOR_TYPES),
-            }
-        )
-
-        return self.async_show_form(
-            step_id="add_sensor",
-            data_schema=schema,
-        )
-
-    async def async_step_sensor_config(
-        self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
-        """Configure sensor specific settings."""
-        if user_input is not None:
-            # Merge with existing sensor data
-            sensor_config = dict(self.current_sensor)
-            sensor_config.update(user_input)
-
-            # HA forms can return None for empty optional text fields.
-            if sensor_config.get(CONF_SENSOR_UNIT) is None:
-                sensor_config[CONF_SENSOR_UNIT] = ""
-
-            # Add optional fields that may not be in user_input
-            optional_fields = [
-                CONF_SENSOR_STATE,
-                CONF_SENSOR_ICON,
-                CONF_SENSOR_COLOR,
-                CONF_SENSOR_DEVICE_CLASS,
-                CONF_SENSOR_UNIT,
-                CONF_TRACKER_LATITUDE,
-                CONF_TRACKER_LONGITUDE,
-                CONF_TRACKER_LOCATION_NAME,
-                CONF_TRACKER_SOURCE_TYPE,
-            ]
-            for field in optional_fields:
-                if field not in sensor_config:
-                    sensor_config[field] = user_input.get(field, "")
-
-            self.sensors.append(sensor_config)
-            # Clean up temporary data
-            self.current_sensor = None
-            return await self.async_step_sensors()
-
-        # Get sensor type to determine what fields to show
-        sensor_type = self.current_sensor[CONF_SENSOR_TYPE]
-
-        # Base schema with common fields
-        schema_dict = {
-            vol.Required(CONF_SENSOR_STATE): str,
-            vol.Optional(CONF_SENSOR_ICON, default=""): str,
-            vol.Optional(CONF_SENSOR_COLOR, default=""): str,
-        }
-
-        # Add device class selection based on sensor type
-        if sensor_type == "sensor":
-            schema_dict[vol.Optional(CONF_SENSOR_DEVICE_CLASS)] = vol.In(
-                ["none"] + list(SENSOR_DEVICE_CLASSES)
-            )
-            schema_dict[vol.Optional(CONF_SENSOR_UNIT, default="")] = str
-        elif sensor_type == "binary_sensor":
-            schema_dict[vol.Optional(CONF_SENSOR_DEVICE_CLASS)] = vol.In(
-                ["none"] + list(BINARY_SENSOR_DEVICE_CLASSES)
-            )
-        elif sensor_type == "number":
-            schema_dict[vol.Optional(CONF_SENSOR_DEVICE_CLASS)] = vol.In(
-                ["none"] + list(NUMBER_DEVICE_CLASSES)
-            )
-            schema_dict[vol.Optional(CONF_SENSOR_UNIT, default="")] = str
-        elif sensor_type == "device_tracker":
-            # Device tracker specific fields
-            schema_dict[vol.Required(CONF_TRACKER_LATITUDE)] = str
-            schema_dict[vol.Required(CONF_TRACKER_LONGITUDE)] = str
-            schema_dict[vol.Optional(CONF_TRACKER_LOCATION_NAME, default="")] = str
-            schema_dict[vol.Optional(CONF_TRACKER_SOURCE_TYPE, default="gps")] = vol.In(
-                ["none", "gps", "router", "bluetooth", "bluetooth_le"]
-            )
-
-        schema = vol.Schema(schema_dict)
-
-        return self.async_show_form(
-            step_id="sensor_config",
-            data_schema=schema,
+            data_schema=_sensor_config_schema(sensor_type, sensor, include_name=True),
         )

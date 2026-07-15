@@ -13,7 +13,9 @@ from xml.etree import ElementTree as ET
 import aiohttp
 from bs4 import BeautifulSoup
 
+from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from homeassistant.helpers.template import Template
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
@@ -97,7 +99,10 @@ class HTTPAgentCoordinator(DataUpdateCoordinator):
         self.sensors_config = entry_data[CONF_SENSORS]
 
         # Session
-        self.session = None
+        self.session: aiohttp.ClientSession | None = None
+
+        # Platforms set up for this entry (populated during async_setup_entry)
+        self.platforms: list[Platform] = []
 
         # Update interval
         update_interval = timedelta(
@@ -114,9 +119,11 @@ class HTTPAgentCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self) -> dict[str, Any]:
         """Fetch data from HTTP endpoint."""
         if not self.session:
-            timeout = aiohttp.ClientTimeout(total=self.timeout)
-            connector = aiohttp.TCPConnector(ssl=self.verify_ssl)
-            self.session = aiohttp.ClientSession(timeout=timeout, connector=connector)
+            self.session = async_create_clientsession(
+                self.hass,
+                verify_ssl=self.verify_ssl,
+                timeout=aiohttp.ClientTimeout(total=self.timeout),
+            )
 
         try:
             # Render templates in URL, headers, and payload
@@ -188,11 +195,14 @@ class HTTPAgentCoordinator(DataUpdateCoordinator):
                             response.status,
                         )
 
-                        # Create custom response object for templates
-                        http_response = HTTPResponse(
-                            text=response_text,
-                            status=response.status,
-                            headers=dict(response.headers),
+                        # Create custom response object for templates. Parsing
+                        # (JSON/HTML/XML) can be expensive, so run it in the
+                        # executor to avoid blocking the event loop.
+                        http_response = await self.hass.async_add_executor_job(
+                            HTTPResponse,
+                            response_text,
+                            response.status,
+                            dict(response.headers),
                         )
 
                         # Extract sensor data
