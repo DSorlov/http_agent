@@ -352,6 +352,69 @@
     },
     "empty_response": {
       "message": "Le point de terminaison a répondu avec un corps vide."
+    },
+    "unknown_endpoint": {
+      "message": "Aucun point de terminaison HTTP Agent trouvé pour \"{target}\"."
+    },
+    "missing_url": {
+      "message": "Indiquez une URL, un point de terminaison à utiliser, ou les deux."
+    }
+  },
+  "services": {
+    "request": {
+      "name": "Requête",
+      "description": "Appelle un point de terminaison HTTP et renvoie la réponse, afin qu'une automatisation ou un script puisse utiliser les données à une étape ultérieure.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Point de terminaison",
+          "description": "Un point de terminaison existant dont l'URL, l'authentification et les paramètres de connexion seront repris."
+        },
+        "url": {
+          "name": "URL",
+          "description": "Remplace l'URL du point de terminaison. Un chemin commençant par une barre oblique est résolu par rapport à l'hôte du point de terminaison choisi."
+        },
+        "method": {
+          "name": "Méthode",
+          "description": "Méthode HTTP à utiliser pour cette requête."
+        },
+        "payload": {
+          "name": "Corps",
+          "description": "Le corps de la requête. Les modèles Home Assistant sont pris en charge."
+        },
+        "headers": {
+          "name": "En-têtes",
+          "description": "En-têtes supplémentaires à envoyer, fusionnés par-dessus ceux du point de terminaison."
+        },
+        "select": {
+          "name": "Valeurs à lire",
+          "description": "Une correspondance entre nom de résultat et chemin, avec la même syntaxe que les capteurs. Les valeurs extraites sont renvoyées sous `values`."
+        },
+        "content_type": {
+          "name": "Type de contenu",
+          "description": "Envoyé comme en-tête `Content-Type`."
+        },
+        "response_format": {
+          "name": "Format de réponse",
+          "description": "Laissez sur 'Auto' pour détecter automatiquement JSON, XML, HTML ou texte brut."
+        },
+        "timeout": {
+          "name": "Délai d'expiration de la requête",
+          "description": "Durée d'attente d'une réponse, en secondes."
+        },
+        "retries": {
+          "name": "Nouvelles tentatives en cas d'erreur",
+          "description": "Nombre de tentatives supplémentaires en cas d'échec d'une relève, avec une seconde entre chaque tentative."
+        },
+        "verify_ssl": {
+          "name": "Vérifier le certificat SSL",
+          "description": "À désactiver uniquement pour les points de terminaison avec un certificat auto-signé."
+        }
+      },
+      "sections": {
+        "advanced_fields": {
+          "name": "Paramètres avancés"
+        }
+      }
     }
   }
 }

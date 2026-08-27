@@ -15,6 +15,7 @@ import sys
 from typing import Any
 
 import voluptuous as vol
+import yaml
 
 import homeassistant.helpers.config_validation as cv
 
@@ -105,11 +106,89 @@ SCHEMA = vol.Schema(
             data_entry_schema(subentry=True), slug_validator=cv.slug
         ),
         vol.Optional("options"): data_entry_schema(),
+        vol.Optional("services"): cv.schema_with_slug_keys(
+            {
+                vol.Required("name"): value,
+                vol.Required("description"): value,
+                vol.Optional("fields"): cv.schema_with_slug_keys(
+                    {
+                        vol.Required("name"): value,
+                        vol.Required("description"): value,
+                    },
+                    slug_validator=cv.slug,
+                ),
+                vol.Optional("sections"): cv.schema_with_slug_keys(
+                    {
+                        vol.Required("name"): value,
+                        vol.Optional("description"): value,
+                    },
+                    slug_validator=cv.slug,
+                ),
+            },
+            slug_validator=cv.slug,
+        ),
         vol.Optional("exceptions"): cv.schema_with_slug_keys(
             {vol.Optional("message"): value}, slug_validator=cv.slug
         ),
     }
 )
+
+
+def check_services(strings: dict[str, Any]) -> list[str]:
+    """Every action and field in services.yaml needs a matching translation."""
+    services_file = COMPONENT / "services.yaml"
+    if not services_file.is_file():
+        return []
+
+    defined = yaml.safe_load(services_file.read_text(encoding="utf-8")) or {}
+    translated = strings.get("services", {})
+    errors: list[str] = []
+
+    for name, service in defined.items():
+        if name not in translated:
+            errors.append(f"services.yaml: action '{name}' has no translation")
+            continue
+        strings_fields = translated[name].get("fields", {})
+        strings_sections = translated[name].get("sections", {})
+
+        for field, spec in (service or {}).get("fields", {}).items():
+            if isinstance(spec, dict) and "fields" in spec:
+                if field not in strings_sections:
+                    errors.append(
+                        f"services.yaml: section '{name}.{field}' has no name"
+                    )
+                nested = spec["fields"]
+            else:
+                nested = {field: spec}
+            for key in nested:
+                if key not in strings_fields:
+                    errors.append(
+                        f"services.yaml: field '{name}.{key}' has no translation"
+                    )
+
+    for name, service in translated.items():
+        if name not in defined:
+            errors.append(f"strings.json: action '{name}' is not in services.yaml")
+            continue
+        declared = _flat_fields(defined[name] or {})
+        for key in service.get("fields", {}):
+            if key not in declared:
+                errors.append(
+                    f"strings.json: field '{name}.{key}' is not in services.yaml"
+                )
+
+    return errors
+
+
+def _flat_fields(service: dict[str, Any]) -> set[str]:
+    """Return every field name of an action, flattening UI sections."""
+    names: set[str] = set()
+    for field, spec in service.get("fields", {}).items():
+        if isinstance(spec, dict) and "fields" in spec:
+            names.update(spec["fields"])
+        else:
+            names.add(field)
+    return names
 
 
 def main() -> int:
@@ -124,6 +203,11 @@ def main() -> int:
         except vol.Invalid as err:
             failed = True
             print(f"error: {path.name}: {err}", file=sys.stderr)  # noqa: T201
+
+    strings = json.loads((COMPONENT / "strings.json").read_text(encoding="utf-8"))
+    for error in check_services(strings):
+        failed = True
+        print(f"error: {error}", file=sys.stderr)  # noqa: T201
 
     if failed:
         return 1

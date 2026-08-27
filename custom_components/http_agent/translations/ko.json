@@ -352,6 +352,69 @@
     },
     "empty_response": {
       "message": "엔드포인트가 빈 본문으로 응답했습니다."
+    },
+    "unknown_endpoint": {
+      "message": "\"{target}\"에 해당하는 HTTP Agent 엔드포인트를 찾을 수 없습니다."
+    },
+    "missing_url": {
+      "message": "URL, 사용할 엔드포인트 또는 둘 다를 지정하세요."
+    }
+  },
+  "services": {
+    "request": {
+      "name": "요청",
+      "description": "HTTP 엔드포인트를 호출하고 응답을 반환하여, 자동화나 스크립트가 이후 단계에서 데이터를 사용할 수 있게 합니다.",
+      "fields": {
+        "config_entry_id": {
+          "name": "엔드포인트",
+          "description": "URL, 인증, 연결 설정을 가져올 기존 엔드포인트입니다."
+        },
+        "url": {
+          "name": "URL",
+          "description": "엔드포인트의 URL을 대체합니다. 슬래시로 시작하는 경로는 선택한 엔드포인트의 호스트를 기준으로 해석됩니다."
+        },
+        "method": {
+          "name": "메서드",
+          "description": "이 요청에 사용할 HTTP 메서드입니다."
+        },
+        "payload": {
+          "name": "본문",
+          "description": "요청의 본문입니다. Home Assistant 템플릿을 지원합니다."
+        },
+        "headers": {
+          "name": "헤더",
+          "description": "함께 보낼 추가 헤더이며, 엔드포인트의 헤더 위에 병합됩니다."
+        },
+        "select": {
+          "name": "읽을 값",
+          "description": "결과 이름과 경로의 매핑이며, 센서와 동일한 구문을 사용합니다. 추출된 값은 `values` 아래에 반환됩니다."
+        },
+        "content_type": {
+          "name": "콘텐츠 유형",
+          "description": "`Content-Type` 헤더로 전송됩니다."
+        },
+        "response_format": {
+          "name": "응답 형식",
+          "description": "'Auto'로 두면 JSON, XML, HTML 또는 일반 텍스트를 자동으로 감지합니다."
+        },
+        "timeout": {
+          "name": "요청 제한 시간",
+          "description": "응답을 기다리는 시간(초)."
+        },
+        "retries": {
+          "name": "오류 시 재시도",
+          "description": "조회에 실패했을 때 추가로 시도하는 횟수이며, 시도 사이에 1초를 기다립니다."
+        },
+        "verify_ssl": {
+          "name": "SSL 인증서 확인",
+          "description": "자체 서명 인증서를 사용하는 엔드포인트에서만 끄세요."
+        }
+      },
+      "sections": {
+        "advanced_fields": {
+          "name": "고급 설정"
+        }
+      }
     }
   }
 }

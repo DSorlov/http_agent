@@ -352,6 +352,69 @@
     },
     "empty_response": {
       "message": "The endpoint answered with an empty body."
+    },
+    "unknown_endpoint": {
+      "message": "No HTTP Agent endpoint found for \"{target}\"."
+    },
+    "missing_url": {
+      "message": "Provide a URL, an endpoint to use, or both."
+    }
+  },
+  "services": {
+    "request": {
+      "name": "Request",
+      "description": "Calls an HTTP endpoint and returns the answer, so an automation or script can use the data in a later step.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Endpoint",
+          "description": "An existing endpoint to take the URL, authentication and connection settings from."
+        },
+        "url": {
+          "name": "URL",
+          "description": "Overrides the endpoint URL. A path starting with a slash is resolved against the host of the chosen endpoint."
+        },
+        "method": {
+          "name": "Method",
+          "description": "HTTP method to use for this request."
+        },
+        "payload": {
+          "name": "Body",
+          "description": "The request body. Home Assistant templates are supported."
+        },
+        "headers": {
+          "name": "Headers",
+          "description": "Extra headers to send, merged on top of those from the endpoint."
+        },
+        "select": {
+          "name": "Values to read",
+          "description": "A mapping of result name to path, using the same syntax as the sensors. The extracted values are returned under `values`."
+        },
+        "content_type": {
+          "name": "Content type",
+          "description": "Sent as the `Content-Type` header."
+        },
+        "response_format": {
+          "name": "Response format",
+          "description": "Leave on 'Auto' to detect JSON, XML, HTML or plain text from the response."
+        },
+        "timeout": {
+          "name": "Request timeout",
+          "description": "How long to wait for a response, in seconds."
+        },
+        "retries": {
+          "name": "Retries on error",
+          "description": "How many extra attempts to make when a poll fails, with one second between attempts."
+        },
+        "verify_ssl": {
+          "name": "Verify SSL certificate",
+          "description": "Turn off only for endpoints with a self-signed certificate."
+        }
+      },
+      "sections": {
+        "advanced_fields": {
+          "name": "Advanced settings"
+        }
+      }
     }
   }
 }

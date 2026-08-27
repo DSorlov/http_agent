@@ -10,5 +10,5 @@
   "issue_tracker": "https://github.com/DSorlov/http_agent/issues",
   "loggers": ["custom_components.http_agent"],
   "requirements": ["beautifulsoup4>=4.13.0", "defusedxml>=0.7.1"],
-  "version": "2.0.0"
+  "version": "2.1.0"
 }

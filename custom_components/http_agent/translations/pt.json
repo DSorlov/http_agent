@@ -352,6 +352,69 @@
     },
     "empty_response": {
       "message": "O endpoint respondeu com um corpo vazio."
+    },
+    "unknown_endpoint": {
+      "message": "Não foi encontrado nenhum endpoint do HTTP Agent para \"{target}\"."
+    },
+    "missing_url": {
+      "message": "Indique um URL, um endpoint a utilizar, ou ambos."
+    }
+  },
+  "services": {
+    "request": {
+      "name": "Pedido",
+      "description": "Chama um endpoint HTTP e devolve a resposta, para que uma automação ou script possa usar os dados num passo posterior.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Endpoint",
+          "description": "Um endpoint existente do qual obter o URL, a autenticação e as definições de ligação."
+        },
+        "url": {
+          "name": "URL",
+          "description": "Substitui o URL do endpoint. Um caminho iniciado por barra é resolvido em relação ao anfitrião do endpoint escolhido."
+        },
+        "method": {
+          "name": "Método",
+          "description": "Método HTTP a utilizar neste pedido."
+        },
+        "payload": {
+          "name": "Corpo",
+          "description": "O corpo do pedido. Os templates do Home Assistant são suportados."
+        },
+        "headers": {
+          "name": "Cabeçalhos",
+          "description": "Cabeçalhos adicionais a enviar, combinados com os do endpoint."
+        },
+        "select": {
+          "name": "Valores a ler",
+          "description": "Um mapeamento de nome de resultado para caminho, com a mesma sintaxe dos sensores. Os valores extraídos são devolvidos em `values`."
+        },
+        "content_type": {
+          "name": "Tipo de conteúdo",
+          "description": "Enviado como o cabeçalho `Content-Type`."
+        },
+        "response_format": {
+          "name": "Formato da resposta",
+          "description": "Deixe em 'Auto' para detetar automaticamente JSON, XML, HTML ou texto simples."
+        },
+        "timeout": {
+          "name": "Tempo limite do pedido",
+          "description": "Quanto tempo esperar por uma resposta, em segundos."
+        },
+        "retries": {
+          "name": "Novas tentativas em caso de erro",
+          "description": "Quantas tentativas adicionais fazer quando uma consulta falha, com um segundo entre tentativas."
+        },
+        "verify_ssl": {
+          "name": "Verificar o certificado SSL",
+          "description": "Desative apenas para endpoints com um certificado autoassinado."
+        }
+      },
+      "sections": {
+        "advanced_fields": {
+          "name": "Definições avançadas"
+        }
+      }
     }
   }
 }

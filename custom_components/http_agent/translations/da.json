@@ -352,6 +352,69 @@
     },
     "empty_response": {
       "message": "Endepunktet svarede med en tom tekst."
+    },
+    "unknown_endpoint": {
+      "message": "Der blev ikke fundet noget HTTP Agent-endepunkt for \"{target}\"."
+    },
+    "missing_url": {
+      "message": "Angiv en URL, et endepunkt der skal bruges, eller begge."
+    }
+  },
+  "services": {
+    "request": {
+      "name": "Forespørgsel",
+      "description": "Kalder et HTTP-endepunkt og returnerer svaret, så en automatisering eller et script kan bruge dataene i et senere trin.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Endepunkt",
+          "description": "Et eksisterende endepunkt at hente URL, godkendelse og forbindelsesindstillinger fra."
+        },
+        "url": {
+          "name": "URL",
+          "description": "Tilsidesætter endepunktets URL. En sti der starter med skråstreg fortolkes mod værten for det valgte endepunkt."
+        },
+        "method": {
+          "name": "Metode",
+          "description": "HTTP-metode der skal bruges til denne forespørgsel."
+        },
+        "payload": {
+          "name": "Tekst",
+          "description": "Forespørgslens tekst. Home Assistant-skabeloner understøttes."
+        },
+        "headers": {
+          "name": "Headere",
+          "description": "Ekstra headere der skal sendes, lagt oven på dem fra endepunktet."
+        },
+        "select": {
+          "name": "Værdier der skal læses",
+          "description": "En tilknytning fra resultatnavn til sti med samme syntaks som sensorerne. De udtrukne værdier returneres under `values`."
+        },
+        "content_type": {
+          "name": "Indholdstype",
+          "description": "Sendes som headeren `Content-Type`."
+        },
+        "response_format": {
+          "name": "Svarformat",
+          "description": "Lad stå på \"Auto\" for automatisk at registrere JSON, XML, HTML eller almindelig tekst."
+        },
+        "timeout": {
+          "name": "Tidsgrænse for forespørgsel",
+          "description": "Hvor længe der ventes på svar, i sekunder."
+        },
+        "retries": {
+          "name": "Forsøg igen ved fejl",
+          "description": "Hvor mange ekstra forsøg der gøres, når en hentning mislykkes, med ét sekund mellem forsøgene."
+        },
+        "verify_ssl": {
+          "name": "Verificer SSL-certifikat",
+          "description": "Slå kun fra for endepunkter med et selvsigneret certifikat."
+        }
+      },
+      "sections": {
+        "advanced_fields": {
+          "name": "Avancerede indstillinger"
+        }
+      }
     }
   }
 }

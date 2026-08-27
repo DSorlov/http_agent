@@ -352,6 +352,69 @@
     },
     "empty_response": {
       "message": "Der Endpunkt antwortete mit einem leeren Text."
+    },
+    "unknown_endpoint": {
+      "message": "Kein HTTP-Agent-Endpunkt für \"{target}\" gefunden."
+    },
+    "missing_url": {
+      "message": "Gib eine URL, einen zu verwendenden Endpunkt oder beides an."
+    }
+  },
+  "services": {
+    "request": {
+      "name": "Anfrage",
+      "description": "Ruft einen HTTP-Endpunkt auf und gibt die Antwort zurück, damit eine Automatisierung oder ein Skript die Daten in einem späteren Schritt verwenden kann.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Endpunkt",
+          "description": "Ein vorhandener Endpunkt, von dem URL, Authentifizierung und Verbindungseinstellungen übernommen werden."
+        },
+        "url": {
+          "name": "URL",
+          "description": "Überschreibt die URL des Endpunkts. Ein Pfad, der mit einem Schrägstrich beginnt, wird auf den Host des gewählten Endpunkts bezogen."
+        },
+        "method": {
+          "name": "Methode",
+          "description": "HTTP-Methode für diese Anfrage."
+        },
+        "payload": {
+          "name": "Text",
+          "description": "Der Anfragetext. Home-Assistant-Vorlagen werden unterstützt."
+        },
+        "headers": {
+          "name": "Header",
+          "description": "Zusätzliche Header, die gesendet werden und die des Endpunkts ergänzen."
+        },
+        "select": {
+          "name": "Zu lesende Werte",
+          "description": "Eine Zuordnung von Ergebnisname zu Pfad, mit derselben Syntax wie bei den Sensoren. Die ausgelesenen Werte werden unter `values` zurückgegeben."
+        },
+        "content_type": {
+          "name": "Inhaltstyp",
+          "description": "Wird als Header `Content-Type` gesendet."
+        },
+        "response_format": {
+          "name": "Antwortformat",
+          "description": "Auf \"Auto\" lassen, um JSON, XML, HTML oder reinen Text automatisch zu erkennen."
+        },
+        "timeout": {
+          "name": "Zeitlimit der Anfrage",
+          "description": "Wie lange auf eine Antwort gewartet wird, in Sekunden."
+        },
+        "retries": {
+          "name": "Wiederholungen bei Fehlern",
+          "description": "Wie viele zusätzliche Versuche unternommen werden, wenn eine Abfrage fehlschlägt, mit einer Sekunde Abstand."
+        },
+        "verify_ssl": {
+          "name": "SSL-Zertifikat prüfen",
+          "description": "Nur für Endpunkte mit selbstsigniertem Zertifikat deaktivieren."
+        }
+      },
+      "sections": {
+        "advanced_fields": {
+          "name": "Erweiterte Einstellungen"
+        }
+      }
     }
   }
 }

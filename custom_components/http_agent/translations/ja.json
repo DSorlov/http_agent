@@ -352,6 +352,69 @@
     },
     "empty_response": {
       "message": "エンドポイントは空のボディを返しました。"
+    },
+    "unknown_endpoint": {
+      "message": "\"{target}\" に対応する HTTP Agent のエンドポイントが見つかりません。"
+    },
+    "missing_url": {
+      "message": "URL、使用するエンドポイント、またはその両方を指定してください。"
+    }
+  },
+  "services": {
+    "request": {
+      "name": "リクエスト",
+      "description": "HTTP エンドポイントを呼び出して応答を返します。オートメーションやスクリプトが後続のステップでそのデータを利用できます。",
+      "fields": {
+        "config_entry_id": {
+          "name": "エンドポイント",
+          "description": "URL、認証、接続設定を引き継ぐ既存のエンドポイント。"
+        },
+        "url": {
+          "name": "URL",
+          "description": "エンドポイントの URL を上書きします。スラッシュで始まるパスは、選択したエンドポイントのホストを基準に解決されます。"
+        },
+        "method": {
+          "name": "メソッド",
+          "description": "このリクエストで使用する HTTP メソッド。"
+        },
+        "payload": {
+          "name": "ボディ",
+          "description": "リクエストのボディ。Home Assistant のテンプレートに対応しています。"
+        },
+        "headers": {
+          "name": "ヘッダー",
+          "description": "送信する追加のヘッダー。エンドポイントのヘッダーに上書きして結合されます。"
+        },
+        "select": {
+          "name": "読み取る値",
+          "description": "結果名とパスの対応表で、センサーと同じ構文を使います。抽出された値は `values` の下に返されます。"
+        },
+        "content_type": {
+          "name": "コンテンツタイプ",
+          "description": "`Content-Type` ヘッダーとして送信されます。"
+        },
+        "response_format": {
+          "name": "レスポンス形式",
+          "description": "'Auto' のままにすると、JSON、XML、HTML、プレーンテキストを自動判別します。"
+        },
+        "timeout": {
+          "name": "リクエストのタイムアウト",
+          "description": "レスポンスを待つ時間（秒）。"
+        },
+        "retries": {
+          "name": "エラー時の再試行回数",
+          "description": "取得に失敗したときに行う追加の試行回数。試行の間隔は 1 秒です。"
+        },
+        "verify_ssl": {
+          "name": "SSL 証明書を検証する",
+          "description": "自己署名証明書のエンドポイントの場合のみ無効にしてください。"
+        }
+      },
+      "sections": {
+        "advanced_fields": {
+          "name": "詳細設定"
+        }
+      }
     }
   }
 }

@@ -8,6 +8,11 @@ DOMAIN: Final = "http_agent"
 
 MANUFACTURER: Final = "HTTP Agent"
 
+# --- Actions ---
+SERVICE_REQUEST: Final = "request"
+ATTR_CONFIG_ENTRY_ID: Final = "config_entry_id"
+ATTR_SELECT: Final = "select"
+
 # Config entry schema version. Version 1 was the pre-subentry layout.
 CONFIG_VERSION: Final = 2
 CONFIG_MINOR_VERSION: Final = 1

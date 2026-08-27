@@ -24,6 +24,8 @@ hand-written JSON paths or XPath expressions required.
   plus free-form headers when you need something else.
 - **One entity per subentry**, so entities can be added, edited and deleted
   individually straight from the integration page.
+- **Use it in automations** with the `http_agent.request` action, which returns
+  the data normalised the same way as the sensors.
 - **Templates** are supported in the URL, headers and request body.
 - **Configurable retries** so a flaky endpoint does not mark everything
   unavailable.
@@ -160,6 +162,84 @@ and request body:
 ```
 https://api.example.com/weather?city={{ states('input_text.city') }}
 ```
+
+## Using it in automations
+
+The `http_agent.request` action calls an endpoint on demand and returns the
+answer, so a later step can use it. It is a normal action, so it works in
+automations, scripts and scenes, and is scheduled the same way as anything else
+in Home Assistant.
+
+### Reading data mid-automation
+
+```yaml
+actions:
+  - action: http_agent.request
+    data:
+      config_entry_id: 01JABCDEF0123456789ABCDEFG
+      select:
+        temperature: current.temp_c
+        condition: current.condition.text
+    response_variable: weather
+
+  - condition: template
+    value_template: "{{ weather.values.temperature < 5 }}"
+
+  - action: notify.persistent_notification
+    data:
+      message: "It is {{ weather.values.temperature }} degrees and {{ weather.values.condition }}"
+```
+
+### Sending data from other entities
+
+```yaml
+actions:
+  - action: http_agent.request
+    data:
+      config_entry_id: 01JABCDEF0123456789ABCDEFG
+      method: POST
+      url: /api/v1/readings
+      payload: >
+        {
+          "temperature": {{ states('sensor.living_room_temperature') }},
+          "humidity": {{ states('sensor.living_room_humidity') }},
+          "at": "{{ now().isoformat() }}"
+        }
+```
+
+`config_entry_id` is optional and only supplies defaults. Without it, give a
+full `url` instead.
+
+### What the action accepts
+
+| Field             | Description                                                                                |
+| ----------------- | ------------------------------------------------------------------------------------------ |
+| `config_entry_id` | An existing endpoint to inherit URL, authentication, headers and connection settings from   |
+| `url`             | Full URL, or a `/path` resolved against the endpoint host                                   |
+| `method`          | Defaults to `GET`                                                                            |
+| `payload`         | Request body; templates are rendered by Home Assistant before the call                      |
+| `headers`         | Extra headers, merged on top of the endpoint headers                                        |
+| `select`          | Mapping of result name to path, using the same syntax as the sensors                        |
+
+Advanced fields: `content_type`, `response_format`, `timeout`, `retries` and
+`verify_ssl`. All of them fall back to the endpoint when one is referenced.
+
+### What the action returns
+
+```yaml
+status: 200
+format: json
+headers: { content-type: application/json }
+values:
+  temperature: 21.5
+  condition: Partly cloudy
+content: { ... }
+```
+
+`values` holds what you asked for in `select`, extracted exactly like a sensor
+would. `content` is the decoded JSON, or the raw text for other formats.
+Credential headers are redacted. The endpoint's own `method` and body are never
+inherited, so an endpoint that polls with `GET` can still be sent a `POST`.
 
 ## Troubleshooting
 

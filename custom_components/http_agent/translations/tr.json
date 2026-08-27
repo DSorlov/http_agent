@@ -352,6 +352,69 @@
     },
     "empty_response": {
       "message": "Uç nokta boş bir gövdeyle yanıt verdi."
+    },
+    "unknown_endpoint": {
+      "message": "\"{target}\" için HTTP Agent uç noktası bulunamadı."
+    },
+    "missing_url": {
+      "message": "Bir URL, kullanılacak bir uç nokta veya her ikisini de belirtin."
+    }
+  },
+  "services": {
+    "request": {
+      "name": "İstek",
+      "description": "Bir HTTP uç noktasını çağırır ve yanıtı döndürür, böylece bir otomasyon veya betik veriyi sonraki bir adımda kullanabilir.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Uç nokta",
+          "description": "URL, kimlik doğrulama ve bağlantı ayarlarının alınacağı mevcut bir uç nokta."
+        },
+        "url": {
+          "name": "URL",
+          "description": "Uç noktanın URL'sini geçersiz kılar. Eğik çizgiyle başlayan bir yol, seçilen uç noktanın ana bilgisayarına göre çözümlenir."
+        },
+        "method": {
+          "name": "Yöntem",
+          "description": "Bu istek için kullanılacak HTTP yöntemi."
+        },
+        "payload": {
+          "name": "Gövde",
+          "description": "İsteğin gövdesi. Home Assistant şablonları desteklenir."
+        },
+        "headers": {
+          "name": "Başlıklar",
+          "description": "Gönderilecek ek başlıklar; uç noktanınkilerin üzerine birleştirilir."
+        },
+        "select": {
+          "name": "Okunacak değerler",
+          "description": "Sonuç adından yola bir eşleme; sensörlerle aynı söz dizimini kullanır. Çıkarılan değerler `values` altında döndürülür."
+        },
+        "content_type": {
+          "name": "İçerik türü",
+          "description": "`Content-Type` başlığı olarak gönderilir."
+        },
+        "response_format": {
+          "name": "Yanıt biçimi",
+          "description": "JSON, XML, HTML veya düz metnin otomatik algılanması için 'Auto' olarak bırakın."
+        },
+        "timeout": {
+          "name": "İstek zaman aşımı",
+          "description": "Yanıtın ne kadar süre bekleneceği, saniye cinsinden."
+        },
+        "retries": {
+          "name": "Hatada yeniden deneme",
+          "description": "Bir sorgu başarısız olduğunda kaç ek deneme yapılacağı, denemeler arasında bir saniye ile."
+        },
+        "verify_ssl": {
+          "name": "SSL sertifikasını doğrula",
+          "description": "Yalnızca kendinden imzalı sertifikaya sahip uç noktalar için kapatın."
+        }
+      },
+      "sections": {
+        "advanced_fields": {
+          "name": "Gelişmiş ayarlar"
+        }
+      }
     }
   }
 }

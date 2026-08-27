@@ -352,6 +352,69 @@
     },
     "empty_response": {
       "message": "L'endpoint ha risposto con un corpo vuoto."
+    },
+    "unknown_endpoint": {
+      "message": "Nessun endpoint HTTP Agent trovato per \"{target}\"."
+    },
+    "missing_url": {
+      "message": "Indica un URL, un endpoint da usare, o entrambi."
+    }
+  },
+  "services": {
+    "request": {
+      "name": "Richiesta",
+      "description": "Chiama un endpoint HTTP e restituisce la risposta, così un'automazione o uno script può usare i dati in un passaggio successivo.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Endpoint",
+          "description": "Un endpoint esistente da cui prendere URL, autenticazione e impostazioni di connessione."
+        },
+        "url": {
+          "name": "URL",
+          "description": "Sostituisce l'URL dell'endpoint. Un percorso che inizia con una barra viene risolto rispetto all'host dell'endpoint scelto."
+        },
+        "method": {
+          "name": "Metodo",
+          "description": "Metodo HTTP da usare per questa richiesta."
+        },
+        "payload": {
+          "name": "Corpo",
+          "description": "Il corpo della richiesta. I template di Home Assistant sono supportati."
+        },
+        "headers": {
+          "name": "Intestazioni",
+          "description": "Intestazioni aggiuntive da inviare, unite a quelle dell'endpoint."
+        },
+        "select": {
+          "name": "Valori da leggere",
+          "description": "Una corrispondenza tra nome del risultato e percorso, con la stessa sintassi dei sensori. I valori estratti vengono restituiti sotto `values`."
+        },
+        "content_type": {
+          "name": "Tipo di contenuto",
+          "description": "Inviato come intestazione `Content-Type`."
+        },
+        "response_format": {
+          "name": "Formato della risposta",
+          "description": "Lascia su 'Auto' per rilevare automaticamente JSON, XML, HTML o testo semplice."
+        },
+        "timeout": {
+          "name": "Timeout della richiesta",
+          "description": "Quanto attendere una risposta, in secondi."
+        },
+        "retries": {
+          "name": "Nuovi tentativi in caso di errore",
+          "description": "Quanti tentativi aggiuntivi effettuare quando un'interrogazione fallisce, con un secondo tra un tentativo e l'altro."
+        },
+        "verify_ssl": {
+          "name": "Verifica il certificato SSL",
+          "description": "Disattiva solo per endpoint con un certificato autofirmato."
+        }
+      },
+      "sections": {
+        "advanced_fields": {
+          "name": "Impostazioni avanzate"
+        }
+      }
     }
   }
 }

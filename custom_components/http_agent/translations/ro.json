@@ -352,6 +352,69 @@
     },
     "empty_response": {
       "message": "Endpointul a răspuns cu un corp gol."
+    },
+    "unknown_endpoint": {
+      "message": "Nu a fost găsit niciun endpoint HTTP Agent pentru \"{target}\"."
+    },
+    "missing_url": {
+      "message": "Indică un URL, un endpoint de folosit, sau ambele."
+    }
+  },
+  "services": {
+    "request": {
+      "name": "Cerere",
+      "description": "Apelează un endpoint HTTP și returnează răspunsul, astfel încât o automatizare sau un script să poată folosi datele într-un pas ulterior.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Endpoint",
+          "description": "Un endpoint existent de la care se preiau URL-ul, autentificarea și setările de conexiune."
+        },
+        "url": {
+          "name": "URL",
+          "description": "Înlocuiește URL-ul endpointului. O cale care începe cu bară oblică este rezolvată față de gazda endpointului ales."
+        },
+        "method": {
+          "name": "Metodă",
+          "description": "Metoda HTTP folosită pentru această cerere."
+        },
+        "payload": {
+          "name": "Corp",
+          "description": "Corpul cererii. Șabloanele Home Assistant sunt acceptate."
+        },
+        "headers": {
+          "name": "Antete",
+          "description": "Antete suplimentare de trimis, combinate peste cele ale endpointului."
+        },
+        "select": {
+          "name": "Valori de citit",
+          "description": "O corespondență între numele rezultatului și cale, cu aceeași sintaxă ca la senzori. Valorile extrase sunt returnate în `values`."
+        },
+        "content_type": {
+          "name": "Tip de conținut",
+          "description": "Trimis ca antetul `Content-Type`."
+        },
+        "response_format": {
+          "name": "Formatul răspunsului",
+          "description": "Lasă pe 'Auto' pentru a detecta automat JSON, XML, HTML sau text simplu."
+        },
+        "timeout": {
+          "name": "Timp limită pentru cerere",
+          "description": "Cât se așteaptă un răspuns, în secunde."
+        },
+        "retries": {
+          "name": "Reîncercări la eroare",
+          "description": "Câte încercări suplimentare se fac atunci când o interogare eșuează, cu o secundă între încercări."
+        },
+        "verify_ssl": {
+          "name": "Verifică certificatul SSL",
+          "description": "Dezactivează doar pentru endpointuri cu certificat autosemnat."
+        }
+      },
+      "sections": {
+        "advanced_fields": {
+          "name": "Setări avansate"
+        }
+      }
     }
   }
 }

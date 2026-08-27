@@ -106,13 +106,15 @@ def redact_headers(headers: dict[str, str]) -> dict[str, str]:
     }
 
 
-async def async_request(hass: HomeAssistant, config: dict[str, Any]) -> ParsedResponse:
+async def async_request(
+    hass: HomeAssistant, config: dict[str, Any], *, allow_empty: bool = False
+) -> ParsedResponse:
     """Request the endpoint, retrying transient failures as configured."""
     attempts = max(1, int(config.get(CONF_RETRIES, DEFAULT_RETRIES)) + 1)
 
     for attempt in range(1, attempts + 1):
         try:
-            return await _async_single_request(hass, config)
+            return await _async_single_request(hass, config, allow_empty=allow_empty)
         except InvalidAuth:
             # Credentials will not become valid by trying again.
             raise
@@ -126,7 +128,7 @@ async def async_request(hass: HomeAssistant, config: dict[str, Any]) -> ParsedRe
 
 
 async def _async_single_request(
-    hass: HomeAssistant, config: dict[str, Any]
+    hass: HomeAssistant, config: dict[str, Any], *, allow_empty: bool = False
 ) -> ParsedResponse:
     """Perform one request against the configured endpoint and parse the result."""
     method = (config.get(CONF_METHOD) or DEFAULT_METHOD).upper()
@@ -181,7 +183,7 @@ async def _async_single_request(
         raise InvalidAuth(f"Endpoint returned HTTP {status}")
     if status >= HTTPStatus.BAD_REQUEST:
         raise InvalidResponse(status)
-    if not text.strip() and method != METHOD_HEAD:
+    if not text.strip() and method != METHOD_HEAD and not allow_empty:
         raise EmptyResponse(f"Endpoint returned an empty body with HTTP {status}")
 
     # Parsing large HTML or XML bodies is CPU bound, keep it off the event loop.

@@ -1,0 +1,78 @@
+request:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: http_agent
+    url:
+      example: /api/v1/state
+      selector:
+        text:
+    method:
+      default: GET
+      selector:
+        select:
+          options:
+            - GET
+            - POST
+            - PUT
+            - PATCH
+            - DELETE
+            - HEAD
+    payload:
+      example: '{"state": "{{ states(''sensor.living_room_temperature'') }}"}'
+      selector:
+        text:
+          multiline: true
+    headers:
+      example:
+        X-Request-Id: "{{ context.id }}"
+      selector:
+        object:
+    select:
+      example:
+        temperature: current.temp_c
+        condition: current.condition.text
+      selector:
+        object:
+    advanced_fields:
+      collapsed: true
+      fields:
+        content_type:
+          default: application/json
+          selector:
+            select:
+              options:
+                - application/json
+                - application/xml
+                - application/x-www-form-urlencoded
+                - text/plain
+                - text/xml
+        response_format:
+          default: auto
+          selector:
+            select:
+              options:
+                - auto
+                - json
+                - xml
+                - html
+                - text
+        timeout:
+          selector:
+            number:
+              min: 1
+              max: 300
+              step: 1
+              mode: box
+              unit_of_measurement: s
+        retries:
+          selector:
+            number:
+              min: 0
+              max: 10
+              step: 1
+              mode: box
+        verify_ssl:
+          selector:
+            boolean:

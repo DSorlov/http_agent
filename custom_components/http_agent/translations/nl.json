@@ -352,6 +352,69 @@
     },
     "empty_response": {
       "message": "Het endpoint antwoordde met een lege tekst."
+    },
+    "unknown_endpoint": {
+      "message": "Geen HTTP Agent-endpoint gevonden voor \"{target}\"."
+    },
+    "missing_url": {
+      "message": "Geef een URL, een te gebruiken endpoint, of beide op."
+    }
+  },
+  "services": {
+    "request": {
+      "name": "Verzoek",
+      "description": "Roept een HTTP-endpoint aan en geeft het antwoord terug, zodat een automatisering of script de gegevens in een latere stap kan gebruiken.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Endpoint",
+          "description": "Een bestaand endpoint waarvan de URL, authenticatie en verbindingsinstellingen worden overgenomen."
+        },
+        "url": {
+          "name": "URL",
+          "description": "Overschrijft de URL van het endpoint. Een pad dat met een schuine streep begint, wordt omgezet met de host van het gekozen endpoint."
+        },
+        "method": {
+          "name": "Methode",
+          "description": "HTTP-methode die voor dit verzoek wordt gebruikt."
+        },
+        "payload": {
+          "name": "Tekst",
+          "description": "De tekst van het verzoek. Home Assistant-sjablonen worden ondersteund."
+        },
+        "headers": {
+          "name": "Headers",
+          "description": "Extra headers om te verzenden, samengevoegd bovenop die van het endpoint."
+        },
+        "select": {
+          "name": "Te lezen waarden",
+          "description": "Een toewijzing van resultaatnaam aan pad, met dezelfde syntaxis als de sensoren. De uitgelezen waarden worden teruggegeven onder `values`."
+        },
+        "content_type": {
+          "name": "Inhoudstype",
+          "description": "Wordt verzonden als de `Content-Type`-header."
+        },
+        "response_format": {
+          "name": "Antwoordformaat",
+          "description": "Laat op 'Auto' staan om JSON, XML, HTML of platte tekst automatisch te herkennen."
+        },
+        "timeout": {
+          "name": "Time-out van verzoek",
+          "description": "Hoelang op een antwoord wordt gewacht, in seconden."
+        },
+        "retries": {
+          "name": "Nieuwe pogingen bij fouten",
+          "description": "Hoeveel extra pogingen worden gedaan wanneer een opvraging mislukt, met één seconde ertussen."
+        },
+        "verify_ssl": {
+          "name": "SSL-certificaat verifiëren",
+          "description": "Schakel dit alleen uit voor endpoints met een zelfondertekend certificaat."
+        }
+      },
+      "sections": {
+        "advanced_fields": {
+          "name": "Geavanceerde instellingen"
+        }
+      }
     }
   }
 }

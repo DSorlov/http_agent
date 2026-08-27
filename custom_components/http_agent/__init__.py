@@ -22,7 +22,8 @@ from homeassistant.const import (
     Platform,
 )
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers import config_validation as cv, device_registry as dr
+from homeassistant.helpers.typing import ConfigType
 
 from .const import (
     AUTH_NONE,
@@ -44,6 +45,7 @@ from .const import (
     DEFAULT_SCAN_INTERVAL,
     DEFAULT_TIMEOUT,
     DEFAULT_VERIFY_SSL,
+    DOMAIN,
     FORMAT_AUTO,
     SUBENTRY_TYPE_BINARY_SENSOR,
     SUBENTRY_TYPE_DEVICE_TRACKER,
@@ -51,6 +53,7 @@ from .const import (
 )
 from .coordinator import HTTPAgentConfigEntry, HTTPAgentCoordinator
 from .entity import hub_device_info
+from .services import async_setup_services
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -78,6 +81,14 @@ _LEGACY_TYPES = {
     "binary_sensor": SUBENTRY_TYPE_BINARY_SENSOR,
     "device_tracker": SUBENTRY_TYPE_DEVICE_TRACKER,
 }
+
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
+
+
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+    """Register the integration actions."""
+    async_setup_services(hass)
+    return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: HTTPAgentConfigEntry) -> bool:

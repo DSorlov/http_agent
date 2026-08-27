@@ -352,6 +352,69 @@
     },
     "empty_response": {
       "message": "Slutpunkten svarade med en tom kropp."
+    },
+    "unknown_endpoint": {
+      "message": "Ingen HTTP Agent-slutpunkt hittades för \"{target}\"."
+    },
+    "missing_url": {
+      "message": "Ange en URL, en slutpunkt att använda, eller båda."
+    }
+  },
+  "services": {
+    "request": {
+      "name": "Anrop",
+      "description": "Anropar en HTTP-slutpunkt och returnerar svaret, så att en automation eller ett skript kan använda datan i ett senare steg.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Slutpunkt",
+          "description": "En befintlig slutpunkt att hämta URL, autentisering och anslutningsinställningar från."
+        },
+        "url": {
+          "name": "URL",
+          "description": "Ersätter slutpunktens URL. En sökväg som börjar med snedstreck tolkas mot värden för den valda slutpunkten."
+        },
+        "method": {
+          "name": "Metod",
+          "description": "HTTP-metod att använda för detta anrop."
+        },
+        "payload": {
+          "name": "Kropp",
+          "description": "Anropets kropp. Home Assistant-mallar stöds."
+        },
+        "headers": {
+          "name": "Headers",
+          "description": "Extra headers att skicka, sammanslagna ovanpå dem från slutpunkten."
+        },
+        "select": {
+          "name": "Värden att läsa",
+          "description": "En mappning från resultatnamn till sökväg, med samma syntax som sensorerna. De extraherade värdena returneras under `values`."
+        },
+        "content_type": {
+          "name": "Innehållstyp",
+          "description": "Skickas som headern `Content-Type`."
+        },
+        "response_format": {
+          "name": "Svarsformat",
+          "description": "Lämna på \"Auto\" för att känna av JSON, XML, HTML eller vanlig text automatiskt."
+        },
+        "timeout": {
+          "name": "Tidsgräns för anrop",
+          "description": "Hur länge svaret väntas in, i sekunder."
+        },
+        "retries": {
+          "name": "Återförsök vid fel",
+          "description": "Hur många extra försök som görs när en hämtning misslyckas, med en sekund mellan försöken."
+        },
+        "verify_ssl": {
+          "name": "Verifiera SSL-certifikat",
+          "description": "Stäng bara av för slutpunkter med självsignerat certifikat."
+        }
+      },
+      "sections": {
+        "advanced_fields": {
+          "name": "Avancerade inställningar"
+        }
+      }
     }
   }
 }

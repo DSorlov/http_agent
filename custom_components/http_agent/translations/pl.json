@@ -352,6 +352,69 @@
     },
     "empty_response": {
       "message": "Punkt końcowy odpowiedział pustą treścią."
+    },
+    "unknown_endpoint": {
+      "message": "Nie znaleziono punktu końcowego HTTP Agent dla \"{target}\"."
+    },
+    "missing_url": {
+      "message": "Podaj adres URL, punkt końcowy do użycia albo oba."
+    }
+  },
+  "services": {
+    "request": {
+      "name": "Żądanie",
+      "description": "Wywołuje punkt końcowy HTTP i zwraca odpowiedź, dzięki czemu automatyzacja lub skrypt może użyć danych w kolejnym kroku.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Punkt końcowy",
+          "description": "Istniejący punkt końcowy, z którego pobierany jest adres URL, uwierzytelnianie i ustawienia połączenia."
+        },
+        "url": {
+          "name": "URL",
+          "description": "Zastępuje adres URL punktu końcowego. Ścieżka zaczynająca się od ukośnika jest rozwiązywana względem hosta wybranego punktu końcowego."
+        },
+        "method": {
+          "name": "Metoda",
+          "description": "Metoda HTTP używana w tym żądaniu."
+        },
+        "payload": {
+          "name": "Treść",
+          "description": "Treść żądania. Szablony Home Assistant są obsługiwane."
+        },
+        "headers": {
+          "name": "Nagłówki",
+          "description": "Dodatkowe nagłówki do wysłania, scalone z nagłówkami punktu końcowego."
+        },
+        "select": {
+          "name": "Wartości do odczytania",
+          "description": "Odwzorowanie nazwy wyniku na ścieżkę, z tą samą składnią co w czujnikach. Odczytane wartości są zwracane w `values`."
+        },
+        "content_type": {
+          "name": "Typ zawartości",
+          "description": "Wysyłany jako nagłówek `Content-Type`."
+        },
+        "response_format": {
+          "name": "Format odpowiedzi",
+          "description": "Pozostaw 'Auto', aby automatycznie wykrywać JSON, XML, HTML lub zwykły tekst."
+        },
+        "timeout": {
+          "name": "Limit czasu żądania",
+          "description": "Jak długo czekać na odpowiedź, w sekundach."
+        },
+        "retries": {
+          "name": "Ponowne próby przy błędzie",
+          "description": "Ile dodatkowych prób wykonać, gdy odpytanie się nie powiedzie, z sekundą przerwy między próbami."
+        },
+        "verify_ssl": {
+          "name": "Weryfikuj certyfikat SSL",
+          "description": "Wyłącz tylko dla punktów końcowych z certyfikatem samopodpisanym."
+        }
+      },
+      "sections": {
+        "advanced_fields": {
+          "name": "Ustawienia zaawansowane"
+        }
+      }
     }
   }
 }

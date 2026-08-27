@@ -352,6 +352,69 @@
     },
     "empty_response": {
       "message": "Endpoint odpověděl s prázdným tělem."
+    },
+    "unknown_endpoint": {
+      "message": "Nebyl nalezen žádný endpoint HTTP Agent pro \"{target}\"."
+    },
+    "missing_url": {
+      "message": "Zadejte adresu URL, endpoint, který se má použít, nebo obojí."
+    }
+  },
+  "services": {
+    "request": {
+      "name": "Požadavek",
+      "description": "Zavolá HTTP endpoint a vrátí odpověď, aby automatizace nebo skript mohly data použít v dalším kroku.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Endpoint",
+          "description": "Existující endpoint, ze kterého se převezme adresa URL, ověřování a nastavení připojení."
+        },
+        "url": {
+          "name": "URL",
+          "description": "Přepíše adresu URL endpointu. Cesta začínající lomítkem se vyhodnotí vůči hostiteli zvoleného endpointu."
+        },
+        "method": {
+          "name": "Metoda",
+          "description": "Metoda HTTP použitá pro tento požadavek."
+        },
+        "payload": {
+          "name": "Tělo",
+          "description": "Tělo požadavku. Šablony Home Assistant jsou podporovány."
+        },
+        "headers": {
+          "name": "Hlavičky",
+          "description": "Další hlavičky k odeslání, sloučené s hlavičkami endpointu."
+        },
+        "select": {
+          "name": "Hodnoty ke čtení",
+          "description": "Mapování názvu výsledku na cestu se stejnou syntaxí jako u senzorů. Získané hodnoty se vrací v `values`."
+        },
+        "content_type": {
+          "name": "Typ obsahu",
+          "description": "Odesílá se jako hlavička `Content-Type`."
+        },
+        "response_format": {
+          "name": "Formát odpovědi",
+          "description": "Ponechte na 'Auto' pro automatické rozpoznání JSON, XML, HTML nebo prostého textu."
+        },
+        "timeout": {
+          "name": "Časový limit požadavku",
+          "description": "Jak dlouho se čeká na odpověď, v sekundách."
+        },
+        "retries": {
+          "name": "Opakované pokusy při chybě",
+          "description": "Kolik dalších pokusů se provede při neúspěšném dotazu, s jednou sekundou mezi pokusy."
+        },
+        "verify_ssl": {
+          "name": "Ověřovat certifikát SSL",
+          "description": "Vypněte pouze u endpointů s vlastnoručně podepsaným certifikátem."
+        }
+      },
+      "sections": {
+        "advanced_fields": {
+          "name": "Pokročilá nastavení"
+        }
+      }
     }
   }
 }

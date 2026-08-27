@@ -352,6 +352,69 @@
     },
     "empty_response": {
       "message": "A végpont üres törzzsel válaszolt."
+    },
+    "unknown_endpoint": {
+      "message": "Nem található HTTP Agent végpont ehhez: \"{target}\"."
+    },
+    "missing_url": {
+      "message": "Adj meg egy URL-t, egy használandó végpontot, vagy mindkettőt."
+    }
+  },
+  "services": {
+    "request": {
+      "name": "Kérés",
+      "description": "Meghív egy HTTP végpontot és visszaadja a választ, így egy automatizálás vagy szkript felhasználhatja az adatokat egy későbbi lépésben.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Végpont",
+          "description": "Egy meglévő végpont, amelyből az URL, a hitelesítés és a kapcsolati beállítások átvételre kerülnek."
+        },
+        "url": {
+          "name": "URL",
+          "description": "Felülírja a végpont URL-jét. A perjellel kezdődő útvonal a kiválasztott végpont gazdagépéhez képest értelmeződik."
+        },
+        "method": {
+          "name": "Metódus",
+          "description": "Az ehhez a kéréshez használt HTTP metódus."
+        },
+        "payload": {
+          "name": "Törzs",
+          "description": "A kérés törzse. A Home Assistant sablonok támogatottak."
+        },
+        "headers": {
+          "name": "Fejlécek",
+          "description": "További elküldendő fejlécek, a végpont fejléceire ráolvasztva."
+        },
+        "select": {
+          "name": "Beolvasandó értékek",
+          "description": "Eredménynév és útvonal összerendelése, az érzékelőkkel azonos szintaxissal. A kiolvasott értékek a `values` alatt kerülnek visszaadásra."
+        },
+        "content_type": {
+          "name": "Tartalomtípus",
+          "description": "`Content-Type` fejlécként kerül elküldésre."
+        },
+        "response_format": {
+          "name": "Válasz formátuma",
+          "description": "Hagyd 'Auto' értéken a JSON, XML, HTML vagy egyszerű szöveg automatikus felismeréséhez."
+        },
+        "timeout": {
+          "name": "Kérés időkorlátja",
+          "description": "Mennyi ideig vár a válaszra, másodpercben."
+        },
+        "retries": {
+          "name": "Újrapróbálkozások hiba esetén",
+          "description": "Hány további próbálkozás történjen, ha egy lekérdezés sikertelen, egy másodperc szünettel a próbálkozások között."
+        },
+        "verify_ssl": {
+          "name": "SSL-tanúsítvány ellenőrzése",
+          "description": "Csak saját aláírású tanúsítvánnyal rendelkező végpontoknál kapcsold ki."
+        }
+      },
+      "sections": {
+        "advanced_fields": {
+          "name": "Speciális beállítások"
+        }
+      }
     }
   }
 }

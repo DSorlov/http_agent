@@ -352,6 +352,69 @@
     },
     "empty_response": {
       "message": "Päätepiste vastasi tyhjällä rungolla."
+    },
+    "unknown_endpoint": {
+      "message": "HTTP Agent -päätepistettä \"{target}\" ei löytynyt."
+    },
+    "missing_url": {
+      "message": "Anna URL-osoite, käytettävä päätepiste tai molemmat."
+    }
+  },
+  "services": {
+    "request": {
+      "name": "Pyyntö",
+      "description": "Kutsuu HTTP-päätepistettä ja palauttaa vastauksen, jotta automaatio tai skripti voi käyttää tietoja myöhemmässä vaiheessa.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Päätepiste",
+          "description": "Olemassa oleva päätepiste, jolta otetaan URL-osoite, todennus ja yhteysasetukset."
+        },
+        "url": {
+          "name": "URL",
+          "description": "Ohittaa päätepisteen URL-osoitteen. Kauttaviivalla alkava polku tulkitaan valitun päätepisteen isäntää vasten."
+        },
+        "method": {
+          "name": "Menetelmä",
+          "description": "Tässä pyynnössä käytettävä HTTP-menetelmä."
+        },
+        "payload": {
+          "name": "Runko",
+          "description": "Pyynnön runko. Home Assistant -mallit ovat tuettuja."
+        },
+        "headers": {
+          "name": "Otsikot",
+          "description": "Lisäotsikot, jotka lähetetään päätepisteen otsikoiden päälle yhdistettyinä."
+        },
+        "select": {
+          "name": "Luettavat arvot",
+          "description": "Määritys tulosnimestä polkuun, samalla syntaksilla kuin antureissa. Poimitut arvot palautetaan kohdassa `values`."
+        },
+        "content_type": {
+          "name": "Sisältötyyppi",
+          "description": "Lähetetään otsikkona `Content-Type`."
+        },
+        "response_format": {
+          "name": "Vastauksen muoto",
+          "description": "Jätä arvoon \"Auto\", jolloin JSON, XML, HTML tai pelkkä teksti tunnistetaan automaattisesti."
+        },
+        "timeout": {
+          "name": "Pyynnön aikakatkaisu",
+          "description": "Kuinka kauan vastausta odotetaan, sekunteina."
+        },
+        "retries": {
+          "name": "Uudelleenyritykset virheen jälkeen",
+          "description": "Kuinka monta lisäyritystä tehdään, kun haku epäonnistuu, sekunnin välein."
+        },
+        "verify_ssl": {
+          "name": "Tarkista SSL-varmenne",
+          "description": "Poista käytöstä vain päätepisteille, joilla on itse allekirjoitettu varmenne."
+        }
+      },
+      "sections": {
+        "advanced_fields": {
+          "name": "Lisäasetukset"
+        }
+      }
     }
   }
 }

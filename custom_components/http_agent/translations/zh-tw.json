@@ -352,6 +352,69 @@
     },
     "empty_response": {
       "message": "端點回應了空的內容。"
+    },
+    "unknown_endpoint": {
+      "message": "找不到與 \"{target}\" 對應的 HTTP Agent 端點。"
+    },
+    "missing_url": {
+      "message": "請提供 URL、要使用的端點，或兩者。"
+    }
+  },
+  "services": {
+    "request": {
+      "name": "請求",
+      "description": "呼叫 HTTP 端點並回傳回應，讓自動化或指令碼可在後續步驟中使用這些資料。",
+      "fields": {
+        "config_entry_id": {
+          "name": "端點",
+          "description": "用來沿用 URL、驗證與連線設定的現有端點。"
+        },
+        "url": {
+          "name": "URL",
+          "description": "覆寫端點的 URL。以斜線開頭的路徑會依照所選端點的主機解析。"
+        },
+        "method": {
+          "name": "方法",
+          "description": "本次請求使用的 HTTP 方法。"
+        },
+        "payload": {
+          "name": "內容",
+          "description": "請求的內容。支援 Home Assistant 範本。"
+        },
+        "headers": {
+          "name": "標頭",
+          "description": "要傳送的額外標頭，會合併覆寫端點自帶的標頭。"
+        },
+        "select": {
+          "name": "要讀取的值",
+          "description": "結果名稱到路徑的對應，語法與感測器相同。擷取出的值會在 `values` 中回傳。"
+        },
+        "content_type": {
+          "name": "內容類型",
+          "description": "以 `Content-Type` 標頭傳送。"
+        },
+        "response_format": {
+          "name": "回應格式",
+          "description": "保持為 'Auto' 可自動辨識 JSON、XML、HTML 或純文字。"
+        },
+        "timeout": {
+          "name": "請求逾時",
+          "description": "等待回應的時間（秒）。"
+        },
+        "retries": {
+          "name": "發生錯誤時的重試次數",
+          "description": "輪詢失敗時額外嘗試的次數，每次嘗試間隔一秒。"
+        },
+        "verify_ssl": {
+          "name": "驗證 SSL 憑證",
+          "description": "僅在端點使用自簽憑證時關閉。"
+        }
+      },
+      "sections": {
+        "advanced_fields": {
+          "name": "進階設定"
+        }
+      }
     }
   }
 }

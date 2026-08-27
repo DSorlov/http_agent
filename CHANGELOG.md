@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-08-27
+
+### Added
+- **`http_agent.request` action.** Automations and scripts can call any endpoint
+  on demand and use the answer in a later step through `response_variable`.
+  - Values are extracted with the same path syntax as the sensors and returned
+    under `values`, so the data is normalised the same way.
+  - `config_entry_id` reuses the URL, authentication, headers and connection
+    settings of a configured endpoint; `url` may be a full URL or a `/path`
+    resolved against that endpoint's host.
+  - `payload` and `headers` make it straightforward to POST values taken from
+    other entities.
+  - What is sent is always decided by the call: the endpoint's own method and
+    body are never inherited.
+  - Response headers that carry credentials are redacted.
+- `script/validate_strings.py` now also checks that `services.yaml` and
+  `strings.json` describe the same actions and fields.
+
+### Changed
+- An empty response body is no longer treated as a failure for the new action,
+  so a fire-and-forget `POST` answering `204` succeeds. Polling is unchanged.
+
 ## [2.0.0] - 2026-08-27
 
 A full rewrite against current Home Assistant integration standards. Existing

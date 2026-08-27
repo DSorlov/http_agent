@@ -352,6 +352,69 @@
     },
     "empty_response": {
       "message": "Endepunktet svarte med en tom tekst."
+    },
+    "unknown_endpoint": {
+      "message": "Ingen HTTP Agent-endepunkt ble funnet for \"{target}\"."
+    },
+    "missing_url": {
+      "message": "Oppgi en URL, et endepunkt å bruke, eller begge."
+    }
+  },
+  "services": {
+    "request": {
+      "name": "Forespørsel",
+      "description": "Kaller et HTTP-endepunkt og returnerer svaret, slik at en automasjon eller et skript kan bruke dataene i et senere steg.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Endepunkt",
+          "description": "Et eksisterende endepunkt å hente URL, autentisering og tilkoblingsinnstillinger fra."
+        },
+        "url": {
+          "name": "URL",
+          "description": "Overstyrer endepunktets URL. En sti som starter med skråstrek tolkes mot verten til det valgte endepunktet."
+        },
+        "method": {
+          "name": "Metode",
+          "description": "HTTP-metode som skal brukes for denne forespørselen."
+        },
+        "payload": {
+          "name": "Tekst",
+          "description": "Teksten i forespørselen. Home Assistant-maler støttes."
+        },
+        "headers": {
+          "name": "Headere",
+          "description": "Ekstra headere som skal sendes, slått sammen oppå dem fra endepunktet."
+        },
+        "select": {
+          "name": "Verdier å lese",
+          "description": "En tilordning fra resultatnavn til sti, med samme syntaks som sensorene. De uthentede verdiene returneres under `values`."
+        },
+        "content_type": {
+          "name": "Innholdstype",
+          "description": "Sendes som headeren `Content-Type`."
+        },
+        "response_format": {
+          "name": "Svarformat",
+          "description": "La stå på \"Auto\" for å oppdage JSON, XML, HTML eller ren tekst automatisk."
+        },
+        "timeout": {
+          "name": "Tidsavbrudd for forespørsel",
+          "description": "Hvor lenge det ventes på svar, i sekunder."
+        },
+        "retries": {
+          "name": "Nye forsøk ved feil",
+          "description": "Hvor mange ekstra forsøk som gjøres når en henting mislykkes, med ett sekund mellom forsøkene."
+        },
+        "verify_ssl": {
+          "name": "Verifiser SSL-sertifikat",
+          "description": "Slå av kun for endepunkter med selvsignert sertifikat."
+        }
+      },
+      "sections": {
+        "advanced_fields": {
+          "name": "Avanserte innstillinger"
+        }
+      }
     }
   }
 }
