@@ -1,147 +1,111 @@
-"""HTTP Agent sensor platform."""
+"""Sensor platform for HTTP Agent."""
 
 from __future__ import annotations
 
+from datetime import date, datetime
 import logging
 from typing import Any
 
-from homeassistant.components.sensor import SensorEntity
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.components.sensor import (
+    SensorDeviceClass,
+    SensorEntity,
+    SensorStateClass,
+)
+from homeassistant.const import CONF_DEVICE_CLASS, CONF_UNIT_OF_MEASUREMENT
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+from homeassistant.util import dt as dt_util
 
-from .const import (
-    CONF_SENSOR_NAME,
-    CONF_SENSOR_TYPE,
-    CONF_SENSOR_UNIT,
-    CONF_SENSORS,
-    DOMAIN,
-)
-from .coordinator import HTTPAgentCoordinator
-from .helpers import (
-    build_device_info,
-    get_device_class,
-    get_sensor_config,
-    merge_entry_data,
-)
+from .const import CONF_STATE_CLASS, SUBENTRY_TYPE_SENSOR
+from .coordinator import HTTPAgentConfigEntry
+from .entity import HTTPAgentEntity, async_add_subentry_entities
 
 _LOGGER = logging.getLogger(__name__)
+
+_NUMERIC_STATE_CLASSES = {
+    SensorStateClass.MEASUREMENT,
+    SensorStateClass.TOTAL,
+    SensorStateClass.TOTAL_INCREASING,
+}
 
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: ConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    entry: HTTPAgentConfigEntry,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Set up HTTP Agent sensors from a config entry."""
-    coordinator = entry.runtime_data
+    """Set up the HTTP Agent sensors."""
+    async_add_subentry_entities(
+        entry, async_add_entities, SUBENTRY_TYPE_SENSOR, HTTPAgentSensor
+    )
 
-    # Merge config data with options
-    data = merge_entry_data(entry)
 
-    sensors = []
-    for sensor_config in data[CONF_SENSORS]:
-        # Only create sensors of type "sensor"
-        if sensor_config.get(CONF_SENSOR_TYPE, "sensor") == "sensor":
-            sensor_name = sensor_config[CONF_SENSOR_NAME]
-            sensors.append(HTTPAgentSensor(coordinator, entry, sensor_name))
+class HTTPAgentSensor(HTTPAgentEntity, SensorEntity):
+    """A sensor reading a single value from the HTTP response."""
 
-    async_add_entities(sensors)
+    def __init__(self, coordinator, subentry) -> None:
+        """Initialise the sensor from its subentry configuration."""
+        super().__init__(coordinator, subentry)
+        self._attr_device_class = _enum_or_none(
+            SensorDeviceClass, self.config.get(CONF_DEVICE_CLASS)
+        )
+        self._attr_state_class = _enum_or_none(
+            SensorStateClass, self.config.get(CONF_STATE_CLASS)
+        )
+        self._attr_native_unit_of_measurement = (
+            self.config.get(CONF_UNIT_OF_MEASUREMENT) or None
+        )
 
-    # Clean up removed sensors from entity registry
-    from homeassistant.helpers import entity_registry as er
+    @property
+    def native_value(self) -> str | float | date | datetime | None:
+        """Return the extracted value, coerced to match the device class."""
+        value = self.value
+        if value is None:
+            return None
 
-    entity_registry = er.async_get(hass)
-
-    # Get current sensor names
-    current_sensor_names = {
-        sensor_config[CONF_SENSOR_NAME] for sensor_config in data[CONF_SENSORS]
-    }
-
-    # Find entities to remove (create list first to avoid iteration error)
-    entities_to_remove = []
-    for entity_id, entity_entry in entity_registry.entities.items():
-        if (
-            entity_entry.config_entry_id == entry.entry_id
-            and entity_entry.domain == "sensor"
-            and entity_entry.platform == DOMAIN
+        if self._attr_device_class in (
+            SensorDeviceClass.TIMESTAMP,
+            SensorDeviceClass.DATE,
         ):
+            return _as_datetime(value, self._attr_device_class)
 
-            # Extract sensor name from unique_id
-            unique_id = entity_entry.unique_id
-            if unique_id and "_" in unique_id:
-                sensor_name = unique_id.split("_", 1)[1]
-                if sensor_name not in current_sensor_names:
-                    entities_to_remove.append(entity_id)
+        if (
+            self._attr_state_class in _NUMERIC_STATE_CLASSES
+            or self._attr_native_unit_of_measurement
+        ):
+            return _as_float(value)
 
-    # Remove obsolete entities
-    for entity_id in entities_to_remove:
-        _LOGGER.info("Removing obsolete sensor entity: %s", entity_id)
-        entity_registry.async_remove(entity_id)
+        return str(value)
 
 
-class HTTPAgentSensor(CoordinatorEntity, SensorEntity):
-    """HTTP Agent sensor."""
+def _enum_or_none(enum_cls: Any, value: Any) -> Any:
+    """Return ``value`` as a member of ``enum_cls``, or None when unsupported."""
+    if not value:
+        return None
+    try:
+        return enum_cls(value)
+    except ValueError:
+        _LOGGER.warning("Ignoring unsupported %s '%s'", enum_cls.__name__, value)
+        return None
 
-    def __init__(
-        self,
-        coordinator: HTTPAgentCoordinator,
-        entry: ConfigEntry,
-        sensor_name: str,
-    ) -> None:
-        """Initialize the sensor."""
-        super().__init__(coordinator)
-        self.entry = entry
-        self.sensor_name = sensor_name
 
-        # Entity properties
-        self._attr_name = sensor_name
-        self._attr_unique_id = f"{entry.entry_id}_{sensor_name}"
-        self._attr_device_info = build_device_info(entry)
+def _as_float(value: Any) -> float | None:
+    """Return ``value`` as a float, or None when it is not numeric."""
+    if isinstance(value, bool):
+        return float(value)
+    try:
+        return float(str(value).strip().replace(",", "."))
+    except (TypeError, ValueError):
+        _LOGGER.debug("Value %r is not numeric", value)
+        return None
 
-        self.sensor_config = get_sensor_config(entry, sensor_name)
-        self._attr_device_class = get_device_class(self.sensor_config)
-        if self.sensor_config:
-            self._attr_native_unit_of_measurement = self.sensor_config.get(
-                CONF_SENSOR_UNIT
-            )
 
-    @property
-    def native_value(self) -> Any:
-        """Return the state of the sensor."""
-        if not self.coordinator.data:
-            return None
-
-        sensor_data = self.coordinator.data.get(self.sensor_name, {})
-        return sensor_data.get("state")
-
-    @property
-    def icon(self) -> str | None:
-        """Return the icon of the sensor."""
-        if not self.coordinator.data:
-            return None
-
-        sensor_data = self.coordinator.data.get(self.sensor_name, {})
-        icon = sensor_data.get("icon")
-
-        # If icon is provided, ensure it starts with mdi:
-        if icon and not icon.startswith("mdi:"):
-            icon = f"mdi:{icon}"
-
-        return icon
-
-    @property
-    def extra_state_attributes(self) -> dict[str, Any]:
-        """Return the state attributes of the sensor."""
-        if not self.coordinator.data:
-            return {}
-
-        sensor_data = self.coordinator.data.get(self.sensor_name, {})
-        attributes = {}
-
-        # Add color if available
-        if sensor_data.get("color"):
-            attributes["color"] = sensor_data["color"]
-
-        return attributes
+def _as_datetime(value: Any, device_class: SensorDeviceClass) -> date | datetime | None:
+    """Return ``value`` parsed as a timestamp or date."""
+    if device_class is SensorDeviceClass.DATE:
+        return dt_util.parse_date(str(value))
+    if (parsed := dt_util.parse_datetime(str(value))) is not None:
+        return dt_util.as_utc(parsed) if parsed.tzinfo is None else parsed
+    if (number := _as_float(value)) is not None:
+        return dt_util.utc_from_timestamp(number)
+    return None

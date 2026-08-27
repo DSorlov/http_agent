@@ -36,44 +36,51 @@ We actively welcome pull requests!
 2. For major changes, please open an issue first to discuss
 3. Fork the repository and create a branch from `main`
 
+#### Development environment
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -r requirements-dev.txt
+```
+
+The project targets the Python version shipped with the current Home Assistant
+release and supports Home Assistant 2025.12 and newer.
+
 #### Code Guidelines
 
-- **Code Style**: Follow PEP 8 guidelines
-- **Formatting**: Use `black` for code formatting:
+- **Code Style**: Follow the Home Assistant conventions; [Ruff](https://docs.astral.sh/ruff/)
+  enforces them.
+- **Linting**:
   ```bash
-  black custom_components/
+  .venv/bin/ruff check custom_components tests script
   ```
-- **Import Sorting**: Use `isort` for import organization:
+- **Formatting**:
   ```bash
-  isort custom_components/
-  ```
-- **Linting**: Run `flake8` to check for issues:
-  ```bash
-  flake8 custom_components/ --count --select=E9,F63,F7,F82 --show-source --statistics
+  .venv/bin/ruff format custom_components tests script
   ```
 
 #### Testing
 
-Before submitting a PR, ensure:
+Before submitting a PR, ensure all of these pass:
 
-1. **Code Quality Checks Pass**:
+1. **Lint and format**:
    ```bash
-   black --check custom_components/
-   isort --check-only custom_components/
-   flake8 custom_components/ --count --select=E9,F63,F7,F82 --show-source --statistics
+   .venv/bin/ruff check custom_components tests script
+   .venv/bin/ruff format --check custom_components tests script
    ```
 
-2. **Python Syntax Validation**:
+2. **Tests** (coverage must not regress):
    ```bash
-   python -m py_compile custom_components/http_agent/*.py
+   .venv/bin/pytest
    ```
 
-3. **API Tests Pass**:
+3. **Translations and brand assets**:
    ```bash
-   python3 test_api.py
+   .venv/bin/python script/validate_strings.py
+   python3 script/validate_assets.py
    ```
 
-4. **Integration Works**: Test in Home Assistant using the Docker environment
+4. **Integration works**: test in Home Assistant using the Docker environment
 
 #### Translation Guidelines
 
@@ -87,11 +94,19 @@ If adding or modifying translations:
    - `de.json` (German)
    - `fi.json` (Finnish)
    - `no.json` (Norwegian)
-3. Ensure all files maintain the same key structure (203 keys)
-4. Validate JSON syntax:
+3. Every file must have exactly the same keys as `strings.json`
+4. Translated values must not contain URLs, HTML-like tags, or placeholders
+   wrapped in single quotes — Home Assistant rejects those
+5. Validate:
    ```bash
-   python3 -m json.tool custom_components/http_agent/translations/LANGUAGE.json
+   .venv/bin/python script/validate_strings.py
+   python3 script/validate_assets.py
    ```
+
+#### Brand assets
+
+See [`brands/README.md`](brands/README.md). `script/validate_assets.py` checks
+the required dimensions.
 
 #### Commit Messages
 

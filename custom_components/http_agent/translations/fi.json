@@ -1,223 +1,357 @@
 {
+  "title": "HTTP Agent",
   "config": {
     "step": {
       "user": {
-        "title": "HTTP Agent Konfigurointi",
-        "description": "Konfiguroi HTTP-päätepiste",
+        "title": "Yhdistä päätepisteeseen",
+        "description": "Osoita HTTP Agent mihin tahansa HTTP-päätepisteeseen. Seuraavien vaiheiden jälkeen päätepistettä kutsutaan kerran, jotta voit valita haluamasi arvot entiteeteiksi.",
         "data": {
           "url": "URL",
-          "method": "HTTP-metodi",
-          "timeout": "Aikakatkaisu (sekuntia)",
-          "interval": "Päivitysväli (sekuntia)",
-          "retries": "Uudelleenyritykset virheen sattuessa",
-          "verify_ssl": "Vahvista SSL-varmenne"
+          "method": "Menetelmä",
+          "auth_type": "Todennus",
+          "name": "Nimi"
+        },
+        "data_description": {
+          "url": "Päätepisteen täydellinen URL-osoite. Home Assistant -mallit ovat tuettuja.",
+          "method": "Jokaisessa haussa käytettävä HTTP-menetelmä.",
+          "auth_type": "Valitse valmis todennusprofiili tai \"None\" ja lisää omat otsikot alle.",
+          "name": "Valinnainen. Oletuksena URL-osoitteen isäntänimi."
+        },
+        "sections": {
+          "advanced": {
+            "name": "Lisäasetukset",
+            "data": {
+              "scan_interval": "Päivitysväli",
+              "timeout": "Pyynnön aikakatkaisu",
+              "retries": "Uudelleenyritykset virheen jälkeen",
+              "extra_headers": "Lisäotsikot",
+              "response_format": "Vastauksen muoto",
+              "verify_ssl": "Tarkista SSL-varmenne",
+              "follow_redirects": "Seuraa uudelleenohjauksia"
+            },
+            "data_description": {
+              "scan_interval": "Kuinka usein päätepiste haetaan, sekunteina.",
+              "timeout": "Kuinka kauan vastausta odotetaan, sekunteina.",
+              "retries": "Kuinka monta lisäyritystä tehdään, kun haku epäonnistuu, sekunnin välein.",
+              "extra_headers": "Yksi otsikko riviä kohden muodossa `Nimi: arvo`. Mallit ovat tuettuja.",
+              "response_format": "Jätä arvoon \"Auto\", jolloin JSON, XML, HTML tai pelkkä teksti tunnistetaan automaattisesti.",
+              "verify_ssl": "Poista käytöstä vain päätepisteille, joilla on itse allekirjoitettu varmenne.",
+              "follow_redirects": "Seuraa HTTP 3xx -uudelleenohjauksia automaattisesti."
+            }
+          }
         }
       },
-      "headers": {
-        "title": "HTTP-otsikot",
-        "description": "Konfiguroi HTTP-otsikot.\n\nNykyiset otsikot:\n{headers}",
-        "menu_options": {
-          "add_header": "Lisää otsikko",
-          "headers_done": "Jatka"
-        }
-      },
-      "add_header": {
-        "title": "Lisää HTTP-otsikko",
-        "description": "Lisää uusi HTTP-otsikko",
+      "credentials": {
+        "title": "Todennus",
+        "description": "Anna profiilin \"{auth_type}\" tunnistetiedot. Ne tallennetaan salattuina eikä niitä näytetä lokeissa tai diagnostiikassa.",
         "data": {
-          "key": "Otsikon nimi",
-          "value": "Otsikon arvo"
+          "token": "Bearer-tunniste",
+          "api_key": "API-avain",
+          "api_key_header": "API-avaimen otsikko",
+          "username": "Käyttäjätunnus",
+          "password": "Salasana"
+        },
+        "data_description": {
+          "token": "Lähetetään otsikkona `Authorization: Bearer`.",
+          "api_key": "Itse avaimen arvo.",
+          "api_key_header": "Otsikko, jossa avain lähetetään, esimerkiksi `X-API-Key`.",
+          "username": "Käyttäjätunnus HTTP basic -todennukseen.",
+          "password": "Salasana HTTP basic -todennukseen."
         }
       },
-      "payload": {
-        "title": "HTTP-hyötykuorma",
-        "description": "Konfiguroi pyynnön hyötykuorma",
+      "body": {
+        "title": "Pyynnön runko",
+        "description": "{method}-pyynnöt voivat lähettää rungon. Jätä tyhjäksi, jos päätepiste ei tarvitse sitä.",
         "data": {
           "content_type": "Sisältötyyppi",
-          "payload": "Hyötykuorma (JSON/XML/Teksti)"
+          "payload": "Runko"
+        },
+        "data_description": {
+          "content_type": "Lähetetään otsikkona `Content-Type`.",
+          "payload": "Pyynnön runko. Home Assistant -mallit ovat tuettuja."
         }
       },
-      "sensors": {
-        "title": "Anturikonfigurointi",
-        "description": "Konfiguroi anturit datan poimimiseksi.\n\nNykyiset anturit:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Lisää anturi",
-          "sensors_done": "Valmis"
-        }
-      },
-      "add_sensor": {
-        "title": "Lisää anturi",
-        "description": "Valitse anturityyppi ja anna nimi",
+      "select_values": {
+        "title": "Valitse haluamasi arvot",
+        "description": "Päätepiste vastasi tilalla HTTP {status} ja luettiin muodossa **{format}**. Löytyi {count} arvoa.\n\n```\n{preview}\n```\n\nValitse arvot, joista tehdään entiteettejä. Järkevät entiteettityypit, laiteluokat ja yksiköt arvataan automaattisesti ja niitä voi muuttaa jälkikäteen. Voit myös ohittaa tämän ja lisätä entiteettejä myöhemmin.",
         "data": {
-          "sensor_name": "Anturin nimi",
-          "sensor_type": "Anturityyppi"
+          "selected_values": "Arvot"
+        },
+        "data_description": {
+          "selected_values": "Hae luettelosta tai kirjoita polku käsin lisätäksesi arvon, jota ei tunnistettu."
         }
       },
-      "sensor_config": {
-        "title": "Anturikonfigurointi",
-        "description": "Konfiguroi anturin asetukset. Poimimismenetelmä (JSON/XPath/CSS/RegEx) tunnistetaan automaattisesti vastauksen sisältötyypin perusteella.",
+      "reauth_confirm": {
+        "title": "Todenna uudelleen",
+        "description": "Päätepiste hylkäsi profiilin \"{auth_type}\" tallennetut tunnistetiedot. Anna ne uudelleen.",
         "data": {
-          "sensor_state": "Tilavalitsin (JSON/XPath/CSS/RegEx - automaattisesti tunnistettu)",
-          "sensor_icon": "Kuvatunnusten valitsin (JSON/XPath/CSS/RegEx - automaattisesti tunnistettu)",
-          "sensor_color": "Värin valitsin (JSON/XPath/CSS/RegEx - automaattisesti tunnistettu)",
-          "sensor_device_class": "Laitteen luokka",
-          "sensor_unit": "Mittayksikkö",
-          "tracker_latitude": "Leveysasteen valitsin (JSON/XPath/CSS/RegEx - automaattisesti tunnistettu)",
-          "tracker_longitude": "Pituusasteen valitsin (JSON/XPath/CSS/RegEx - automaattisesti tunnistettu)",
-          "tracker_location_name": "Sijainnin nimen valitsin (JSON/XPath/CSS/RegEx - automaattisesti tunnistettu)",
-          "tracker_source_type": "Lähdetyyppi"
+          "token": "Bearer-tunniste",
+          "api_key": "API-avain",
+          "api_key_header": "API-avaimen otsikko",
+          "username": "Käyttäjätunnus",
+          "password": "Salasana"
         }
       }
     },
     "error": {
-      "invalid_url": "Virheellinen URL-muoto",
-      "no_sensors": "Vähintään yksi anturi on määritettävä"
+      "cannot_connect": "Päätepistettä ei tavoitettu. Tarkista URL-osoite, verkko ja aikakatkaisu.",
+      "invalid_auth": "Päätepiste hylkäsi tunnistetiedot (HTTP 401/403).",
+      "invalid_url": "Anna täydellinen URL-osoite, joka alkaa http tai https.",
+      "invalid_headers": "Jokainen otsikko on kirjoitettava muodossa `Nimi: arvo` omalle rivilleen.",
+      "bad_status": "Päätepiste vastasi virhetilakoodilla.",
+      "no_values": "Vastaus oli tyhjä tai siinä ei ollut luettavia arvoja."
     },
     "abort": {
-      "already_configured": "Tämä HTTP-päätepiste on jo määritetty",
-      "no_sensors": "Antureita ei määritetty"
+      "already_configured": "Tämä URL-osoitteen ja menetelmän yhdistelmä on jo määritetty.",
+      "reauth_successful": "Uudelleentodennus onnistui.",
+      "reconfigure_successful": "Päätepiste päivitettiin."
     }
   },
-  "options": {
-    "step": {
-      "init": {
-        "title": "HTTP Agent Konfigurointi",
-        "description": "Valitse mitä muokata",
-        "menu_options": {
-          "basic": "Muokkaa perusasetuksia (URL, metodi, aikakatkaisu, väli, SSL)",
-          "headers": "Muokkaa HTTP-otsikoita",
-          "payload": "Muokkaa pyynnön hyötykuormaa",
-          "sensors": "Muokkaa anturikonfiguraatiota"
+  "config_subentries": {
+    "sensor": {
+      "initiate_flow": {
+        "user": "Lisää anturi",
+        "reconfigure": "Muokkaa anturia"
+      },
+      "entry_type": "Anturi",
+      "step": {
+        "user": {
+          "title": "Lisää anturi",
+          "description": "Valitse arvo viimeisimmästä vastauksesta tai kirjoita polku itse.",
+          "data": {
+            "name": "Nimi",
+            "value_path": "Arvo"
+          },
+          "data_description": {
+            "name": "Entiteetin nimi.",
+            "value_path": "Polku, joka luetaan vastauksesta."
+          },
+          "sections": {
+            "options": {
+              "name": "Entiteetin asetukset",
+              "data": {
+                "device_class": "Laiteluokka",
+                "unit_of_measurement": "Mittayksikkö",
+                "state_class": "Tilaluokka",
+                "icon": "Kuvake",
+                "attributes": "Lisäattribuutit"
+              },
+              "data_description": {
+                "device_class": "Määrittää, miten Home Assistant muotoilee ja piirtää arvon.",
+                "unit_of_measurement": "Esimerkiksi °C, %, kWh.",
+                "state_class": "Aseta arvoon \"Measurement\" tai \"Total increasing\", jotta anturi sisällytetään pitkän aikavälin tilastoihin.",
+                "icon": "Korvaa laiteluokasta johdetun kuvakkeen.",
+                "attributes": "Yksi riviä kohden muodossa `Attribuutin nimi: polku`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Muokkaa anturia",
+          "description": "Valitse arvo viimeisimmästä vastauksesta tai kirjoita polku itse.",
+          "data": {
+            "name": "Nimi",
+            "value_path": "Arvo"
+          },
+          "data_description": {
+            "name": "Entiteetin nimi.",
+            "value_path": "Polku, joka luetaan vastauksesta."
+          },
+          "sections": {
+            "options": {
+              "name": "Entiteetin asetukset",
+              "data": {
+                "device_class": "Laiteluokka",
+                "unit_of_measurement": "Mittayksikkö",
+                "state_class": "Tilaluokka",
+                "icon": "Kuvake",
+                "attributes": "Lisäattribuutit"
+              },
+              "data_description": {
+                "device_class": "Määrittää, miten Home Assistant muotoilee ja piirtää arvon.",
+                "unit_of_measurement": "Esimerkiksi °C, %, kWh.",
+                "state_class": "Aseta arvoon \"Measurement\" tai \"Total increasing\", jotta anturi sisällytetään pitkän aikavälin tilastoihin.",
+                "icon": "Korvaa laiteluokasta johdetun kuvakkeen.",
+                "attributes": "Yksi riviä kohden muodossa `Attribuutin nimi: polku`."
+              }
+            }
+          }
         }
       },
-      "basic": {
-        "title": "Perusasetukset",
-        "description": "Muokkaa URL:ia, metodia, aikakatkaisua, väliä ja SSL-vahvistusta",
-        "data": {
-          "url": "URL",
-          "method": "HTTP-metodi",
-          "timeout": "Aikakatkaisu (sekuntia)",
-          "interval": "Päivitysväli (sekuntia)",
-          "retries": "Uudelleenyritykset virheen sattuessa",
-          "verify_ssl": "Vahvista SSL-varmenne"
-        }
+      "error": {
+        "invalid_attributes": "Jokainen attribuutti on kirjoitettava muodossa `Attribuutin nimi: polku` omalle rivilleen."
       },
-      "headers": {
-        "title": "HTTP-otsikot",
-        "description": "Muokkaa HTTP-otsikoita.\n\nNykyiset otsikot:\n{headers}",
-        "menu_options": {
-          "add_header": "Lisää otsikko",
-          "clear_headers": "Tyhjennä kaikki otsikot",
-          "headers_done": "Tallenna"
-        }
-      },
-      "add_header": {
-        "title": "Lisää HTTP-otsikko",
-        "description": "Lisää uusi HTTP-otsikko",
-        "data": {
-          "key": "Otsikon nimi",
-          "value": "Otsikon arvo"
-        }
-      },
-      "payload": {
-        "title": "HTTP-hyötykuorma",
-        "description": "Muokkaa pyynnön hyötykuormaa",
-        "data": {
-          "content_type": "Sisältötyyppi",
-          "payload": "Hyötykuorma (JSON/XML/Teksti)"
-        }
-      },
-      "sensors": {
-        "title": "Anturikonfigurointi",
-        "description": "Muokkaa anturikonfiguraatiota.\n\nNykyiset anturit:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Lisää anturi",
-          "select_sensor": "Muokkaa anturia",
-          "clear_sensors": "Tyhjennä kaikki anturit",
-          "sensors_done": "Tallenna"
-        }
-      },
-      "select_sensor": {
-        "title": "Valitse anturi",
-        "description": "Valitse anturi muokattavaksi tai poistettavaksi",
-        "data": {
-          "sensor": "Anturi"
-        }
-      },
-      "edit_sensor": {
-        "title": "Muokkaa anturia",
-        "description": "Valitse mitä tehdä tälle anturille:\n\n{sensor_info}",
-        "menu_options": {
-          "modify_sensor": "Muokkaa anturia",
-          "delete_sensor": "Poista anturi",
-          "edit_back": "Takaisin"
-        }
-      },
-      "modify_sensor": {
-        "title": "Muuta anturia",
-        "description": "Muokkaa anturikonfiguraatiota. Poimimismenetelmä (JSON/XPath/CSS/RegEx) tunnistetaan automaattisesti vastauksen sisältötyypin perusteella.",
-        "data": {
-          "sensor_name": "Anturin nimi",
-          "sensor_state": "Tilavalitsin (JSON/XPath/CSS/RegEx - automaattisesti tunnistettu)",
-          "sensor_icon": "Kuvatunnusten valitsin (JSON/XPath/CSS/RegEx - automaattisesti tunnistettu)",
-          "sensor_color": "Värin valitsin (JSON/XPath/CSS/RegEx - automaattisesti tunnistettu)",
-          "sensor_device_class": "Laitteen luokka",
-          "sensor_unit": "Mittayksikkö",
-          "tracker_latitude": "Leveysasteen valitsin (JSON/XPath/CSS/RegEx - automaattisesti tunnistettu)",
-          "tracker_longitude": "Pituusasteen valitsin (JSON/XPath/CSS/RegEx - automaattisesti tunnistettu)",
-          "tracker_location_name": "Sijainnin nimen valitsin (JSON/XPath/CSS/RegEx - automaattisesti tunnistettu)",
-          "tracker_source_type": "Lähdetyyppi"
-        }
-      },
-      "add_sensor": {
-        "title": "Lisää anturi",
-        "description": "Valitse anturityyppi ja anna nimi",
-        "data": {
-          "sensor_name": "Anturin nimi",
-          "sensor_type": "Anturityyppi"
-        }
-      },
-      "sensor_config": {
-        "title": "Anturikonfigurointi",
-        "description": "Konfiguroi anturin asetukset. Poimimismenetelmä (JSON/XPath/CSS/RegEx) tunnistetaan automaattisesti vastauksen sisältötyypin perusteella.",
-        "data": {
-          "sensor_state": "Tilavalitsin (JSON/XPath/CSS/RegEx - automaattisesti tunnistettu)",
-          "sensor_icon": "Kuvatunnusten valitsin (JSON/XPath/CSS/RegEx - automaattisesti tunnistettu)",
-          "sensor_color": "Värin valitsin (JSON/XPath/CSS/RegEx - automaattisesti tunnistettu)",
-          "sensor_device_class": "Laitteen luokka",
-          "sensor_unit": "Mittayksikkö",
-          "tracker_latitude": "Leveysasteen valitsin (JSON/XPath/CSS/RegEx - automaattisesti tunnistettu)",
-          "tracker_longitude": "Pituusasteen valitsin (JSON/XPath/CSS/RegEx - automaattisesti tunnistettu)",
-          "tracker_location_name": "Sijainnin nimen valitsin (JSON/XPath/CSS/RegEx - automaattisesti tunnistettu)",
-          "tracker_source_type": "Lähdetyyppi"
-        }
+      "abort": {
+        "reconfigure_successful": "Anturi päivitettiin."
       }
     },
-    "error": {
-      "invalid_url": "Virheellinen URL-muoto",
-      "no_sensors": "Vähintään yksi anturi on määritettävä"
+    "binary_sensor": {
+      "initiate_flow": {
+        "user": "Lisää binäärianturi",
+        "reconfigure": "Muokkaa binäärianturia"
+      },
+      "entry_type": "Binäärianturi",
+      "step": {
+        "user": {
+          "title": "Lisää binäärianturi",
+          "description": "Valitse arvo viimeisimmästä vastauksesta tai kirjoita polku itse.",
+          "data": {
+            "name": "Nimi",
+            "value_path": "Arvo"
+          },
+          "data_description": {
+            "name": "Entiteetin nimi.",
+            "value_path": "Polku, joka luetaan vastauksesta."
+          },
+          "sections": {
+            "options": {
+              "name": "Entiteetin asetukset",
+              "data": {
+                "device_class": "Laiteluokka",
+                "payload_on": "Päällä-arvo",
+                "payload_off": "Pois-arvo",
+                "icon": "Kuvake",
+                "attributes": "Lisäattribuutit"
+              },
+              "data_description": {
+                "device_class": "Määrittää päällä/pois-sanamuodon ja kuvakkeen.",
+                "payload_on": "Valinnainen. Tarkka arvo, joka tarkoittaa \"päällä\". Jätä tyhjäksi, jolloin true/1/on/yes tunnistetaan automaattisesti.",
+                "payload_off": "Valinnainen. Tarkka arvo, joka tarkoittaa \"pois\".",
+                "icon": "Korvaa laiteluokasta johdetun kuvakkeen.",
+                "attributes": "Yksi riviä kohden muodossa `Attribuutin nimi: polku`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Muokkaa binäärianturia",
+          "description": "Valitse arvo viimeisimmästä vastauksesta tai kirjoita polku itse.",
+          "data": {
+            "name": "Nimi",
+            "value_path": "Arvo"
+          },
+          "data_description": {
+            "name": "Entiteetin nimi.",
+            "value_path": "Polku, joka luetaan vastauksesta."
+          },
+          "sections": {
+            "options": {
+              "name": "Entiteetin asetukset",
+              "data": {
+                "device_class": "Laiteluokka",
+                "payload_on": "Päällä-arvo",
+                "payload_off": "Pois-arvo",
+                "icon": "Kuvake",
+                "attributes": "Lisäattribuutit"
+              },
+              "data_description": {
+                "device_class": "Määrittää päällä/pois-sanamuodon ja kuvakkeen.",
+                "payload_on": "Valinnainen. Tarkka arvo, joka tarkoittaa \"päällä\". Jätä tyhjäksi, jolloin true/1/on/yes tunnistetaan automaattisesti.",
+                "payload_off": "Valinnainen. Tarkka arvo, joka tarkoittaa \"pois\".",
+                "icon": "Korvaa laiteluokasta johdetun kuvakkeen.",
+                "attributes": "Yksi riviä kohden muodossa `Attribuutin nimi: polku`."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Jokainen attribuutti on kirjoitettava muodossa `Attribuutin nimi: polku` omalle rivilleen."
+      },
+      "abort": {
+        "reconfigure_successful": "Binäärianturi päivitettiin."
+      }
     },
-    "abort": {
-      "no_sensors": "Antureita ei määritetty"
+    "device_tracker": {
+      "initiate_flow": {
+        "user": "Lisää laiteseuranta",
+        "reconfigure": "Muokkaa laiteseurantaa"
+      },
+      "entry_type": "Laiteseuranta",
+      "step": {
+        "user": {
+          "title": "Lisää laiteseuranta",
+          "description": "Valitse leveys- ja pituusasteen arvot viimeisimmästä vastauksesta.",
+          "data": {
+            "name": "Nimi",
+            "latitude_path": "Leveysaste",
+            "longitude_path": "Pituusaste"
+          },
+          "data_description": {
+            "name": "Entiteetin nimi.",
+            "latitude_path": "Polku leveysasteen arvoon.",
+            "longitude_path": "Polku pituusasteen arvoon."
+          },
+          "sections": {
+            "options": {
+              "name": "Entiteetin asetukset",
+              "data": {
+                "gps_accuracy_path": "GPS-tarkkuus",
+                "source_type": "Lähdetyyppi",
+                "icon": "Kuvake",
+                "attributes": "Lisäattribuutit"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Valinnainen. Tarkkuus metreinä.",
+                "source_type": "Miten sijainti määritetään.",
+                "icon": "Korvaa oletuskuvakkeen.",
+                "attributes": "Yksi riviä kohden muodossa `Attribuutin nimi: polku`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Muokkaa laiteseurantaa",
+          "description": "Valitse leveys- ja pituusasteen arvot viimeisimmästä vastauksesta.",
+          "data": {
+            "name": "Nimi",
+            "latitude_path": "Leveysaste",
+            "longitude_path": "Pituusaste"
+          },
+          "data_description": {
+            "name": "Entiteetin nimi.",
+            "latitude_path": "Polku leveysasteen arvoon.",
+            "longitude_path": "Polku pituusasteen arvoon."
+          },
+          "sections": {
+            "options": {
+              "name": "Entiteetin asetukset",
+              "data": {
+                "gps_accuracy_path": "GPS-tarkkuus",
+                "source_type": "Lähdetyyppi",
+                "icon": "Kuvake",
+                "attributes": "Lisäattribuutit"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Valinnainen. Tarkkuus metreinä.",
+                "source_type": "Miten sijainti määritetään.",
+                "icon": "Korvaa oletuskuvakkeen.",
+                "attributes": "Yksi riviä kohden muodossa `Attribuutin nimi: polku`."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Jokainen attribuutti on kirjoitettava muodossa `Attribuutin nimi: polku` omalle rivilleen."
+      },
+      "abort": {
+        "reconfigure_successful": "Laiteseuranta päivitettiin."
+      }
     }
   },
-  "selector": {
-    "sensor_type": {
-      "options": {
-        "sensor": "Anturi",
-        "binary_sensor": "Binäärianturi",
-        "number": "Numero",
-        "device_tracker": "Laitteen seuranta"
-      }
+  "exceptions": {
+    "cannot_connect": {
+      "message": "Päätepistettä ei tavoitettu: {error}"
     },
-    "tracker_source_type": {
-      "options": {
-        "none": "Ei mitään (oletus)",
-        "gps": "GPS",
-        "router": "Reititin",
-        "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE"
-      }
+    "invalid_auth": {
+      "message": "Päätepiste hylkäsi tallennetut tunnistetiedot."
+    },
+    "bad_status": {
+      "message": "Päätepiste vastasi tilalla HTTP {status}."
+    },
+    "empty_response": {
+      "message": "Päätepiste vastasi tyhjällä rungolla."
     }
   }
 }

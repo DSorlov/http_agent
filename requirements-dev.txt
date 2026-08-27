@@ -1,15 +1,10 @@
-# Development requirements for HTTP Agent integration
+# Tooling
+ruff==0.14.2
+mypy==1.18.2
 
-# Code quality
-black==26.3.1
-isort==8.0.1
-flake8==7.3.0
-mypy==1.20.2
+# Testing (pytest and its plugins are pinned by the test harness)
+pytest-homeassistant-custom-component==0.13.357
 
-# Testing
-pytest==9.0.3
-pytest-asyncio==1.3.0
-pytest-homeassistant-custom-component==0.13.325
-
-# Home Assistant core (for development/testing)
-homeassistant>=2026.4.4
+# Runtime requirements declared in manifest.json
+beautifulsoup4>=4.13.0
+defusedxml>=0.7.1

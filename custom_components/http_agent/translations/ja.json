@@ -1,223 +1,357 @@
 {
+  "title": "HTTP Agent",
   "config": {
     "step": {
       "user": {
-        "title": "HTTP Agent 設定",
-        "description": "HTTP エンドポイントを設定",
+        "title": "エンドポイントに接続",
+        "description": "HTTP Agent を任意の HTTP エンドポイントに向けます。次の手順のあとにエンドポイントが一度呼び出され、エンティティにしたい値を選べるようになります。",
         "data": {
           "url": "URL",
-          "method": "HTTP メソッド",
-          "timeout": "タイムアウト（秒）",
-          "interval": "更新間隔（秒）",
-          "retries": "エラー時に再試行",
-          "verify_ssl": "SSL 証明書を検証"
+          "method": "メソッド",
+          "auth_type": "認証",
+          "name": "名前"
+        },
+        "data_description": {
+          "url": "エンドポイントの完全な URL。Home Assistant のテンプレートに対応しています。",
+          "method": "毎回の取得に使用する HTTP メソッド。",
+          "auth_type": "既定の認証プリセットを選ぶか、'None' を選んで下に独自のヘッダーを追加します。",
+          "name": "任意。既定では URL のホスト名です。"
+        },
+        "sections": {
+          "advanced": {
+            "name": "詳細設定",
+            "data": {
+              "scan_interval": "更新間隔",
+              "timeout": "リクエストのタイムアウト",
+              "retries": "エラー時の再試行回数",
+              "extra_headers": "追加ヘッダー",
+              "response_format": "レスポンス形式",
+              "verify_ssl": "SSL 証明書を検証する",
+              "follow_redirects": "リダイレクトをたどる"
+            },
+            "data_description": {
+              "scan_interval": "エンドポイントを取得する間隔（秒）。",
+              "timeout": "レスポンスを待つ時間（秒）。",
+              "retries": "取得に失敗したときに行う追加の試行回数。試行の間隔は 1 秒です。",
+              "extra_headers": "1 行に 1 つのヘッダーを `名前: 値` の形式で記述します。テンプレートに対応しています。",
+              "response_format": "'Auto' のままにすると、JSON、XML、HTML、プレーンテキストを自動判別します。",
+              "verify_ssl": "自己署名証明書のエンドポイントの場合のみ無効にしてください。",
+              "follow_redirects": "HTTP 3xx リダイレクトを自動的にたどります。"
+            }
+          }
         }
       },
-      "headers": {
-        "title": "HTTP ヘッダー",
-        "description": "HTTP ヘッダーを設定\n\n現在のヘッダー:\n{headers}",
-        "menu_options": {
-          "add_header": "追加",
-          "headers_done": "完了"
-        }
-      },
-      "add_header": {
-        "title": "HTTP ヘッダーを追加",
-        "description": "新しい HTTP ヘッダーを追加",
+      "credentials": {
+        "title": "認証",
+        "description": "\"{auth_type}\" プリセットの認証情報を入力してください。暗号化して保存され、ログや診断情報に表示されることはありません。",
         "data": {
-          "key": "ヘッダー名",
-          "value": "ヘッダー値"
+          "token": "Bearer トークン",
+          "api_key": "API キー",
+          "api_key_header": "API キーのヘッダー",
+          "username": "ユーザー名",
+          "password": "パスワード"
+        },
+        "data_description": {
+          "token": "`Authorization: Bearer` ヘッダーとして送信されます。",
+          "api_key": "キーの値そのもの。",
+          "api_key_header": "キーを送信するヘッダー。例: `X-API-Key`。",
+          "username": "HTTP basic 認証のユーザー名。",
+          "password": "HTTP basic 認証のパスワード。"
         }
       },
-      "payload": {
-        "title": "HTTP ペイロード",
-        "description": "リクエストペイロードを設定",
+      "body": {
+        "title": "リクエストボディ",
+        "description": "{method} リクエストはボディを送信できます。エンドポイントに不要な場合は空のままにしてください。",
         "data": {
           "content_type": "コンテンツタイプ",
-          "payload": "ペイロード（JSON/XML/テキスト）"
+          "payload": "ボディ"
+        },
+        "data_description": {
+          "content_type": "`Content-Type` ヘッダーとして送信されます。",
+          "payload": "リクエストのボディ。Home Assistant のテンプレートに対応しています。"
         }
       },
-      "sensors": {
-        "title": "センサー設定",
-        "description": "データ抽出用センサーを設定\n\n現在のセンサー:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "追加",
-          "sensors_done": "完了"
-        }
-      },
-      "add_sensor": {
-        "title": "センサーを追加",
-        "description": "センサータイプを選択し、名前を入力してください",
+      "select_values": {
+        "title": "必要な値を選択",
+        "description": "エンドポイントは HTTP {status} を返し、レスポンスは **{format}** として読み取られました。{count} 個の値が見つかりました。\n\n```\n{preview}\n```\n\nエンティティにする値を選択してください。適切なエンティティ種別、デバイスクラス、単位は自動的に推測され、あとから変更できます。この手順を省略して、後でエンティティを追加することもできます。",
         "data": {
-          "sensor_name": "センサー名",
-          "sensor_type": "センサータイプ"
+          "selected_values": "値"
+        },
+        "data_description": {
+          "selected_values": "一覧を検索するか、検出されなかったパスを手入力して追加してください。"
         }
       },
-      "sensor_config": {
-        "title": "センサー設定",
-        "description": "センサー設定を構成します。抽出方法（JSON/XPath/CSS/RegEx）はレスポンスのコンテンツタイプに基づいて自動検出されます。",
+      "reauth_confirm": {
+        "title": "再認証",
+        "description": "エンドポイントが \"{auth_type}\" プリセットに保存された認証情報を拒否しました。もう一度入力してください。",
         "data": {
-          "sensor_state": "状態セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
-          "sensor_icon": "アイコンセレクター（JSON/XPath/CSS/RegEx - 自動検出）",
-          "sensor_color": "色セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
-          "sensor_device_class": "デバイスクラス",
-          "sensor_unit": "測定単位",
-          "tracker_latitude": "緯度セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
-          "tracker_longitude": "経度セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
-          "tracker_location_name": "位置名セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
-          "tracker_source_type": "ソースタイプ"
+          "token": "Bearer トークン",
+          "api_key": "API キー",
+          "api_key_header": "API キーのヘッダー",
+          "username": "ユーザー名",
+          "password": "パスワード"
         }
       }
     },
     "error": {
-      "invalid_url": "無効な URL 形式",
-      "no_sensors": "少なくとも 1 つのセンサーを設定する必要があります"
+      "cannot_connect": "エンドポイントに接続できませんでした。URL、ネットワーク、タイムアウトを確認してください。",
+      "invalid_auth": "エンドポイントが認証情報を拒否しました (HTTP 401/403)。",
+      "invalid_url": "http または https スキームを含む完全な URL を入力してください。",
+      "invalid_headers": "各ヘッダーは 1 行に 1 つ、`名前: 値` の形式で記述してください。",
+      "bad_status": "エンドポイントがエラーのステータスコードを返しました。",
+      "no_values": "レスポンスが空であるか、読み取れる値が含まれていませんでした。"
     },
     "abort": {
-      "already_configured": "この HTTP エンドポイントは既に設定されています",
-      "no_sensors": "センサーは設定されていません"
+      "already_configured": "この URL とメソッドの組み合わせはすでに設定されています。",
+      "reauth_successful": "再認証に成功しました。",
+      "reconfigure_successful": "エンドポイントを更新しました。"
     }
   },
-  "options": {
-    "step": {
-      "init": {
-        "title": "HTTP Agent 設定",
-        "description": "編集する項目を選択",
-        "menu_options": {
-          "basic": "基本設定を編集（URL、メソッド、タイムアウト、間隔、SSL）",
-          "headers": "HTTP ヘッダーを編集",
-          "payload": "リクエストペイロードを編集",
-          "sensors": "センサー設定を編集"
+  "config_subentries": {
+    "sensor": {
+      "initiate_flow": {
+        "user": "センサーを追加",
+        "reconfigure": "センサーを編集"
+      },
+      "entry_type": "センサー",
+      "step": {
+        "user": {
+          "title": "センサーを追加",
+          "description": "直近のレスポンスから値を選ぶか、自分でパスを入力してください。",
+          "data": {
+            "name": "名前",
+            "value_path": "値"
+          },
+          "data_description": {
+            "name": "エンティティの名前。",
+            "value_path": "レスポンスから読み取るパス。"
+          },
+          "sections": {
+            "options": {
+              "name": "エンティティ設定",
+              "data": {
+                "device_class": "デバイスクラス",
+                "unit_of_measurement": "単位",
+                "state_class": "状態クラス",
+                "icon": "アイコン",
+                "attributes": "追加の属性"
+              },
+              "data_description": {
+                "device_class": "Home Assistant が値をどのように整形しグラフ化するかを決めます。",
+                "unit_of_measurement": "例: °C、%、kWh。",
+                "state_class": "長期統計にセンサーを含めるには 'Measurement' または 'Total increasing' を設定します。",
+                "icon": "デバイスクラスから導かれるアイコンを上書きします。",
+                "attributes": "1 行に 1 つ、`属性名: パス` の形式で記述します。"
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "センサーを編集",
+          "description": "直近のレスポンスから値を選ぶか、自分でパスを入力してください。",
+          "data": {
+            "name": "名前",
+            "value_path": "値"
+          },
+          "data_description": {
+            "name": "エンティティの名前。",
+            "value_path": "レスポンスから読み取るパス。"
+          },
+          "sections": {
+            "options": {
+              "name": "エンティティ設定",
+              "data": {
+                "device_class": "デバイスクラス",
+                "unit_of_measurement": "単位",
+                "state_class": "状態クラス",
+                "icon": "アイコン",
+                "attributes": "追加の属性"
+              },
+              "data_description": {
+                "device_class": "Home Assistant が値をどのように整形しグラフ化するかを決めます。",
+                "unit_of_measurement": "例: °C、%、kWh。",
+                "state_class": "長期統計にセンサーを含めるには 'Measurement' または 'Total increasing' を設定します。",
+                "icon": "デバイスクラスから導かれるアイコンを上書きします。",
+                "attributes": "1 行に 1 つ、`属性名: パス` の形式で記述します。"
+              }
+            }
+          }
         }
       },
-      "basic": {
-        "title": "基本設定",
-        "description": "URL、メソッド、タイムアウト、間隔、SSL 検証を編集",
-        "data": {
-          "url": "URL",
-          "method": "HTTP メソッド",
-          "timeout": "タイムアウト（秒）",
-          "interval": "更新間隔（秒）",
-          "retries": "エラー時に再試行",
-          "verify_ssl": "SSL 証明書を検証"
-        }
+      "error": {
+        "invalid_attributes": "各属性は 1 行に 1 つ、`属性名: パス` の形式で記述してください。"
       },
-      "headers": {
-        "title": "HTTP ヘッダー",
-        "description": "HTTP ヘッダーを編集\n\n現在のヘッダー:\n{headers}",
-        "menu_options": {
-          "add_header": "追加",
-          "clear_headers": "すべてクリア",
-          "headers_done": "変更を保存"
-        }
-      },
-      "add_header": {
-        "title": "HTTP ヘッダーを追加",
-        "description": "新しい HTTP ヘッダーを追加",
-        "data": {
-          "key": "ヘッダー名",
-          "value": "ヘッダー値"
-        }
-      },
-      "payload": {
-        "title": "HTTP ペイロード",
-        "description": "リクエストペイロードを編集",
-        "data": {
-          "content_type": "コンテンツタイプ",
-          "payload": "ペイロード（JSON/XML/テキスト）"
-        }
-      },
-      "sensors": {
-        "title": "センサー設定",
-        "description": "センサー設定を編集\n\n現在のセンサー:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "追加",
-          "select_sensor": "編集",
-          "clear_sensors": "すべてクリア",
-          "sensors_done": "変更を保存"
-        }
-      },
-      "select_sensor": {
-        "title": "センサーを選択",
-        "description": "編集または削除するセンサーを選択",
-        "data": {
-          "sensor": "センサー"
-        }
-      },
-      "edit_sensor": {
-        "title": "センサーを編集",
-        "description": "このセンサーに対して行う操作を選択:\n\n{sensor_info}",
-        "menu_options": {
-          "modify_sensor": "編集",
-          "delete_sensor": "削除",
-          "edit_back": "戻る"
-        }
-      },
-      "modify_sensor": {
-        "title": "センサーを変更",
-        "description": "センサー設定を編集します。抽出方法（JSON/XPath/CSS/RegEx）はレスポンスのコンテンツタイプに基づいて自動検出されます。",
-        "data": {
-          "sensor_name": "センサー名",
-          "sensor_state": "状態セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
-          "sensor_icon": "アイコンセレクター（JSON/XPath/CSS/RegEx - 自動検出）",
-          "sensor_color": "色セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
-          "sensor_device_class": "デバイスクラス",
-          "sensor_unit": "測定単位",
-          "tracker_latitude": "緯度セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
-          "tracker_longitude": "経度セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
-          "tracker_location_name": "位置名セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
-          "tracker_source_type": "ソースタイプ"
-        }
-      },
-      "add_sensor": {
-        "title": "センサーを追加",
-        "description": "センサータイプを選択し、名前を入力してください",
-        "data": {
-          "sensor_name": "センサー名",
-          "sensor_type": "センサータイプ"
-        }
-      },
-      "sensor_config": {
-        "title": "センサー設定",
-        "description": "センサー設定を構成します。抽出方法（JSON/XPath/CSS/RegEx）はレスポンスのコンテンツタイプに基づいて自動検出されます。",
-        "data": {
-          "sensor_state": "状態セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
-          "sensor_icon": "アイコンセレクター（JSON/XPath/CSS/RegEx - 自動検出）",
-          "sensor_color": "色セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
-          "sensor_device_class": "デバイスクラス",
-          "sensor_unit": "測定単位",
-          "tracker_latitude": "緯度セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
-          "tracker_longitude": "経度セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
-          "tracker_location_name": "位置名セレクター（JSON/XPath/CSS/RegEx - 自動検出）",
-          "tracker_source_type": "ソースタイプ"
-        }
+      "abort": {
+        "reconfigure_successful": "センサーを更新しました。"
       }
     },
-    "error": {
-      "invalid_url": "無効な URL 形式",
-      "no_sensors": "少なくとも 1 つのセンサーを設定する必要があります"
+    "binary_sensor": {
+      "initiate_flow": {
+        "user": "バイナリセンサーを追加",
+        "reconfigure": "バイナリセンサーを編集"
+      },
+      "entry_type": "バイナリセンサー",
+      "step": {
+        "user": {
+          "title": "バイナリセンサーを追加",
+          "description": "直近のレスポンスから値を選ぶか、自分でパスを入力してください。",
+          "data": {
+            "name": "名前",
+            "value_path": "値"
+          },
+          "data_description": {
+            "name": "エンティティの名前。",
+            "value_path": "レスポンスから読み取るパス。"
+          },
+          "sections": {
+            "options": {
+              "name": "エンティティ設定",
+              "data": {
+                "device_class": "デバイスクラス",
+                "payload_on": "オンを表す値",
+                "payload_off": "オフを表す値",
+                "icon": "アイコン",
+                "attributes": "追加の属性"
+              },
+              "data_description": {
+                "device_class": "オン／オフの表記とアイコンを決めます。",
+                "payload_on": "任意。'オン' を意味する正確な値。空欄にすると true/1/on/yes を自動判別します。",
+                "payload_off": "任意。'オフ' を意味する正確な値。",
+                "icon": "デバイスクラスから導かれるアイコンを上書きします。",
+                "attributes": "1 行に 1 つ、`属性名: パス` の形式で記述します。"
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "バイナリセンサーを編集",
+          "description": "直近のレスポンスから値を選ぶか、自分でパスを入力してください。",
+          "data": {
+            "name": "名前",
+            "value_path": "値"
+          },
+          "data_description": {
+            "name": "エンティティの名前。",
+            "value_path": "レスポンスから読み取るパス。"
+          },
+          "sections": {
+            "options": {
+              "name": "エンティティ設定",
+              "data": {
+                "device_class": "デバイスクラス",
+                "payload_on": "オンを表す値",
+                "payload_off": "オフを表す値",
+                "icon": "アイコン",
+                "attributes": "追加の属性"
+              },
+              "data_description": {
+                "device_class": "オン／オフの表記とアイコンを決めます。",
+                "payload_on": "任意。'オン' を意味する正確な値。空欄にすると true/1/on/yes を自動判別します。",
+                "payload_off": "任意。'オフ' を意味する正確な値。",
+                "icon": "デバイスクラスから導かれるアイコンを上書きします。",
+                "attributes": "1 行に 1 つ、`属性名: パス` の形式で記述します。"
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "各属性は 1 行に 1 つ、`属性名: パス` の形式で記述してください。"
+      },
+      "abort": {
+        "reconfigure_successful": "バイナリセンサーを更新しました。"
+      }
     },
-    "abort": {
-      "no_sensors": "センサーは設定されていません"
+    "device_tracker": {
+      "initiate_flow": {
+        "user": "デバイストラッカーを追加",
+        "reconfigure": "デバイストラッカーを編集"
+      },
+      "entry_type": "デバイストラッカー",
+      "step": {
+        "user": {
+          "title": "デバイストラッカーを追加",
+          "description": "直近のレスポンスから緯度と経度の値を選択してください。",
+          "data": {
+            "name": "名前",
+            "latitude_path": "緯度",
+            "longitude_path": "経度"
+          },
+          "data_description": {
+            "name": "エンティティの名前。",
+            "latitude_path": "緯度の値へのパス。",
+            "longitude_path": "経度の値へのパス。"
+          },
+          "sections": {
+            "options": {
+              "name": "エンティティ設定",
+              "data": {
+                "gps_accuracy_path": "GPS 精度",
+                "source_type": "ソース種別",
+                "icon": "アイコン",
+                "attributes": "追加の属性"
+              },
+              "data_description": {
+                "gps_accuracy_path": "任意。メートル単位の精度。",
+                "source_type": "位置をどのように判定するか。",
+                "icon": "既定のアイコンを上書きします。",
+                "attributes": "1 行に 1 つ、`属性名: パス` の形式で記述します。"
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "デバイストラッカーを編集",
+          "description": "直近のレスポンスから緯度と経度の値を選択してください。",
+          "data": {
+            "name": "名前",
+            "latitude_path": "緯度",
+            "longitude_path": "経度"
+          },
+          "data_description": {
+            "name": "エンティティの名前。",
+            "latitude_path": "緯度の値へのパス。",
+            "longitude_path": "経度の値へのパス。"
+          },
+          "sections": {
+            "options": {
+              "name": "エンティティ設定",
+              "data": {
+                "gps_accuracy_path": "GPS 精度",
+                "source_type": "ソース種別",
+                "icon": "アイコン",
+                "attributes": "追加の属性"
+              },
+              "data_description": {
+                "gps_accuracy_path": "任意。メートル単位の精度。",
+                "source_type": "位置をどのように判定するか。",
+                "icon": "既定のアイコンを上書きします。",
+                "attributes": "1 行に 1 つ、`属性名: パス` の形式で記述します。"
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "各属性は 1 行に 1 つ、`属性名: パス` の形式で記述してください。"
+      },
+      "abort": {
+        "reconfigure_successful": "デバイストラッカーを更新しました。"
+      }
     }
   },
-  "selector": {
-    "sensor_type": {
-      "options": {
-        "sensor": "センサー",
-        "binary_sensor": "バイナリセンサー",
-        "number": "数値",
-        "device_tracker": "デバイストラッカー"
-      }
+  "exceptions": {
+    "cannot_connect": {
+      "message": "エンドポイントに接続できませんでした: {error}"
     },
-    "tracker_source_type": {
-      "options": {
-        "none": "なし（デフォルト）",
-        "gps": "GPS",
-        "router": "ルーター",
-        "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE"
-      }
+    "invalid_auth": {
+      "message": "エンドポイントが保存された認証情報を拒否しました。"
+    },
+    "bad_status": {
+      "message": "エンドポイントは HTTP {status} を返しました。"
+    },
+    "empty_response": {
+      "message": "エンドポイントは空のボディを返しました。"
     }
   }
 }

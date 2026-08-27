@@ -1,223 +1,357 @@
 {
+  "title": "HTTP Agent",
   "config": {
     "step": {
       "user": {
-        "title": "Configuration de HTTP Agent",
-        "description": "Configurer le point de terminaison HTTP",
+        "title": "Se connecter à un point de terminaison",
+        "description": "Pointez HTTP Agent vers n'importe quel point de terminaison HTTP. Après les étapes suivantes, le point de terminaison est appelé une fois afin que vous puissiez choisir les valeurs à transformer en entités.",
         "data": {
           "url": "URL",
-          "method": "Méthode HTTP",
-          "timeout": "Délai d'expiration (secondes)",
-          "interval": "Intervalle de mise à jour (secondes)",
-          "retries": "Nouvelles tentatives en cas d'erreur",
-          "verify_ssl": "Vérifier le certificat SSL"
+          "method": "Méthode",
+          "auth_type": "Authentification",
+          "name": "Nom"
+        },
+        "data_description": {
+          "url": "URL complète du point de terminaison. Les modèles Home Assistant sont pris en charge.",
+          "method": "Méthode HTTP utilisée à chaque relève.",
+          "auth_type": "Choisissez un profil d'authentification prêt à l'emploi, ou 'None' et ajoutez vos propres en-têtes ci-dessous.",
+          "name": "Facultatif. Par défaut, le nom d'hôte de l'URL."
+        },
+        "sections": {
+          "advanced": {
+            "name": "Paramètres avancés",
+            "data": {
+              "scan_interval": "Intervalle de mise à jour",
+              "timeout": "Délai d'expiration de la requête",
+              "retries": "Nouvelles tentatives en cas d'erreur",
+              "extra_headers": "En-têtes supplémentaires",
+              "response_format": "Format de réponse",
+              "verify_ssl": "Vérifier le certificat SSL",
+              "follow_redirects": "Suivre les redirections"
+            },
+            "data_description": {
+              "scan_interval": "Fréquence de relève du point de terminaison, en secondes.",
+              "timeout": "Durée d'attente d'une réponse, en secondes.",
+              "retries": "Nombre de tentatives supplémentaires en cas d'échec d'une relève, avec une seconde entre chaque tentative.",
+              "extra_headers": "Un en-tête par ligne, écrit sous la forme `Nom : valeur`. Les modèles sont pris en charge.",
+              "response_format": "Laissez sur 'Auto' pour détecter automatiquement JSON, XML, HTML ou texte brut.",
+              "verify_ssl": "À désactiver uniquement pour les points de terminaison avec un certificat auto-signé.",
+              "follow_redirects": "Suivre automatiquement les redirections HTTP 3xx."
+            }
+          }
         }
       },
-      "headers": {
-        "title": "En-têtes HTTP",
-        "description": "Configurer les en-têtes HTTP\n\nEn-têtes actuels :\n{headers}",
-        "menu_options": {
-          "add_header": "Ajouter",
-          "headers_done": "Terminé"
-        }
-      },
-      "add_header": {
-        "title": "Ajouter un en-tête HTTP",
-        "description": "Ajouter un nouvel en-tête HTTP",
+      "credentials": {
+        "title": "Authentification",
+        "description": "Saisissez les identifiants du profil \"{auth_type}\". Ils sont stockés chiffrés et ne sont jamais affichés dans les journaux ni les diagnostics.",
         "data": {
-          "key": "Nom de l'en-tête",
-          "value": "Valeur de l'en-tête"
+          "token": "Jeton Bearer",
+          "api_key": "Clé d'API",
+          "api_key_header": "En-tête de la clé d'API",
+          "username": "Nom d'utilisateur",
+          "password": "Mot de passe"
+        },
+        "data_description": {
+          "token": "Envoyé sous forme d'en-tête `Authorization: Bearer`.",
+          "api_key": "La valeur de la clé elle-même.",
+          "api_key_header": "L'en-tête dans lequel la clé est envoyée, par exemple `X-API-Key`.",
+          "username": "Nom d'utilisateur pour l'authentification HTTP basic.",
+          "password": "Mot de passe pour l'authentification HTTP basic."
         }
       },
-      "payload": {
-        "title": "Charge utile HTTP",
-        "description": "Configurer la charge utile de la requête",
+      "body": {
+        "title": "Corps de la requête",
+        "description": "Les requêtes {method} peuvent envoyer un corps. Laissez-le vide si le point de terminaison n'en a pas besoin.",
         "data": {
           "content_type": "Type de contenu",
-          "payload": "Charge utile (JSON/XML/Texte)"
+          "payload": "Corps"
+        },
+        "data_description": {
+          "content_type": "Envoyé comme en-tête `Content-Type`.",
+          "payload": "Le corps de la requête. Les modèles Home Assistant sont pris en charge."
         }
       },
-      "sensors": {
-        "title": "Configuration des capteurs",
-        "description": "Configurer les capteurs pour extraire des données\n\nCapteurs actuels :\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Ajouter",
-          "sensors_done": "Terminé"
-        }
-      },
-      "add_sensor": {
-        "title": "Ajouter un capteur",
-        "description": "Choisissez le type de capteur et indiquez un nom",
+      "select_values": {
+        "title": "Choisissez les valeurs souhaitées",
+        "description": "Le point de terminaison a répondu HTTP {status} et a été lu comme **{format}**. {count} valeurs ont été trouvées.\n\n```\n{preview}\n```\n\nChoisissez les valeurs qui doivent devenir des entités. Les types d'entité, classes d'appareil et unités pertinents sont devinés automatiquement et peuvent être modifiés ensuite. Vous pouvez aussi ignorer cette étape et ajouter des entités plus tard.",
         "data": {
-          "sensor_name": "Nom du capteur",
-          "sensor_type": "Type de capteur"
+          "selected_values": "Valeurs"
+        },
+        "data_description": {
+          "selected_values": "Recherchez dans la liste, ou saisissez un chemin manuellement pour en ajouter un qui n'a pas été détecté."
         }
       },
-      "sensor_config": {
-        "title": "Configuration du capteur",
-        "description": "Configurez les paramètres du capteur. La méthode d'extraction (JSON/XPath/CSS/RegEx) sera détectée automatiquement selon le type de contenu de la réponse.",
+      "reauth_confirm": {
+        "title": "Se réauthentifier",
+        "description": "Le point de terminaison a rejeté les identifiants enregistrés du profil \"{auth_type}\". Saisissez-les à nouveau.",
         "data": {
-          "sensor_state": "Sélecteur d'état (JSON/XPath/CSS/RegEx - détection automatique)",
-          "sensor_icon": "Sélecteur d'icône (JSON/XPath/CSS/RegEx - détection automatique)",
-          "sensor_color": "Sélecteur de couleur (JSON/XPath/CSS/RegEx - détection automatique)",
-          "sensor_device_class": "Classe d'appareil",
-          "sensor_unit": "Unité de mesure",
-          "tracker_latitude": "Sélecteur de latitude (JSON/XPath/CSS/RegEx - détection automatique)",
-          "tracker_longitude": "Sélecteur de longitude (JSON/XPath/CSS/RegEx - détection automatique)",
-          "tracker_location_name": "Sélecteur de nom d'emplacement (JSON/XPath/CSS/RegEx - détection automatique)",
-          "tracker_source_type": "Type de source"
+          "token": "Jeton Bearer",
+          "api_key": "Clé d'API",
+          "api_key_header": "En-tête de la clé d'API",
+          "username": "Nom d'utilisateur",
+          "password": "Mot de passe"
         }
       }
     },
     "error": {
-      "invalid_url": "Format d'URL invalide",
-      "no_sensors": "Au moins un capteur doit être configuré"
+      "cannot_connect": "Impossible de joindre le point de terminaison. Vérifiez l'URL, votre réseau et le délai d'expiration.",
+      "invalid_auth": "Le point de terminaison a rejeté les identifiants (HTTP 401/403).",
+      "invalid_url": "Saisissez une URL complète, avec le schéma http ou https.",
+      "invalid_headers": "Chaque en-tête doit être écrit sous la forme `Nom : valeur` sur sa propre ligne.",
+      "bad_status": "Le point de terminaison a répondu avec un code d'état d'erreur.",
+      "no_values": "La réponse était vide ou ne contenait aucune valeur lisible."
     },
     "abort": {
-      "already_configured": "Ce point de terminaison HTTP est déjà configuré",
-      "no_sensors": "Aucun capteur n'a été configuré"
+      "already_configured": "Cette combinaison d'URL et de méthode est déjà configurée.",
+      "reauth_successful": "La réauthentification a réussi.",
+      "reconfigure_successful": "Le point de terminaison a été mis à jour."
     }
   },
-  "options": {
-    "step": {
-      "init": {
-        "title": "Configuration de HTTP Agent",
-        "description": "Choisissez ce que vous voulez modifier",
-        "menu_options": {
-          "basic": "Modifier les paramètres de base (URL, méthode, délai, intervalle, SSL)",
-          "headers": "Modifier les en-têtes HTTP",
-          "payload": "Modifier la charge utile de la requête",
-          "sensors": "Modifier la configuration des capteurs"
+  "config_subentries": {
+    "sensor": {
+      "initiate_flow": {
+        "user": "Ajouter un capteur",
+        "reconfigure": "Modifier le capteur"
+      },
+      "entry_type": "Capteur",
+      "step": {
+        "user": {
+          "title": "Ajouter un capteur",
+          "description": "Choisissez une valeur dans la dernière réponse, ou saisissez vous-même un chemin.",
+          "data": {
+            "name": "Nom",
+            "value_path": "Valeur"
+          },
+          "data_description": {
+            "name": "Le nom de l'entité.",
+            "value_path": "Le chemin à lire dans la réponse."
+          },
+          "sections": {
+            "options": {
+              "name": "Paramètres de l'entité",
+              "data": {
+                "device_class": "Classe d'appareil",
+                "unit_of_measurement": "Unité de mesure",
+                "state_class": "Classe d'état",
+                "icon": "Icône",
+                "attributes": "Attributs supplémentaires"
+              },
+              "data_description": {
+                "device_class": "Détermine la façon dont Home Assistant met en forme et représente la valeur.",
+                "unit_of_measurement": "Par exemple °C, %, kWh.",
+                "state_class": "Réglez sur 'Measurement' ou 'Total increasing' pour inclure le capteur dans les statistiques de long terme.",
+                "icon": "Remplace l'icône dérivée de la classe d'appareil.",
+                "attributes": "Un par ligne, écrit sous la forme `Nom d'attribut : chemin`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Modifier le capteur",
+          "description": "Choisissez une valeur dans la dernière réponse, ou saisissez vous-même un chemin.",
+          "data": {
+            "name": "Nom",
+            "value_path": "Valeur"
+          },
+          "data_description": {
+            "name": "Le nom de l'entité.",
+            "value_path": "Le chemin à lire dans la réponse."
+          },
+          "sections": {
+            "options": {
+              "name": "Paramètres de l'entité",
+              "data": {
+                "device_class": "Classe d'appareil",
+                "unit_of_measurement": "Unité de mesure",
+                "state_class": "Classe d'état",
+                "icon": "Icône",
+                "attributes": "Attributs supplémentaires"
+              },
+              "data_description": {
+                "device_class": "Détermine la façon dont Home Assistant met en forme et représente la valeur.",
+                "unit_of_measurement": "Par exemple °C, %, kWh.",
+                "state_class": "Réglez sur 'Measurement' ou 'Total increasing' pour inclure le capteur dans les statistiques de long terme.",
+                "icon": "Remplace l'icône dérivée de la classe d'appareil.",
+                "attributes": "Un par ligne, écrit sous la forme `Nom d'attribut : chemin`."
+              }
+            }
+          }
         }
       },
-      "basic": {
-        "title": "Paramètres de base",
-        "description": "Modifier l'URL, la méthode, le délai d'expiration, l'intervalle et la vérification SSL",
-        "data": {
-          "url": "URL",
-          "method": "Méthode HTTP",
-          "timeout": "Délai d'expiration (secondes)",
-          "interval": "Intervalle de mise à jour (secondes)",
-          "retries": "Nouvelles tentatives en cas d'erreur",
-          "verify_ssl": "Vérifier le certificat SSL"
-        }
+      "error": {
+        "invalid_attributes": "Chaque attribut doit être écrit sous la forme `Nom d'attribut : chemin` sur sa propre ligne."
       },
-      "headers": {
-        "title": "En-têtes HTTP",
-        "description": "Modifier les en-têtes HTTP\n\nEn-têtes actuels :\n{headers}",
-        "menu_options": {
-          "add_header": "Ajouter",
-          "clear_headers": "Tout effacer",
-          "headers_done": "Enregistrer les modifications"
-        }
-      },
-      "add_header": {
-        "title": "Ajouter un en-tête HTTP",
-        "description": "Ajouter un nouvel en-tête HTTP",
-        "data": {
-          "key": "Nom de l'en-tête",
-          "value": "Valeur de l'en-tête"
-        }
-      },
-      "payload": {
-        "title": "Charge utile HTTP",
-        "description": "Modifier la charge utile de la requête",
-        "data": {
-          "content_type": "Type de contenu",
-          "payload": "Charge utile (JSON/XML/Texte)"
-        }
-      },
-      "sensors": {
-        "title": "Configuration des capteurs",
-        "description": "Modifier la configuration des capteurs\n\nCapteurs actuels :\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Ajouter",
-          "select_sensor": "Modifier",
-          "clear_sensors": "Tout effacer",
-          "sensors_done": "Enregistrer les modifications"
-        }
-      },
-      "select_sensor": {
-        "title": "Sélectionner un capteur",
-        "description": "Choisissez un capteur à modifier ou à supprimer",
-        "data": {
-          "sensor": "Capteur"
-        }
-      },
-      "edit_sensor": {
-        "title": "Modifier le capteur",
-        "description": "Choisissez quoi faire avec ce capteur :\n\n{sensor_info}",
-        "menu_options": {
-          "modify_sensor": "Modifier",
-          "delete_sensor": "Supprimer",
-          "edit_back": "Retour"
-        }
-      },
-      "modify_sensor": {
-        "title": "Modifier le capteur",
-        "description": "Modifiez la configuration du capteur. La méthode d'extraction (JSON/XPath/CSS/RegEx) sera détectée automatiquement selon le type de contenu de la réponse.",
-        "data": {
-          "sensor_name": "Nom du capteur",
-          "sensor_state": "Sélecteur d'état (JSON/XPath/CSS/RegEx - détection automatique)",
-          "sensor_icon": "Sélecteur d'icône (JSON/XPath/CSS/RegEx - détection automatique)",
-          "sensor_color": "Sélecteur de couleur (JSON/XPath/CSS/RegEx - détection automatique)",
-          "sensor_device_class": "Classe d'appareil",
-          "sensor_unit": "Unité de mesure",
-          "tracker_latitude": "Sélecteur de latitude (JSON/XPath/CSS/RegEx - détection automatique)",
-          "tracker_longitude": "Sélecteur de longitude (JSON/XPath/CSS/RegEx - détection automatique)",
-          "tracker_location_name": "Sélecteur de nom d'emplacement (JSON/XPath/CSS/RegEx - détection automatique)",
-          "tracker_source_type": "Type de source"
-        }
-      },
-      "add_sensor": {
-        "title": "Ajouter un capteur",
-        "description": "Choisissez le type de capteur et indiquez un nom",
-        "data": {
-          "sensor_name": "Nom du capteur",
-          "sensor_type": "Type de capteur"
-        }
-      },
-      "sensor_config": {
-        "title": "Configuration du capteur",
-        "description": "Configurez les paramètres du capteur. La méthode d'extraction (JSON/XPath/CSS/RegEx) sera détectée automatiquement selon le type de contenu de la réponse.",
-        "data": {
-          "sensor_state": "Sélecteur d'état (JSON/XPath/CSS/RegEx - détection automatique)",
-          "sensor_icon": "Sélecteur d'icône (JSON/XPath/CSS/RegEx - détection automatique)",
-          "sensor_color": "Sélecteur de couleur (JSON/XPath/CSS/RegEx - détection automatique)",
-          "sensor_device_class": "Classe d'appareil",
-          "sensor_unit": "Unité de mesure",
-          "tracker_latitude": "Sélecteur de latitude (JSON/XPath/CSS/RegEx - détection automatique)",
-          "tracker_longitude": "Sélecteur de longitude (JSON/XPath/CSS/RegEx - détection automatique)",
-          "tracker_location_name": "Sélecteur de nom d'emplacement (JSON/XPath/CSS/RegEx - détection automatique)",
-          "tracker_source_type": "Type de source"
-        }
+      "abort": {
+        "reconfigure_successful": "Le capteur a été mis à jour."
       }
     },
-    "error": {
-      "invalid_url": "Format d'URL invalide",
-      "no_sensors": "Au moins un capteur doit être configuré"
+    "binary_sensor": {
+      "initiate_flow": {
+        "user": "Ajouter un capteur binaire",
+        "reconfigure": "Modifier le capteur binaire"
+      },
+      "entry_type": "Capteur binaire",
+      "step": {
+        "user": {
+          "title": "Ajouter un capteur binaire",
+          "description": "Choisissez une valeur dans la dernière réponse, ou saisissez vous-même un chemin.",
+          "data": {
+            "name": "Nom",
+            "value_path": "Valeur"
+          },
+          "data_description": {
+            "name": "Le nom de l'entité.",
+            "value_path": "Le chemin à lire dans la réponse."
+          },
+          "sections": {
+            "options": {
+              "name": "Paramètres de l'entité",
+              "data": {
+                "device_class": "Classe d'appareil",
+                "payload_on": "Valeur pour activé",
+                "payload_off": "Valeur pour désactivé",
+                "icon": "Icône",
+                "attributes": "Attributs supplémentaires"
+              },
+              "data_description": {
+                "device_class": "Détermine le libellé et l'icône activé/désactivé.",
+                "payload_on": "Facultatif. La valeur exacte signifiant 'activé'. Laissez vide pour détecter automatiquement true/1/on/yes.",
+                "payload_off": "Facultatif. La valeur exacte signifiant 'désactivé'.",
+                "icon": "Remplace l'icône dérivée de la classe d'appareil.",
+                "attributes": "Un par ligne, écrit sous la forme `Nom d'attribut : chemin`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Modifier le capteur binaire",
+          "description": "Choisissez une valeur dans la dernière réponse, ou saisissez vous-même un chemin.",
+          "data": {
+            "name": "Nom",
+            "value_path": "Valeur"
+          },
+          "data_description": {
+            "name": "Le nom de l'entité.",
+            "value_path": "Le chemin à lire dans la réponse."
+          },
+          "sections": {
+            "options": {
+              "name": "Paramètres de l'entité",
+              "data": {
+                "device_class": "Classe d'appareil",
+                "payload_on": "Valeur pour activé",
+                "payload_off": "Valeur pour désactivé",
+                "icon": "Icône",
+                "attributes": "Attributs supplémentaires"
+              },
+              "data_description": {
+                "device_class": "Détermine le libellé et l'icône activé/désactivé.",
+                "payload_on": "Facultatif. La valeur exacte signifiant 'activé'. Laissez vide pour détecter automatiquement true/1/on/yes.",
+                "payload_off": "Facultatif. La valeur exacte signifiant 'désactivé'.",
+                "icon": "Remplace l'icône dérivée de la classe d'appareil.",
+                "attributes": "Un par ligne, écrit sous la forme `Nom d'attribut : chemin`."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Chaque attribut doit être écrit sous la forme `Nom d'attribut : chemin` sur sa propre ligne."
+      },
+      "abort": {
+        "reconfigure_successful": "Le capteur binaire a été mis à jour."
+      }
     },
-    "abort": {
-      "no_sensors": "Aucun capteur n'a été configuré"
+    "device_tracker": {
+      "initiate_flow": {
+        "user": "Ajouter un traceur d'appareil",
+        "reconfigure": "Modifier le traceur d'appareil"
+      },
+      "entry_type": "Traceur d'appareil",
+      "step": {
+        "user": {
+          "title": "Ajouter un traceur d'appareil",
+          "description": "Choisissez les valeurs de latitude et de longitude dans la dernière réponse.",
+          "data": {
+            "name": "Nom",
+            "latitude_path": "Latitude",
+            "longitude_path": "Longitude"
+          },
+          "data_description": {
+            "name": "Le nom de l'entité.",
+            "latitude_path": "Le chemin vers la valeur de latitude.",
+            "longitude_path": "Le chemin vers la valeur de longitude."
+          },
+          "sections": {
+            "options": {
+              "name": "Paramètres de l'entité",
+              "data": {
+                "gps_accuracy_path": "Précision GPS",
+                "source_type": "Type de source",
+                "icon": "Icône",
+                "attributes": "Attributs supplémentaires"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Facultatif. La précision en mètres.",
+                "source_type": "Comment la position est déterminée.",
+                "icon": "Remplace l'icône par défaut.",
+                "attributes": "Un par ligne, écrit sous la forme `Nom d'attribut : chemin`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Modifier le traceur d'appareil",
+          "description": "Choisissez les valeurs de latitude et de longitude dans la dernière réponse.",
+          "data": {
+            "name": "Nom",
+            "latitude_path": "Latitude",
+            "longitude_path": "Longitude"
+          },
+          "data_description": {
+            "name": "Le nom de l'entité.",
+            "latitude_path": "Le chemin vers la valeur de latitude.",
+            "longitude_path": "Le chemin vers la valeur de longitude."
+          },
+          "sections": {
+            "options": {
+              "name": "Paramètres de l'entité",
+              "data": {
+                "gps_accuracy_path": "Précision GPS",
+                "source_type": "Type de source",
+                "icon": "Icône",
+                "attributes": "Attributs supplémentaires"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Facultatif. La précision en mètres.",
+                "source_type": "Comment la position est déterminée.",
+                "icon": "Remplace l'icône par défaut.",
+                "attributes": "Un par ligne, écrit sous la forme `Nom d'attribut : chemin`."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Chaque attribut doit être écrit sous la forme `Nom d'attribut : chemin` sur sa propre ligne."
+      },
+      "abort": {
+        "reconfigure_successful": "Le traceur d'appareil a été mis à jour."
+      }
     }
   },
-  "selector": {
-    "sensor_type": {
-      "options": {
-        "sensor": "Capteur",
-        "binary_sensor": "Capteur binaire",
-        "number": "Nombre",
-        "device_tracker": "Suivi d'appareil"
-      }
+  "exceptions": {
+    "cannot_connect": {
+      "message": "Impossible de joindre le point de terminaison : {error}"
     },
-    "tracker_source_type": {
-      "options": {
-        "none": "Aucun (par défaut)",
-        "gps": "GPS",
-        "router": "Routeur",
-        "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE"
-      }
+    "invalid_auth": {
+      "message": "Le point de terminaison a rejeté les identifiants enregistrés."
+    },
+    "bad_status": {
+      "message": "Le point de terminaison a répondu HTTP {status}."
+    },
+    "empty_response": {
+      "message": "Le point de terminaison a répondu avec un corps vide."
     }
   }
 }

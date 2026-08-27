@@ -1,223 +1,357 @@
 {
+  "title": "HTTP Agent",
   "config": {
     "step": {
       "user": {
-        "title": "HTTP Agent 設定",
-        "description": "設定 HTTP 端點",
+        "title": "連線到端點",
+        "description": "將 HTTP Agent 指向任意 HTTP 端點。完成後續步驟後會呼叫端點一次，讓你挑選想要成為實體的值。",
         "data": {
           "url": "URL",
-          "method": "HTTP 方法",
-          "timeout": "逾時（秒）",
-          "interval": "更新間隔（秒）",
-          "retries": "發生錯誤時重試",
-          "verify_ssl": "驗證 SSL 憑證"
+          "method": "方法",
+          "auth_type": "驗證",
+          "name": "名稱"
+        },
+        "data_description": {
+          "url": "端點的完整 URL。支援 Home Assistant 範本。",
+          "method": "每次輪詢使用的 HTTP 方法。",
+          "auth_type": "選擇現成的驗證預設，或選擇 'None' 並在下方加入自訂標頭。",
+          "name": "選填。預設為 URL 的主機名稱。"
+        },
+        "sections": {
+          "advanced": {
+            "name": "進階設定",
+            "data": {
+              "scan_interval": "更新間隔",
+              "timeout": "請求逾時",
+              "retries": "發生錯誤時的重試次數",
+              "extra_headers": "額外標頭",
+              "response_format": "回應格式",
+              "verify_ssl": "驗證 SSL 憑證",
+              "follow_redirects": "跟隨重新導向"
+            },
+            "data_description": {
+              "scan_interval": "輪詢端點的頻率（秒）。",
+              "timeout": "等待回應的時間（秒）。",
+              "retries": "輪詢失敗時額外嘗試的次數，每次嘗試間隔一秒。",
+              "extra_headers": "每行一個標頭，格式為 `名稱: 值`。支援範本。",
+              "response_format": "保持為 'Auto' 可自動辨識 JSON、XML、HTML 或純文字。",
+              "verify_ssl": "僅在端點使用自簽憑證時關閉。",
+              "follow_redirects": "自動跟隨 HTTP 3xx 重新導向。"
+            }
+          }
         }
       },
-      "headers": {
-        "title": "HTTP 標頭",
-        "description": "設定 HTTP 標頭\n\n目前標頭：\n{headers}",
-        "menu_options": {
-          "add_header": "新增",
-          "headers_done": "完成"
-        }
-      },
-      "add_header": {
-        "title": "新增 HTTP 標頭",
-        "description": "新增 HTTP 標頭",
+      "credentials": {
+        "title": "驗證",
+        "description": "請輸入 \"{auth_type}\" 預設的憑證。憑證會加密儲存，且絕不會出現在記錄或診斷資訊中。",
         "data": {
-          "key": "標頭名稱",
-          "value": "標頭值"
+          "token": "Bearer 權杖",
+          "api_key": "API 金鑰",
+          "api_key_header": "API 金鑰標頭",
+          "username": "使用者名稱",
+          "password": "密碼"
+        },
+        "data_description": {
+          "token": "以 `Authorization: Bearer` 標頭傳送。",
+          "api_key": "金鑰值本身。",
+          "api_key_header": "傳送金鑰所用的標頭，例如 `X-API-Key`。",
+          "username": "HTTP basic 驗證的使用者名稱。",
+          "password": "HTTP basic 驗證的密碼。"
         }
       },
-      "payload": {
-        "title": "HTTP 負載",
-        "description": "設定請求負載",
+      "body": {
+        "title": "請求內容",
+        "description": "{method} 請求可以傳送內容。若端點不需要，請留空。",
         "data": {
           "content_type": "內容類型",
-          "payload": "負載（JSON/XML/文字）"
+          "payload": "內容"
+        },
+        "data_description": {
+          "content_type": "以 `Content-Type` 標頭傳送。",
+          "payload": "請求的內容。支援 Home Assistant 範本。"
         }
       },
-      "sensors": {
-        "title": "感測器設定",
-        "description": "設定感測器以擷取資料\n\n目前感測器：\n{sensors}",
-        "menu_options": {
-          "add_sensor": "新增",
-          "sensors_done": "完成"
-        }
-      },
-      "add_sensor": {
-        "title": "新增感測器",
-        "description": "選擇感測器類型並提供名稱",
+      "select_values": {
+        "title": "挑選你需要的值",
+        "description": "端點回應了 HTTP {status}，回應被解析為 **{format}**。共找到 {count} 個值。\n\n```\n{preview}\n```\n\n請挑選要變成實體的值。合適的實體類型、裝置類別與單位會自動推斷，之後可以隨時修改。你也可以略過此步驟，稍後再新增實體。",
         "data": {
-          "sensor_name": "感測器名稱",
-          "sensor_type": "感測器類型"
+          "selected_values": "值"
+        },
+        "data_description": {
+          "selected_values": "在清單中搜尋，或手動輸入路徑以新增未被偵測到的值。"
         }
       },
-      "sensor_config": {
-        "title": "感測器設定",
-        "description": "設定感測器參數。擷取方法（JSON/XPath/CSS/RegEx）會根據回應內容類型自動偵測。",
+      "reauth_confirm": {
+        "title": "重新驗證",
+        "description": "端點拒絕了 \"{auth_type}\" 預設中儲存的憑證。請重新輸入。",
         "data": {
-          "sensor_state": "狀態選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
-          "sensor_icon": "圖示選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
-          "sensor_color": "顏色選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
-          "sensor_device_class": "裝置類別",
-          "sensor_unit": "計量單位",
-          "tracker_latitude": "緯度選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
-          "tracker_longitude": "經度選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
-          "tracker_location_name": "位置名稱選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
-          "tracker_source_type": "來源類型"
+          "token": "Bearer 權杖",
+          "api_key": "API 金鑰",
+          "api_key_header": "API 金鑰標頭",
+          "username": "使用者名稱",
+          "password": "密碼"
         }
       }
     },
     "error": {
-      "invalid_url": "URL 格式無效",
-      "no_sensors": "至少必須設定一個感測器"
+      "cannot_connect": "無法連線到端點。請檢查 URL、網路與逾時設定。",
+      "invalid_auth": "端點拒絕了憑證 (HTTP 401/403)。",
+      "invalid_url": "請輸入包含 http 或 https 通訊協定的完整 URL。",
+      "invalid_headers": "每個標頭必須單獨一行，格式為 `名稱: 值`。",
+      "bad_status": "端點回應了錯誤狀態碼。",
+      "no_values": "回應為空，或不包含可讀取的值。"
     },
     "abort": {
-      "already_configured": "此 HTTP 端點已設定",
-      "no_sensors": "未設定任何感測器"
+      "already_configured": "此 URL 與方法的組合已設定過。",
+      "reauth_successful": "重新驗證成功。",
+      "reconfigure_successful": "端點已更新。"
     }
   },
-  "options": {
-    "step": {
-      "init": {
-        "title": "HTTP Agent 設定",
-        "description": "選擇要編輯的內容",
-        "menu_options": {
-          "basic": "編輯基本設定（URL、方法、逾時、間隔、SSL）",
-          "headers": "編輯 HTTP 標頭",
-          "payload": "編輯請求負載",
-          "sensors": "編輯感測器設定"
+  "config_subentries": {
+    "sensor": {
+      "initiate_flow": {
+        "user": "新增感測器",
+        "reconfigure": "編輯感測器"
+      },
+      "entry_type": "感測器",
+      "step": {
+        "user": {
+          "title": "新增感測器",
+          "description": "從最近一次回應中挑選一個值，或自行輸入路徑。",
+          "data": {
+            "name": "名稱",
+            "value_path": "值"
+          },
+          "data_description": {
+            "name": "實體的名稱。",
+            "value_path": "要從回應中讀取的路徑。"
+          },
+          "sections": {
+            "options": {
+              "name": "實體設定",
+              "data": {
+                "device_class": "裝置類別",
+                "unit_of_measurement": "測量單位",
+                "state_class": "狀態類別",
+                "icon": "圖示",
+                "attributes": "額外屬性"
+              },
+              "data_description": {
+                "device_class": "決定 Home Assistant 如何格式化該值並繪製圖表。",
+                "unit_of_measurement": "例如 °C、%、kWh。",
+                "state_class": "設為 'Measurement' 或 'Total increasing' 可將感測器納入長期統計。",
+                "icon": "覆寫由裝置類別推導出的圖示。",
+                "attributes": "每行一個，格式為 `屬性名稱: 路徑`。"
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "編輯感測器",
+          "description": "從最近一次回應中挑選一個值，或自行輸入路徑。",
+          "data": {
+            "name": "名稱",
+            "value_path": "值"
+          },
+          "data_description": {
+            "name": "實體的名稱。",
+            "value_path": "要從回應中讀取的路徑。"
+          },
+          "sections": {
+            "options": {
+              "name": "實體設定",
+              "data": {
+                "device_class": "裝置類別",
+                "unit_of_measurement": "測量單位",
+                "state_class": "狀態類別",
+                "icon": "圖示",
+                "attributes": "額外屬性"
+              },
+              "data_description": {
+                "device_class": "決定 Home Assistant 如何格式化該值並繪製圖表。",
+                "unit_of_measurement": "例如 °C、%、kWh。",
+                "state_class": "設為 'Measurement' 或 'Total increasing' 可將感測器納入長期統計。",
+                "icon": "覆寫由裝置類別推導出的圖示。",
+                "attributes": "每行一個，格式為 `屬性名稱: 路徑`。"
+              }
+            }
+          }
         }
       },
-      "basic": {
-        "title": "基本設定",
-        "description": "編輯 URL、方法、逾時、間隔與 SSL 驗證",
-        "data": {
-          "url": "URL",
-          "method": "HTTP 方法",
-          "timeout": "逾時（秒）",
-          "interval": "更新間隔（秒）",
-          "retries": "發生錯誤時重試",
-          "verify_ssl": "驗證 SSL 憑證"
-        }
+      "error": {
+        "invalid_attributes": "每個屬性必須單獨一行，格式為 `屬性名稱: 路徑`。"
       },
-      "headers": {
-        "title": "HTTP 標頭",
-        "description": "編輯 HTTP 標頭\n\n目前標頭：\n{headers}",
-        "menu_options": {
-          "add_header": "新增",
-          "clear_headers": "全部清除",
-          "headers_done": "儲存變更"
-        }
-      },
-      "add_header": {
-        "title": "新增 HTTP 標頭",
-        "description": "新增 HTTP 標頭",
-        "data": {
-          "key": "標頭名稱",
-          "value": "標頭值"
-        }
-      },
-      "payload": {
-        "title": "HTTP 負載",
-        "description": "編輯請求負載",
-        "data": {
-          "content_type": "內容類型",
-          "payload": "負載（JSON/XML/文字）"
-        }
-      },
-      "sensors": {
-        "title": "感測器設定",
-        "description": "編輯感測器設定\n\n目前感測器：\n{sensors}",
-        "menu_options": {
-          "add_sensor": "新增",
-          "select_sensor": "編輯",
-          "clear_sensors": "全部清除",
-          "sensors_done": "儲存變更"
-        }
-      },
-      "select_sensor": {
-        "title": "選擇感測器",
-        "description": "選擇要編輯或刪除的感測器",
-        "data": {
-          "sensor": "感測器"
-        }
-      },
-      "edit_sensor": {
-        "title": "編輯感測器",
-        "description": "選擇對此感測器執行的動作：\n\n{sensor_info}",
-        "menu_options": {
-          "modify_sensor": "編輯",
-          "delete_sensor": "刪除",
-          "edit_back": "返回"
-        }
-      },
-      "modify_sensor": {
-        "title": "修改感測器",
-        "description": "編輯感測器設定。擷取方法（JSON/XPath/CSS/RegEx）會根據回應內容類型自動偵測。",
-        "data": {
-          "sensor_name": "感測器名稱",
-          "sensor_state": "狀態選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
-          "sensor_icon": "圖示選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
-          "sensor_color": "顏色選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
-          "sensor_device_class": "裝置類別",
-          "sensor_unit": "計量單位",
-          "tracker_latitude": "緯度選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
-          "tracker_longitude": "經度選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
-          "tracker_location_name": "位置名稱選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
-          "tracker_source_type": "來源類型"
-        }
-      },
-      "add_sensor": {
-        "title": "新增感測器",
-        "description": "選擇感測器類型並提供名稱",
-        "data": {
-          "sensor_name": "感測器名稱",
-          "sensor_type": "感測器類型"
-        }
-      },
-      "sensor_config": {
-        "title": "感測器設定",
-        "description": "設定感測器參數。擷取方法（JSON/XPath/CSS/RegEx）會根據回應內容類型自動偵測。",
-        "data": {
-          "sensor_state": "狀態選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
-          "sensor_icon": "圖示選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
-          "sensor_color": "顏色選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
-          "sensor_device_class": "裝置類別",
-          "sensor_unit": "計量單位",
-          "tracker_latitude": "緯度選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
-          "tracker_longitude": "經度選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
-          "tracker_location_name": "位置名稱選擇器（JSON/XPath/CSS/RegEx - 自動偵測）",
-          "tracker_source_type": "來源類型"
-        }
+      "abort": {
+        "reconfigure_successful": "感測器已更新。"
       }
     },
-    "error": {
-      "invalid_url": "URL 格式無效",
-      "no_sensors": "至少必須設定一個感測器"
+    "binary_sensor": {
+      "initiate_flow": {
+        "user": "新增二元感測器",
+        "reconfigure": "編輯二元感測器"
+      },
+      "entry_type": "二元感測器",
+      "step": {
+        "user": {
+          "title": "新增二元感測器",
+          "description": "從最近一次回應中挑選一個值，或自行輸入路徑。",
+          "data": {
+            "name": "名稱",
+            "value_path": "值"
+          },
+          "data_description": {
+            "name": "實體的名稱。",
+            "value_path": "要從回應中讀取的路徑。"
+          },
+          "sections": {
+            "options": {
+              "name": "實體設定",
+              "data": {
+                "device_class": "裝置類別",
+                "payload_on": "代表開啟的值",
+                "payload_off": "代表關閉的值",
+                "icon": "圖示",
+                "attributes": "額外屬性"
+              },
+              "data_description": {
+                "device_class": "決定開啟/關閉的用語與圖示。",
+                "payload_on": "選填。代表 '開啟' 的確切值。留空則自動辨識 true/1/on/yes。",
+                "payload_off": "選填。代表 '關閉' 的確切值。",
+                "icon": "覆寫由裝置類別推導出的圖示。",
+                "attributes": "每行一個，格式為 `屬性名稱: 路徑`。"
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "編輯二元感測器",
+          "description": "從最近一次回應中挑選一個值，或自行輸入路徑。",
+          "data": {
+            "name": "名稱",
+            "value_path": "值"
+          },
+          "data_description": {
+            "name": "實體的名稱。",
+            "value_path": "要從回應中讀取的路徑。"
+          },
+          "sections": {
+            "options": {
+              "name": "實體設定",
+              "data": {
+                "device_class": "裝置類別",
+                "payload_on": "代表開啟的值",
+                "payload_off": "代表關閉的值",
+                "icon": "圖示",
+                "attributes": "額外屬性"
+              },
+              "data_description": {
+                "device_class": "決定開啟/關閉的用語與圖示。",
+                "payload_on": "選填。代表 '開啟' 的確切值。留空則自動辨識 true/1/on/yes。",
+                "payload_off": "選填。代表 '關閉' 的確切值。",
+                "icon": "覆寫由裝置類別推導出的圖示。",
+                "attributes": "每行一個，格式為 `屬性名稱: 路徑`。"
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "每個屬性必須單獨一行，格式為 `屬性名稱: 路徑`。"
+      },
+      "abort": {
+        "reconfigure_successful": "二元感測器已更新。"
+      }
     },
-    "abort": {
-      "no_sensors": "未設定任何感測器"
+    "device_tracker": {
+      "initiate_flow": {
+        "user": "新增裝置追蹤器",
+        "reconfigure": "編輯裝置追蹤器"
+      },
+      "entry_type": "裝置追蹤器",
+      "step": {
+        "user": {
+          "title": "新增裝置追蹤器",
+          "description": "從最近一次回應中挑選緯度與經度的值。",
+          "data": {
+            "name": "名稱",
+            "latitude_path": "緯度",
+            "longitude_path": "經度"
+          },
+          "data_description": {
+            "name": "實體的名稱。",
+            "latitude_path": "緯度值的路徑。",
+            "longitude_path": "經度值的路徑。"
+          },
+          "sections": {
+            "options": {
+              "name": "實體設定",
+              "data": {
+                "gps_accuracy_path": "GPS 精確度",
+                "source_type": "來源類型",
+                "icon": "圖示",
+                "attributes": "額外屬性"
+              },
+              "data_description": {
+                "gps_accuracy_path": "選填。以公尺為單位的精確度。",
+                "source_type": "位置的判定方式。",
+                "icon": "覆寫預設圖示。",
+                "attributes": "每行一個，格式為 `屬性名稱: 路徑`。"
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "編輯裝置追蹤器",
+          "description": "從最近一次回應中挑選緯度與經度的值。",
+          "data": {
+            "name": "名稱",
+            "latitude_path": "緯度",
+            "longitude_path": "經度"
+          },
+          "data_description": {
+            "name": "實體的名稱。",
+            "latitude_path": "緯度值的路徑。",
+            "longitude_path": "經度值的路徑。"
+          },
+          "sections": {
+            "options": {
+              "name": "實體設定",
+              "data": {
+                "gps_accuracy_path": "GPS 精確度",
+                "source_type": "來源類型",
+                "icon": "圖示",
+                "attributes": "額外屬性"
+              },
+              "data_description": {
+                "gps_accuracy_path": "選填。以公尺為單位的精確度。",
+                "source_type": "位置的判定方式。",
+                "icon": "覆寫預設圖示。",
+                "attributes": "每行一個，格式為 `屬性名稱: 路徑`。"
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "每個屬性必須單獨一行，格式為 `屬性名稱: 路徑`。"
+      },
+      "abort": {
+        "reconfigure_successful": "裝置追蹤器已更新。"
+      }
     }
   },
-  "selector": {
-    "sensor_type": {
-      "options": {
-        "sensor": "感測器",
-        "binary_sensor": "二元感測器",
-        "number": "數值",
-        "device_tracker": "裝置追蹤器"
-      }
+  "exceptions": {
+    "cannot_connect": {
+      "message": "無法連線到端點：{error}"
     },
-    "tracker_source_type": {
-      "options": {
-        "none": "無（預設）",
-        "gps": "GPS",
-        "router": "路由器",
-        "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE"
-      }
+    "invalid_auth": {
+      "message": "端點拒絕了已儲存的憑證。"
+    },
+    "bad_status": {
+      "message": "端點回應了 HTTP {status}。"
+    },
+    "empty_response": {
+      "message": "端點回應了空的內容。"
     }
   }
 }

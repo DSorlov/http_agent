@@ -1,223 +1,357 @@
 {
+  "title": "HTTP Agent",
   "config": {
     "step": {
       "user": {
-        "title": "Configurare HTTP Agent",
-        "description": "Configureaza endpoint-ul HTTP",
+        "title": "Conectare la un endpoint",
+        "description": "Îndreaptă HTTP Agent către orice endpoint HTTP. După pașii următori, endpointul este apelat o dată, ca să poți alege valorile pe care le vrei ca entități.",
         "data": {
           "url": "URL",
-          "method": "Metoda HTTP",
-          "timeout": "Timeout (secunde)",
-          "interval": "Interval de actualizare (secunde)",
-          "retries": "Reincercari la eroare",
-          "verify_ssl": "Verifica certificatul SSL"
+          "method": "Metodă",
+          "auth_type": "Autentificare",
+          "name": "Nume"
+        },
+        "data_description": {
+          "url": "URL-ul complet al endpointului. Șabloanele Home Assistant sunt acceptate.",
+          "method": "Metoda HTTP folosită la fiecare interogare.",
+          "auth_type": "Alege un profil de autentificare predefinit sau 'None' și adaugă mai jos propriile antete.",
+          "name": "Opțional. Implicit, numele de gazdă din URL."
+        },
+        "sections": {
+          "advanced": {
+            "name": "Setări avansate",
+            "data": {
+              "scan_interval": "Interval de actualizare",
+              "timeout": "Timp limită pentru cerere",
+              "retries": "Reîncercări la eroare",
+              "extra_headers": "Antete suplimentare",
+              "response_format": "Formatul răspunsului",
+              "verify_ssl": "Verifică certificatul SSL",
+              "follow_redirects": "Urmează redirecționările"
+            },
+            "data_description": {
+              "scan_interval": "Cât de des este interogat endpointul, în secunde.",
+              "timeout": "Cât se așteaptă un răspuns, în secunde.",
+              "retries": "Câte încercări suplimentare se fac atunci când o interogare eșuează, cu o secundă între încercări.",
+              "extra_headers": "Un antet pe linie, scris ca `Nume: valoare`. Șabloanele sunt acceptate.",
+              "response_format": "Lasă pe 'Auto' pentru a detecta automat JSON, XML, HTML sau text simplu.",
+              "verify_ssl": "Dezactivează doar pentru endpointuri cu certificat autosemnat.",
+              "follow_redirects": "Urmează automat redirecționările HTTP 3xx."
+            }
+          }
         }
       },
-      "headers": {
-        "title": "Headere HTTP",
-        "description": "Configureaza headerele HTTP\n\nHeadere curente:\n{headers}",
-        "menu_options": {
-          "add_header": "Adauga",
-          "headers_done": "Gata"
-        }
-      },
-      "add_header": {
-        "title": "Adauga header HTTP",
-        "description": "Adauga un header HTTP nou",
+      "credentials": {
+        "title": "Autentificare",
+        "description": "Introdu datele de autentificare pentru profilul \"{auth_type}\". Sunt stocate criptat și nu apar niciodată în jurnale sau în diagnostic.",
         "data": {
-          "key": "Nume header",
-          "value": "Valoare header"
+          "token": "Token Bearer",
+          "api_key": "Cheie API",
+          "api_key_header": "Antetul cheii API",
+          "username": "Nume de utilizator",
+          "password": "Parolă"
+        },
+        "data_description": {
+          "token": "Trimis ca antet `Authorization: Bearer`.",
+          "api_key": "Valoarea cheii în sine.",
+          "api_key_header": "Antetul în care este trimisă cheia, de exemplu `X-API-Key`.",
+          "username": "Nume de utilizator pentru autentificarea HTTP basic.",
+          "password": "Parolă pentru autentificarea HTTP basic."
         }
       },
-      "payload": {
-        "title": "Payload HTTP",
-        "description": "Configureaza payload-ul cererii",
+      "body": {
+        "title": "Corpul cererii",
+        "description": "Cererile {method} pot trimite un corp. Lasă-l gol dacă endpointul nu are nevoie de unul.",
         "data": {
-          "content_type": "Tip continut",
-          "payload": "Payload (JSON/XML/Text)"
+          "content_type": "Tip de conținut",
+          "payload": "Corp"
+        },
+        "data_description": {
+          "content_type": "Trimis ca antetul `Content-Type`.",
+          "payload": "Corpul cererii. Șabloanele Home Assistant sunt acceptate."
         }
       },
-      "sensors": {
-        "title": "Configurare senzori",
-        "description": "Configureaza senzorii pentru extragerea datelor\n\nSenzori curenti:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Adauga",
-          "sensors_done": "Gata"
-        }
-      },
-      "add_sensor": {
-        "title": "Adauga senzor",
-        "description": "Alege tipul senzorului si ofera un nume",
+      "select_values": {
+        "title": "Alege valorile dorite",
+        "description": "Endpointul a răspuns cu HTTP {status}, iar răspunsul a fost citit ca **{format}**. Au fost găsite {count} valori.\n\n```\n{preview}\n```\n\nAlege valorile care ar trebui să devină entități. Tipurile de entitate, clasele de dispozitiv și unitățile potrivite sunt deduse automat și pot fi modificate ulterior. Poți sări peste acest pas și adăuga entități mai târziu.",
         "data": {
-          "sensor_name": "Nume senzor",
-          "sensor_type": "Tip senzor"
+          "selected_values": "Valori"
+        },
+        "data_description": {
+          "selected_values": "Caută în listă sau scrie manual o cale pentru a adăuga una care nu a fost detectată."
         }
       },
-      "sensor_config": {
-        "title": "Configurare senzor",
-        "description": "Configureaza setarile senzorului. Metoda de extragere (JSON/XPath/CSS/RegEx) va fi detectata automat pe baza tipului de continut al raspunsului.",
+      "reauth_confirm": {
+        "title": "Reautentificare",
+        "description": "Endpointul a respins datele de autentificare salvate pentru profilul \"{auth_type}\". Introdu-le din nou.",
         "data": {
-          "sensor_state": "Selector stare (JSON/XPath/CSS/RegEx - detectat automat)",
-          "sensor_icon": "Selector pictograma (JSON/XPath/CSS/RegEx - detectat automat)",
-          "sensor_color": "Selector culoare (JSON/XPath/CSS/RegEx - detectat automat)",
-          "sensor_device_class": "Clasa dispozitiv",
-          "sensor_unit": "Unitate de masura",
-          "tracker_latitude": "Selector latitudine (JSON/XPath/CSS/RegEx - detectat automat)",
-          "tracker_longitude": "Selector longitudine (JSON/XPath/CSS/RegEx - detectat automat)",
-          "tracker_location_name": "Selector nume locatie (JSON/XPath/CSS/RegEx - detectat automat)",
-          "tracker_source_type": "Tip sursa"
+          "token": "Token Bearer",
+          "api_key": "Cheie API",
+          "api_key_header": "Antetul cheii API",
+          "username": "Nume de utilizator",
+          "password": "Parolă"
         }
       }
     },
     "error": {
-      "invalid_url": "Format URL invalid",
-      "no_sensors": "Trebuie configurat cel putin un senzor"
+      "cannot_connect": "Endpointul nu a putut fi contactat. Verifică URL-ul, rețeaua și timpul limită.",
+      "invalid_auth": "Endpointul a respins datele de autentificare (HTTP 401/403).",
+      "invalid_url": "Introdu un URL complet, inclusiv schema http sau https.",
+      "invalid_headers": "Fiecare antet trebuie scris ca `Nume: valoare` pe linia sa.",
+      "bad_status": "Endpointul a răspuns cu un cod de stare de eroare.",
+      "no_values": "Răspunsul a fost gol sau nu conținea valori care pot fi citite."
     },
     "abort": {
-      "already_configured": "Acest endpoint HTTP este deja configurat",
-      "no_sensors": "Nu au fost configurati senzori"
+      "already_configured": "Această combinație de URL și metodă este deja configurată.",
+      "reauth_successful": "Reautentificarea a reușit.",
+      "reconfigure_successful": "Endpointul a fost actualizat."
     }
   },
-  "options": {
-    "step": {
-      "init": {
-        "title": "Configurare HTTP Agent",
-        "description": "Alege ce sa editezi",
-        "menu_options": {
-          "basic": "Editeaza setarile de baza (URL, metoda, timeout, interval, SSL)",
-          "headers": "Editeaza headerele HTTP",
-          "payload": "Editeaza payload-ul cererii",
-          "sensors": "Editeaza configuratia senzorilor"
+  "config_subentries": {
+    "sensor": {
+      "initiate_flow": {
+        "user": "Adaugă senzor",
+        "reconfigure": "Editează senzorul"
+      },
+      "entry_type": "Senzor",
+      "step": {
+        "user": {
+          "title": "Adaugă un senzor",
+          "description": "Alege o valoare din ultimul răspuns sau scrie tu o cale.",
+          "data": {
+            "name": "Nume",
+            "value_path": "Valoare"
+          },
+          "data_description": {
+            "name": "Numele entității.",
+            "value_path": "Calea care este citită din răspuns."
+          },
+          "sections": {
+            "options": {
+              "name": "Setările entității",
+              "data": {
+                "device_class": "Clasă de dispozitiv",
+                "unit_of_measurement": "Unitate de măsură",
+                "state_class": "Clasă de stare",
+                "icon": "Pictogramă",
+                "attributes": "Atribute suplimentare"
+              },
+              "data_description": {
+                "device_class": "Controlează modul în care Home Assistant formatează și reprezintă grafic valoarea.",
+                "unit_of_measurement": "De exemplu °C, %, kWh.",
+                "state_class": "Setează pe 'Measurement' sau 'Total increasing' pentru a include senzorul în statisticile pe termen lung.",
+                "icon": "Înlocuiește pictograma derivată din clasa de dispozitiv.",
+                "attributes": "Câte unul pe linie, scris ca `Nume atribut: cale`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Editează senzorul",
+          "description": "Alege o valoare din ultimul răspuns sau scrie tu o cale.",
+          "data": {
+            "name": "Nume",
+            "value_path": "Valoare"
+          },
+          "data_description": {
+            "name": "Numele entității.",
+            "value_path": "Calea care este citită din răspuns."
+          },
+          "sections": {
+            "options": {
+              "name": "Setările entității",
+              "data": {
+                "device_class": "Clasă de dispozitiv",
+                "unit_of_measurement": "Unitate de măsură",
+                "state_class": "Clasă de stare",
+                "icon": "Pictogramă",
+                "attributes": "Atribute suplimentare"
+              },
+              "data_description": {
+                "device_class": "Controlează modul în care Home Assistant formatează și reprezintă grafic valoarea.",
+                "unit_of_measurement": "De exemplu °C, %, kWh.",
+                "state_class": "Setează pe 'Measurement' sau 'Total increasing' pentru a include senzorul în statisticile pe termen lung.",
+                "icon": "Înlocuiește pictograma derivată din clasa de dispozitiv.",
+                "attributes": "Câte unul pe linie, scris ca `Nume atribut: cale`."
+              }
+            }
+          }
         }
       },
-      "basic": {
-        "title": "Setari de baza",
-        "description": "Editeaza URL, metoda, timeout, intervalul si verificarea SSL",
-        "data": {
-          "url": "URL",
-          "method": "Metoda HTTP",
-          "timeout": "Timeout (secunde)",
-          "interval": "Interval de actualizare (secunde)",
-          "retries": "Reincercari la eroare",
-          "verify_ssl": "Verifica certificatul SSL"
-        }
+      "error": {
+        "invalid_attributes": "Fiecare atribut trebuie scris ca `Nume atribut: cale` pe linia sa."
       },
-      "headers": {
-        "title": "Headere HTTP",
-        "description": "Editeaza headerele HTTP\n\nHeadere curente:\n{headers}",
-        "menu_options": {
-          "add_header": "Adauga",
-          "clear_headers": "Sterge tot",
-          "headers_done": "Salveaza modificarile"
-        }
-      },
-      "add_header": {
-        "title": "Adauga header HTTP",
-        "description": "Adauga un header HTTP nou",
-        "data": {
-          "key": "Nume header",
-          "value": "Valoare header"
-        }
-      },
-      "payload": {
-        "title": "Payload HTTP",
-        "description": "Editeaza payload-ul cererii",
-        "data": {
-          "content_type": "Tip continut",
-          "payload": "Payload (JSON/XML/Text)"
-        }
-      },
-      "sensors": {
-        "title": "Configurare senzori",
-        "description": "Editeaza configuratia senzorilor\n\nSenzori curenti:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Adauga",
-          "select_sensor": "Editeaza",
-          "clear_sensors": "Sterge tot",
-          "sensors_done": "Salveaza modificarile"
-        }
-      },
-      "select_sensor": {
-        "title": "Selecteaza senzor",
-        "description": "Alege un senzor pentru editare sau stergere",
-        "data": {
-          "sensor": "Senzor"
-        }
-      },
-      "edit_sensor": {
-        "title": "Editeaza senzor",
-        "description": "Alege ce sa faci cu acest senzor:\n\n{sensor_info}",
-        "menu_options": {
-          "modify_sensor": "Editeaza",
-          "delete_sensor": "Sterge",
-          "edit_back": "Inapoi"
-        }
-      },
-      "modify_sensor": {
-        "title": "Modifica senzor",
-        "description": "Editeaza configuratia senzorului. Metoda de extragere (JSON/XPath/CSS/RegEx) va fi detectata automat pe baza tipului de continut al raspunsului.",
-        "data": {
-          "sensor_name": "Nume senzor",
-          "sensor_state": "Selector stare (JSON/XPath/CSS/RegEx - detectat automat)",
-          "sensor_icon": "Selector pictograma (JSON/XPath/CSS/RegEx - detectat automat)",
-          "sensor_color": "Selector culoare (JSON/XPath/CSS/RegEx - detectat automat)",
-          "sensor_device_class": "Clasa dispozitiv",
-          "sensor_unit": "Unitate de masura",
-          "tracker_latitude": "Selector latitudine (JSON/XPath/CSS/RegEx - detectat automat)",
-          "tracker_longitude": "Selector longitudine (JSON/XPath/CSS/RegEx - detectat automat)",
-          "tracker_location_name": "Selector nume locatie (JSON/XPath/CSS/RegEx - detectat automat)",
-          "tracker_source_type": "Tip sursa"
-        }
-      },
-      "add_sensor": {
-        "title": "Adauga senzor",
-        "description": "Alege tipul senzorului si ofera un nume",
-        "data": {
-          "sensor_name": "Nume senzor",
-          "sensor_type": "Tip senzor"
-        }
-      },
-      "sensor_config": {
-        "title": "Configurare senzor",
-        "description": "Configureaza setarile senzorului. Metoda de extragere (JSON/XPath/CSS/RegEx) va fi detectata automat pe baza tipului de continut al raspunsului.",
-        "data": {
-          "sensor_state": "Selector stare (JSON/XPath/CSS/RegEx - detectat automat)",
-          "sensor_icon": "Selector pictograma (JSON/XPath/CSS/RegEx - detectat automat)",
-          "sensor_color": "Selector culoare (JSON/XPath/CSS/RegEx - detectat automat)",
-          "sensor_device_class": "Clasa dispozitiv",
-          "sensor_unit": "Unitate de masura",
-          "tracker_latitude": "Selector latitudine (JSON/XPath/CSS/RegEx - detectat automat)",
-          "tracker_longitude": "Selector longitudine (JSON/XPath/CSS/RegEx - detectat automat)",
-          "tracker_location_name": "Selector nume locatie (JSON/XPath/CSS/RegEx - detectat automat)",
-          "tracker_source_type": "Tip sursa"
-        }
+      "abort": {
+        "reconfigure_successful": "Senzorul a fost actualizat."
       }
     },
-    "error": {
-      "invalid_url": "Format URL invalid",
-      "no_sensors": "Trebuie configurat cel putin un senzor"
+    "binary_sensor": {
+      "initiate_flow": {
+        "user": "Adaugă senzor binar",
+        "reconfigure": "Editează senzorul binar"
+      },
+      "entry_type": "Senzor binar",
+      "step": {
+        "user": {
+          "title": "Adaugă un senzor binar",
+          "description": "Alege o valoare din ultimul răspuns sau scrie tu o cale.",
+          "data": {
+            "name": "Nume",
+            "value_path": "Valoare"
+          },
+          "data_description": {
+            "name": "Numele entității.",
+            "value_path": "Calea care este citită din răspuns."
+          },
+          "sections": {
+            "options": {
+              "name": "Setările entității",
+              "data": {
+                "device_class": "Clasă de dispozitiv",
+                "payload_on": "Valoare pentru pornit",
+                "payload_off": "Valoare pentru oprit",
+                "icon": "Pictogramă",
+                "attributes": "Atribute suplimentare"
+              },
+              "data_description": {
+                "device_class": "Controlează textul și pictograma pentru pornit/oprit.",
+                "payload_on": "Opțional. Valoarea exactă care înseamnă 'pornit'. Lasă gol pentru a detecta automat true/1/on/yes.",
+                "payload_off": "Opțional. Valoarea exactă care înseamnă 'oprit'.",
+                "icon": "Înlocuiește pictograma derivată din clasa de dispozitiv.",
+                "attributes": "Câte unul pe linie, scris ca `Nume atribut: cale`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Editează senzorul binar",
+          "description": "Alege o valoare din ultimul răspuns sau scrie tu o cale.",
+          "data": {
+            "name": "Nume",
+            "value_path": "Valoare"
+          },
+          "data_description": {
+            "name": "Numele entității.",
+            "value_path": "Calea care este citită din răspuns."
+          },
+          "sections": {
+            "options": {
+              "name": "Setările entității",
+              "data": {
+                "device_class": "Clasă de dispozitiv",
+                "payload_on": "Valoare pentru pornit",
+                "payload_off": "Valoare pentru oprit",
+                "icon": "Pictogramă",
+                "attributes": "Atribute suplimentare"
+              },
+              "data_description": {
+                "device_class": "Controlează textul și pictograma pentru pornit/oprit.",
+                "payload_on": "Opțional. Valoarea exactă care înseamnă 'pornit'. Lasă gol pentru a detecta automat true/1/on/yes.",
+                "payload_off": "Opțional. Valoarea exactă care înseamnă 'oprit'.",
+                "icon": "Înlocuiește pictograma derivată din clasa de dispozitiv.",
+                "attributes": "Câte unul pe linie, scris ca `Nume atribut: cale`."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Fiecare atribut trebuie scris ca `Nume atribut: cale` pe linia sa."
+      },
+      "abort": {
+        "reconfigure_successful": "Senzorul binar a fost actualizat."
+      }
     },
-    "abort": {
-      "no_sensors": "Nu au fost configurati senzori"
+    "device_tracker": {
+      "initiate_flow": {
+        "user": "Adaugă urmăritor de dispozitiv",
+        "reconfigure": "Editează urmăritorul de dispozitiv"
+      },
+      "entry_type": "Urmăritor de dispozitiv",
+      "step": {
+        "user": {
+          "title": "Adaugă un urmăritor de dispozitiv",
+          "description": "Alege valorile de latitudine și longitudine din ultimul răspuns.",
+          "data": {
+            "name": "Nume",
+            "latitude_path": "Latitudine",
+            "longitude_path": "Longitudine"
+          },
+          "data_description": {
+            "name": "Numele entității.",
+            "latitude_path": "Calea către valoarea latitudinii.",
+            "longitude_path": "Calea către valoarea longitudinii."
+          },
+          "sections": {
+            "options": {
+              "name": "Setările entității",
+              "data": {
+                "gps_accuracy_path": "Precizie GPS",
+                "source_type": "Tip de sursă",
+                "icon": "Pictogramă",
+                "attributes": "Atribute suplimentare"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Opțional. Precizia în metri.",
+                "source_type": "Cum este determinată poziția.",
+                "icon": "Înlocuiește pictograma implicită.",
+                "attributes": "Câte unul pe linie, scris ca `Nume atribut: cale`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Editează urmăritorul de dispozitiv",
+          "description": "Alege valorile de latitudine și longitudine din ultimul răspuns.",
+          "data": {
+            "name": "Nume",
+            "latitude_path": "Latitudine",
+            "longitude_path": "Longitudine"
+          },
+          "data_description": {
+            "name": "Numele entității.",
+            "latitude_path": "Calea către valoarea latitudinii.",
+            "longitude_path": "Calea către valoarea longitudinii."
+          },
+          "sections": {
+            "options": {
+              "name": "Setările entității",
+              "data": {
+                "gps_accuracy_path": "Precizie GPS",
+                "source_type": "Tip de sursă",
+                "icon": "Pictogramă",
+                "attributes": "Atribute suplimentare"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Opțional. Precizia în metri.",
+                "source_type": "Cum este determinată poziția.",
+                "icon": "Înlocuiește pictograma implicită.",
+                "attributes": "Câte unul pe linie, scris ca `Nume atribut: cale`."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Fiecare atribut trebuie scris ca `Nume atribut: cale` pe linia sa."
+      },
+      "abort": {
+        "reconfigure_successful": "Urmăritorul de dispozitiv a fost actualizat."
+      }
     }
   },
-  "selector": {
-    "sensor_type": {
-      "options": {
-        "sensor": "Senzor",
-        "binary_sensor": "Senzor binar",
-        "number": "Numar",
-        "device_tracker": "Tracker dispozitiv"
-      }
+  "exceptions": {
+    "cannot_connect": {
+      "message": "Endpointul nu a putut fi contactat: {error}"
     },
-    "tracker_source_type": {
-      "options": {
-        "none": "Niciunul (implicit)",
-        "gps": "GPS",
-        "router": "Router",
-        "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE"
-      }
+    "invalid_auth": {
+      "message": "Endpointul a respins datele de autentificare salvate."
+    },
+    "bad_status": {
+      "message": "Endpointul a răspuns cu HTTP {status}."
+    },
+    "empty_response": {
+      "message": "Endpointul a răspuns cu un corp gol."
     }
   }
 }

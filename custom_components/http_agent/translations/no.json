@@ -1,223 +1,357 @@
 {
+  "title": "HTTP Agent",
   "config": {
     "step": {
       "user": {
-        "title": "HTTP Agent Konfigurasjon",
-        "description": "Konfigurer HTTP-endepunktet",
+        "title": "Koble til et endepunkt",
+        "description": "Pek HTTP Agent mot et hvilket som helst HTTP-endepunkt. Etter de neste stegene kalles endepunktet én gang slik at du kan velge hvilke verdier du vil ha som enheter.",
         "data": {
           "url": "URL",
-          "method": "HTTP-metode",
-          "timeout": "Tidsavbrudd (sekunder)",
-          "interval": "Oppdateringsintervall (sekunder)",
-          "retries": "Forsøk på nytt ved feil",
-          "verify_ssl": "Verifiser SSL-sertifikat"
+          "method": "Metode",
+          "auth_type": "Autentisering",
+          "name": "Navn"
+        },
+        "data_description": {
+          "url": "Full URL til endepunktet. Home Assistant-maler støttes.",
+          "method": "HTTP-metode som brukes ved hver henting.",
+          "auth_type": "Velg en ferdig autentiseringsprofil, eller \"None\" og legg til egne headere nedenfor.",
+          "name": "Valgfritt. Standard er vertsnavnet i URL-en."
+        },
+        "sections": {
+          "advanced": {
+            "name": "Avanserte innstillinger",
+            "data": {
+              "scan_interval": "Oppdateringsintervall",
+              "timeout": "Tidsavbrudd for forespørsel",
+              "retries": "Nye forsøk ved feil",
+              "extra_headers": "Ekstra headere",
+              "response_format": "Svarformat",
+              "verify_ssl": "Verifiser SSL-sertifikat",
+              "follow_redirects": "Følg videresendinger"
+            },
+            "data_description": {
+              "scan_interval": "Hvor ofte endepunktet hentes, i sekunder.",
+              "timeout": "Hvor lenge det ventes på svar, i sekunder.",
+              "retries": "Hvor mange ekstra forsøk som gjøres når en henting mislykkes, med ett sekund mellom forsøkene.",
+              "extra_headers": "Én header per linje, skrevet som `Navn: verdi`. Maler støttes.",
+              "response_format": "La stå på \"Auto\" for å oppdage JSON, XML, HTML eller ren tekst automatisk.",
+              "verify_ssl": "Slå av kun for endepunkter med selvsignert sertifikat.",
+              "follow_redirects": "Følg HTTP 3xx-videresendinger automatisk."
+            }
+          }
         }
       },
-      "headers": {
-        "title": "HTTP-hoder",
-        "description": "Konfigurer HTTP-hoder.\n\nGjeldende hoder:\n{headers}",
-        "menu_options": {
-          "add_header": "Legg til hode",
-          "headers_done": "Fortsett"
-        }
-      },
-      "add_header": {
-        "title": "Legg til HTTP-hode",
-        "description": "Legg til et nytt HTTP-hode",
+      "credentials": {
+        "title": "Autentisering",
+        "description": "Oppgi legitimasjonen for profilen \"{auth_type}\". Den lagres kryptert og vises aldri i logger eller diagnostikk.",
         "data": {
-          "key": "Hodenavn",
-          "value": "Hodeverdi"
+          "token": "Bearer-token",
+          "api_key": "API-nøkkel",
+          "api_key_header": "Header for API-nøkkel",
+          "username": "Brukernavn",
+          "password": "Passord"
+        },
+        "data_description": {
+          "token": "Sendes som headeren `Authorization: Bearer`.",
+          "api_key": "Selve nøkkelverdien.",
+          "api_key_header": "Headeren nøkkelen sendes i, for eksempel `X-API-Key`.",
+          "username": "Brukernavn for HTTP basic-autentisering.",
+          "password": "Passord for HTTP basic-autentisering."
         }
       },
-      "payload": {
-        "title": "HTTP-nyttelast",
-        "description": "Konfigurer forespørselsnyttelasten",
+      "body": {
+        "title": "Forespørselstekst",
+        "description": "{method}-forespørsler kan sende en tekst. La den stå tom hvis endepunktet ikke trenger den.",
         "data": {
           "content_type": "Innholdstype",
-          "payload": "Nyttelast (JSON/XML/Tekst)"
+          "payload": "Tekst"
+        },
+        "data_description": {
+          "content_type": "Sendes som headeren `Content-Type`.",
+          "payload": "Teksten i forespørselen. Home Assistant-maler støttes."
         }
       },
-      "sensors": {
-        "title": "Sensorkonfigurasjon",
-        "description": "Konfigurer sensorer for å trekke ut data.\n\nGjeldende sensorer:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Legg til sensor",
-          "sensors_done": "Fullfør"
-        }
-      },
-      "add_sensor": {
-        "title": "Legg til sensor",
-        "description": "Velg sensortype og oppgi et navn",
+      "select_values": {
+        "title": "Velg verdiene du vil ha",
+        "description": "Endepunktet svarte med HTTP {status} og ble tolket som **{format}**. {count} verdier ble funnet.\n\n```\n{preview}\n```\n\nVelg verdiene som skal bli enheter. Fornuftige enhetstyper, enhetsklasser og måleenheter gjettes automatisk og kan endres etterpå. Du kan også hoppe over dette og legge til enheter senere.",
         "data": {
-          "sensor_name": "Sensornavn",
-          "sensor_type": "Sensortype"
+          "selected_values": "Verdier"
+        },
+        "data_description": {
+          "selected_values": "Søk i listen, eller skriv inn en sti manuelt for å legge til en som ikke ble funnet."
         }
       },
-      "sensor_config": {
-        "title": "Sensorkonfigurasjon",
-        "description": "Konfigurer sensorinnstillingene. Utvinningsmetoden (JSON/XPath/CSS/RegEx) vil automatisk bli oppdaget basert på responsinnholdstypen.",
+      "reauth_confirm": {
+        "title": "Autentiser på nytt",
+        "description": "Endepunktet avviste den lagrede legitimasjonen for profilen \"{auth_type}\". Oppgi den på nytt.",
         "data": {
-          "sensor_state": "Tilstandsvelger (JSON/XPath/CSS/RegEx - auto-oppdaget)",
-          "sensor_icon": "Ikonvelger (JSON/XPath/CSS/RegEx - auto-oppdaget)",
-          "sensor_color": "Fargevelger (JSON/XPath/CSS/RegEx - auto-oppdaget)",
-          "sensor_device_class": "Enhetsklasse",
-          "sensor_unit": "Måleenhet",
-          "tracker_latitude": "Breddegradvelger (JSON/XPath/CSS/RegEx - auto-oppdaget)",
-          "tracker_longitude": "Lengdegradvelger (JSON/XPath/CSS/RegEx - auto-oppdaget)",
-          "tracker_location_name": "Stedsnavnvelger (JSON/XPath/CSS/RegEx - auto-oppdaget)",
-          "tracker_source_type": "Kildetype"
+          "token": "Bearer-token",
+          "api_key": "API-nøkkel",
+          "api_key_header": "Header for API-nøkkel",
+          "username": "Brukernavn",
+          "password": "Passord"
         }
       }
     },
     "error": {
-      "invalid_url": "Ugyldig URL-format",
-      "no_sensors": "Minst én sensor må konfigureres"
+      "cannot_connect": "Kunne ikke nå endepunktet. Kontroller URL, nettverk og tidsavbrudd.",
+      "invalid_auth": "Endepunktet avviste legitimasjonen (HTTP 401/403).",
+      "invalid_url": "Oppgi en full URL som starter med http eller https.",
+      "invalid_headers": "Hver header må skrives som `Navn: verdi` på egen linje.",
+      "bad_status": "Endepunktet svarte med en feilstatuskode.",
+      "no_values": "Svaret var tomt eller inneholdt ingen lesbare verdier."
     },
     "abort": {
-      "already_configured": "Dette HTTP-endepunktet er allerede konfigurert",
-      "no_sensors": "Ingen sensorer ble konfigurert"
+      "already_configured": "Denne kombinasjonen av URL og metode er allerede konfigurert.",
+      "reauth_successful": "Autentiseringen lyktes.",
+      "reconfigure_successful": "Endepunktet ble oppdatert."
     }
   },
-  "options": {
-    "step": {
-      "init": {
-        "title": "HTTP Agent Konfigurasjon",
-        "description": "Velg hva som skal redigeres",
-        "menu_options": {
-          "basic": "Rediger grunninnstillinger (URL, metode, tidsavbrudd, intervall, SSL)",
-          "headers": "Rediger HTTP-hoder",
-          "payload": "Rediger forespørselsnyttelast",
-          "sensors": "Rediger sensorkonfigurasjon"
+  "config_subentries": {
+    "sensor": {
+      "initiate_flow": {
+        "user": "Legg til sensor",
+        "reconfigure": "Rediger sensor"
+      },
+      "entry_type": "Sensor",
+      "step": {
+        "user": {
+          "title": "Legg til en sensor",
+          "description": "Velg en verdi fra siste svar, eller skriv inn en sti selv.",
+          "data": {
+            "name": "Navn",
+            "value_path": "Verdi"
+          },
+          "data_description": {
+            "name": "Navnet på enheten.",
+            "value_path": "Stien som leses fra svaret."
+          },
+          "sections": {
+            "options": {
+              "name": "Enhetsinnstillinger",
+              "data": {
+                "device_class": "Enhetsklasse",
+                "unit_of_measurement": "Måleenhet",
+                "state_class": "Tilstandsklasse",
+                "icon": "Ikon",
+                "attributes": "Ekstra attributter"
+              },
+              "data_description": {
+                "device_class": "Styrer hvordan Home Assistant formaterer og grafer verdien.",
+                "unit_of_measurement": "For eksempel °C, %, kWh.",
+                "state_class": "Sett til \"Measurement\" eller \"Total increasing\" for å ta med sensoren i langtidsstatistikk.",
+                "icon": "Overstyrer ikonet som utledes fra enhetsklassen.",
+                "attributes": "Én per linje, skrevet som `Attributtnavn: sti`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Rediger sensor",
+          "description": "Velg en verdi fra siste svar, eller skriv inn en sti selv.",
+          "data": {
+            "name": "Navn",
+            "value_path": "Verdi"
+          },
+          "data_description": {
+            "name": "Navnet på enheten.",
+            "value_path": "Stien som leses fra svaret."
+          },
+          "sections": {
+            "options": {
+              "name": "Enhetsinnstillinger",
+              "data": {
+                "device_class": "Enhetsklasse",
+                "unit_of_measurement": "Måleenhet",
+                "state_class": "Tilstandsklasse",
+                "icon": "Ikon",
+                "attributes": "Ekstra attributter"
+              },
+              "data_description": {
+                "device_class": "Styrer hvordan Home Assistant formaterer og grafer verdien.",
+                "unit_of_measurement": "For eksempel °C, %, kWh.",
+                "state_class": "Sett til \"Measurement\" eller \"Total increasing\" for å ta med sensoren i langtidsstatistikk.",
+                "icon": "Overstyrer ikonet som utledes fra enhetsklassen.",
+                "attributes": "Én per linje, skrevet som `Attributtnavn: sti`."
+              }
+            }
+          }
         }
       },
-      "basic": {
-        "title": "Grunninnstillinger",
-        "description": "Rediger URL, metode, tidsavbrudd, intervall og SSL-verifisering",
-        "data": {
-          "url": "URL",
-          "method": "HTTP-metode",
-          "timeout": "Tidsavbrudd (sekunder)",
-          "interval": "Oppdateringsintervall (sekunder)",
-          "retries": "Forsøk på nytt ved feil",
-          "verify_ssl": "Verifiser SSL-sertifikat"
-        }
+      "error": {
+        "invalid_attributes": "Hvert attributt må skrives som `Attributtnavn: sti` på egen linje."
       },
-      "headers": {
-        "title": "HTTP-hoder",
-        "description": "Rediger HTTP-hoder.\n\nGjeldende hoder:\n{headers}",
-        "menu_options": {
-          "add_header": "Legg til hode",
-          "clear_headers": "Fjern alle hoder",
-          "headers_done": "Lagre"
-        }
-      },
-      "add_header": {
-        "title": "Legg til HTTP-hode",
-        "description": "Legg til et nytt HTTP-hode",
-        "data": {
-          "key": "Hodenavn",
-          "value": "Hodeverdi"
-        }
-      },
-      "payload": {
-        "title": "HTTP-nyttelast",
-        "description": "Rediger forespørselsnyttelasten",
-        "data": {
-          "content_type": "Innholdstype",
-          "payload": "Nyttelast (JSON/XML/Tekst)"
-        }
-      },
-      "sensors": {
-        "title": "Sensorkonfigurasjon",
-        "description": "Rediger sensorkonfigurasjon.\n\nGjeldende sensorer:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Legg til sensor",
-          "select_sensor": "Rediger en sensor",
-          "clear_sensors": "Fjern alle sensorer",
-          "sensors_done": "Lagre"
-        }
-      },
-      "select_sensor": {
-        "title": "Velg sensor",
-        "description": "Velg en sensor å redigere eller slette",
-        "data": {
-          "sensor": "Sensor"
-        }
-      },
-      "edit_sensor": {
-        "title": "Rediger sensor",
-        "description": "Velg hva som skal gjøres med denne sensoren:\n\n{sensor_info}",
-        "menu_options": {
-          "modify_sensor": "Rediger sensor",
-          "delete_sensor": "Slett sensor",
-          "edit_back": "Tilbake"
-        }
-      },
-      "modify_sensor": {
-        "title": "Endre sensor",
-        "description": "Rediger sensorkonfigurasjon. Utvinningsmetoden (JSON/XPath/CSS/RegEx) vil automatisk bli oppdaget basert på responsinnholdstypen.",
-        "data": {
-          "sensor_name": "Sensornavn",
-          "sensor_state": "Tilstandsvelger (JSON/XPath/CSS/RegEx - auto-oppdaget)",
-          "sensor_icon": "Ikonvelger (JSON/XPath/CSS/RegEx - auto-oppdaget)",
-          "sensor_color": "Fargevelger (JSON/XPath/CSS/RegEx - auto-oppdaget)",
-          "sensor_device_class": "Enhetsklasse",
-          "sensor_unit": "Måleenhet",
-          "tracker_latitude": "Breddegradvelger (JSON/XPath/CSS/RegEx - auto-oppdaget)",
-          "tracker_longitude": "Lengdegradvelger (JSON/XPath/CSS/RegEx - auto-oppdaget)",
-          "tracker_location_name": "Stedsnavnvelger (JSON/XPath/CSS/RegEx - auto-oppdaget)",
-          "tracker_source_type": "Kildetype"
-        }
-      },
-      "add_sensor": {
-        "title": "Legg til sensor",
-        "description": "Velg sensortype og oppgi et navn",
-        "data": {
-          "sensor_name": "Sensornavn",
-          "sensor_type": "Sensortype"
-        }
-      },
-      "sensor_config": {
-        "title": "Sensorkonfigurasjon",
-        "description": "Konfigurer sensorinnstillingene. Utvinningsmetoden (JSON/XPath/CSS/RegEx) vil automatisk bli oppdaget basert på responsinnholdstypen.",
-        "data": {
-          "sensor_state": "Tilstandsvelger (JSON/XPath/CSS/RegEx - auto-oppdaget)",
-          "sensor_icon": "Ikonvelger (JSON/XPath/CSS/RegEx - auto-oppdaget)",
-          "sensor_color": "Fargevelger (JSON/XPath/CSS/RegEx - auto-oppdaget)",
-          "sensor_device_class": "Enhetsklasse",
-          "sensor_unit": "Måleenhet",
-          "tracker_latitude": "Breddegradvelger (JSON/XPath/CSS/RegEx - auto-oppdaget)",
-          "tracker_longitude": "Lengdegradvelger (JSON/XPath/CSS/RegEx - auto-oppdaget)",
-          "tracker_location_name": "Stedsnavnvelger (JSON/XPath/CSS/RegEx - auto-oppdaget)",
-          "tracker_source_type": "Kildetype"
-        }
+      "abort": {
+        "reconfigure_successful": "Sensoren ble oppdatert."
       }
     },
-    "error": {
-      "invalid_url": "Ugyldig URL-format",
-      "no_sensors": "Minst én sensor må konfigureres"
+    "binary_sensor": {
+      "initiate_flow": {
+        "user": "Legg til binærsensor",
+        "reconfigure": "Rediger binærsensor"
+      },
+      "entry_type": "Binærsensor",
+      "step": {
+        "user": {
+          "title": "Legg til en binærsensor",
+          "description": "Velg en verdi fra siste svar, eller skriv inn en sti selv.",
+          "data": {
+            "name": "Navn",
+            "value_path": "Verdi"
+          },
+          "data_description": {
+            "name": "Navnet på enheten.",
+            "value_path": "Stien som leses fra svaret."
+          },
+          "sections": {
+            "options": {
+              "name": "Enhetsinnstillinger",
+              "data": {
+                "device_class": "Enhetsklasse",
+                "payload_on": "Verdi for på",
+                "payload_off": "Verdi for av",
+                "icon": "Ikon",
+                "attributes": "Ekstra attributter"
+              },
+              "data_description": {
+                "device_class": "Styrer tekst og ikon for på/av.",
+                "payload_on": "Valgfritt. Nøyaktig verdi som betyr \"på\". La stå tom for å oppdage true/1/on/yes automatisk.",
+                "payload_off": "Valgfritt. Nøyaktig verdi som betyr \"av\".",
+                "icon": "Overstyrer ikonet som utledes fra enhetsklassen.",
+                "attributes": "Én per linje, skrevet som `Attributtnavn: sti`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Rediger binærsensor",
+          "description": "Velg en verdi fra siste svar, eller skriv inn en sti selv.",
+          "data": {
+            "name": "Navn",
+            "value_path": "Verdi"
+          },
+          "data_description": {
+            "name": "Navnet på enheten.",
+            "value_path": "Stien som leses fra svaret."
+          },
+          "sections": {
+            "options": {
+              "name": "Enhetsinnstillinger",
+              "data": {
+                "device_class": "Enhetsklasse",
+                "payload_on": "Verdi for på",
+                "payload_off": "Verdi for av",
+                "icon": "Ikon",
+                "attributes": "Ekstra attributter"
+              },
+              "data_description": {
+                "device_class": "Styrer tekst og ikon for på/av.",
+                "payload_on": "Valgfritt. Nøyaktig verdi som betyr \"på\". La stå tom for å oppdage true/1/on/yes automatisk.",
+                "payload_off": "Valgfritt. Nøyaktig verdi som betyr \"av\".",
+                "icon": "Overstyrer ikonet som utledes fra enhetsklassen.",
+                "attributes": "Én per linje, skrevet som `Attributtnavn: sti`."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Hvert attributt må skrives som `Attributtnavn: sti` på egen linje."
+      },
+      "abort": {
+        "reconfigure_successful": "Binærsensoren ble oppdatert."
+      }
     },
-    "abort": {
-      "no_sensors": "Ingen sensorer ble konfigurert"
+    "device_tracker": {
+      "initiate_flow": {
+        "user": "Legg til enhetssporer",
+        "reconfigure": "Rediger enhetssporer"
+      },
+      "entry_type": "Enhetssporer",
+      "step": {
+        "user": {
+          "title": "Legg til en enhetssporer",
+          "description": "Velg verdiene for breddegrad og lengdegrad fra siste svar.",
+          "data": {
+            "name": "Navn",
+            "latitude_path": "Breddegrad",
+            "longitude_path": "Lengdegrad"
+          },
+          "data_description": {
+            "name": "Navnet på enheten.",
+            "latitude_path": "Stien til breddegradsverdien.",
+            "longitude_path": "Stien til lengdegradsverdien."
+          },
+          "sections": {
+            "options": {
+              "name": "Enhetsinnstillinger",
+              "data": {
+                "gps_accuracy_path": "GPS-nøyaktighet",
+                "source_type": "Kildetype",
+                "icon": "Ikon",
+                "attributes": "Ekstra attributter"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Valgfritt. Nøyaktigheten i meter.",
+                "source_type": "Hvordan posisjonen bestemmes.",
+                "icon": "Overstyrer standardikonet.",
+                "attributes": "Én per linje, skrevet som `Attributtnavn: sti`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Rediger enhetssporer",
+          "description": "Velg verdiene for breddegrad og lengdegrad fra siste svar.",
+          "data": {
+            "name": "Navn",
+            "latitude_path": "Breddegrad",
+            "longitude_path": "Lengdegrad"
+          },
+          "data_description": {
+            "name": "Navnet på enheten.",
+            "latitude_path": "Stien til breddegradsverdien.",
+            "longitude_path": "Stien til lengdegradsverdien."
+          },
+          "sections": {
+            "options": {
+              "name": "Enhetsinnstillinger",
+              "data": {
+                "gps_accuracy_path": "GPS-nøyaktighet",
+                "source_type": "Kildetype",
+                "icon": "Ikon",
+                "attributes": "Ekstra attributter"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Valgfritt. Nøyaktigheten i meter.",
+                "source_type": "Hvordan posisjonen bestemmes.",
+                "icon": "Overstyrer standardikonet.",
+                "attributes": "Én per linje, skrevet som `Attributtnavn: sti`."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Hvert attributt må skrives som `Attributtnavn: sti` på egen linje."
+      },
+      "abort": {
+        "reconfigure_successful": "Enhetssporeren ble oppdatert."
+      }
     }
   },
-  "selector": {
-    "sensor_type": {
-      "options": {
-        "sensor": "Sensor",
-        "binary_sensor": "Binær sensor",
-        "number": "Nummer",
-        "device_tracker": "Enhetssporing"
-      }
+  "exceptions": {
+    "cannot_connect": {
+      "message": "Kunne ikke nå endepunktet: {error}"
     },
-    "tracker_source_type": {
-      "options": {
-        "none": "Ingen (standard)",
-        "gps": "GPS",
-        "router": "Ruter",
-        "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE"
-      }
+    "invalid_auth": {
+      "message": "Endepunktet avviste den lagrede legitimasjonen."
+    },
+    "bad_status": {
+      "message": "Endepunktet svarte med HTTP {status}."
+    },
+    "empty_response": {
+      "message": "Endepunktet svarte med en tom tekst."
     }
   }
 }

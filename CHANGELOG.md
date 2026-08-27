@@ -5,6 +5,68 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [2.0.0] - 2026-08-27
+
+A full rewrite against current Home Assistant integration standards. Existing
+configuration entries are migrated automatically.
+
+### Added
+- **Visual value picker.** After entering the URL, method and authentication the
+  endpoint is called once. The response is flattened into a searchable list of
+  `path = value` pairs, and the selected values become entities.
+- **Automatic guessing** of entity type, device class, unit of measurement and
+  state class from the key name and the value.
+- **Authentication presets**: bearer token, API key (custom header) and HTTP
+  basic authentication, in addition to free-form headers.
+- **Config subentries** — every entity is its own subentry with dedicated
+  *Add* and *Edit* dialogs on the integration page.
+- **Reconfigure flow** for changing the endpoint without recreating the entry.
+- **Re-authentication flow** triggered automatically on HTTP 401/403.
+- **Diagnostics** with the URL, headers and credentials redacted.
+- Support for reading XML and HTML attributes (`/@name`, `::attr(name)`).
+- Configurable extra state attributes per entity.
+- `HEAD` request method, redirect control and a forced response format.
+- Local brand assets in `brands/`, plus `script/validate_assets.py` and
+  `script/validate_strings.py` to keep assets and translations valid.
+- Test suite covering the flows, migration, parsing and entity behaviour.
+
+### Changed
+- **Simplified configuration.** Headers are entered as `Name: value` lines
+  instead of a repeating add-one-at-a-time wizard, and advanced options are
+  collapsed into a section. Setup is now two to four steps.
+- Requests use Home Assistant's shared aiohttp session.
+- The coordinator stores the parsed response once; entities extract their own
+  value from it.
+- Entities follow the `has_entity_name` convention and each get their own device
+  linked to the endpoint device. **Entity IDs change.**
+- Complete rewrite of `strings.json`; all 24 languages retranslated.
+- Tooling moved from Black/isort/flake8 to Ruff.
+
+### Fixed
+- **XML external entity (XXE) vulnerability**: XML is now parsed with
+  `defusedxml` instead of the standard library parser.
+- Credentials are no longer written to logs or diagnostics.
+- Sensors with a numeric device class now coerce their value, and timestamp
+  sensors return a real `datetime`.
+- Unsupported or removed device classes are ignored instead of breaking setup.
+- Unresolvable paths leave the entity `unknown` instead of logging a warning on
+  every poll.
+
+### Removed
+- The `number` platform. Read-only number entities were misleading; existing
+  ones are migrated to sensors.
+- The `lxml` requirement. HTML is parsed with the standard library parser.
+- The `sensor_color` option, migrated to an extra state attribute named `color`.
+- The device tracker `location_name` option, deprecated upstream.
+
+### Retained from 1.2.0
+- Configurable retries on error, including retrying on an empty response body.
+- Response parsing runs in the executor to keep the event loop free.
+- Regular-expression extraction from plain-text bodies.
+- All 24 UI translations.
+
 ## [1.2.0] - 2026-07-15
 
 ### Added

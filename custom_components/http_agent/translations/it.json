@@ -1,223 +1,357 @@
 {
+  "title": "HTTP Agent",
   "config": {
     "step": {
       "user": {
-        "title": "Configurazione HTTP Agent",
-        "description": "Configura l'endpoint HTTP",
+        "title": "Connettersi a un endpoint",
+        "description": "Punta HTTP Agent verso un qualsiasi endpoint HTTP. Dopo i passaggi successivi l'endpoint viene chiamato una volta, così puoi scegliere i valori da trasformare in entità.",
         "data": {
           "url": "URL",
-          "method": "Metodo HTTP",
-          "timeout": "Timeout (secondi)",
-          "interval": "Intervallo di aggiornamento (secondi)",
-          "retries": "Tentativi in caso di errore",
-          "verify_ssl": "Verifica certificato SSL"
+          "method": "Metodo",
+          "auth_type": "Autenticazione",
+          "name": "Nome"
+        },
+        "data_description": {
+          "url": "URL completo dell'endpoint. I template di Home Assistant sono supportati.",
+          "method": "Metodo HTTP usato a ogni interrogazione.",
+          "auth_type": "Scegli un profilo di autenticazione predefinito, oppure 'None' e aggiungi le tue intestazioni qui sotto.",
+          "name": "Facoltativo. Per impostazione predefinita, il nome host dell'URL."
+        },
+        "sections": {
+          "advanced": {
+            "name": "Impostazioni avanzate",
+            "data": {
+              "scan_interval": "Intervallo di aggiornamento",
+              "timeout": "Timeout della richiesta",
+              "retries": "Nuovi tentativi in caso di errore",
+              "extra_headers": "Intestazioni aggiuntive",
+              "response_format": "Formato della risposta",
+              "verify_ssl": "Verifica il certificato SSL",
+              "follow_redirects": "Segui i reindirizzamenti"
+            },
+            "data_description": {
+              "scan_interval": "Ogni quanto viene interrogato l'endpoint, in secondi.",
+              "timeout": "Quanto attendere una risposta, in secondi.",
+              "retries": "Quanti tentativi aggiuntivi effettuare quando un'interrogazione fallisce, con un secondo tra un tentativo e l'altro.",
+              "extra_headers": "Un'intestazione per riga, scritta come `Nome: valore`. I template sono supportati.",
+              "response_format": "Lascia su 'Auto' per rilevare automaticamente JSON, XML, HTML o testo semplice.",
+              "verify_ssl": "Disattiva solo per endpoint con un certificato autofirmato.",
+              "follow_redirects": "Segui automaticamente i reindirizzamenti HTTP 3xx."
+            }
+          }
         }
       },
-      "headers": {
-        "title": "Intestazioni HTTP",
-        "description": "Configura le intestazioni HTTP\n\nIntestazioni correnti:\n{headers}",
-        "menu_options": {
-          "add_header": "Aggiungi",
-          "headers_done": "Fatto"
-        }
-      },
-      "add_header": {
-        "title": "Aggiungi intestazione HTTP",
-        "description": "Aggiungi una nuova intestazione HTTP",
+      "credentials": {
+        "title": "Autenticazione",
+        "description": "Inserisci le credenziali per il profilo \"{auth_type}\". Vengono salvate cifrate e non compaiono mai nei log o nella diagnostica.",
         "data": {
-          "key": "Nome intestazione",
-          "value": "Valore intestazione"
+          "token": "Token Bearer",
+          "api_key": "Chiave API",
+          "api_key_header": "Intestazione della chiave API",
+          "username": "Nome utente",
+          "password": "Password"
+        },
+        "data_description": {
+          "token": "Inviato come intestazione `Authorization: Bearer`.",
+          "api_key": "Il valore della chiave stessa.",
+          "api_key_header": "L'intestazione in cui viene inviata la chiave, ad esempio `X-API-Key`.",
+          "username": "Nome utente per l'autenticazione HTTP basic.",
+          "password": "Password per l'autenticazione HTTP basic."
         }
       },
-      "payload": {
-        "title": "Payload HTTP",
-        "description": "Configura il payload della richiesta",
+      "body": {
+        "title": "Corpo della richiesta",
+        "description": "Le richieste {method} possono inviare un corpo. Lascialo vuoto se l'endpoint non ne ha bisogno.",
         "data": {
           "content_type": "Tipo di contenuto",
-          "payload": "Payload (JSON/XML/Testo)"
+          "payload": "Corpo"
+        },
+        "data_description": {
+          "content_type": "Inviato come intestazione `Content-Type`.",
+          "payload": "Il corpo della richiesta. I template di Home Assistant sono supportati."
         }
       },
-      "sensors": {
-        "title": "Configurazione sensori",
-        "description": "Configura i sensori per estrarre i dati\n\nSensori correnti:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Aggiungi",
-          "sensors_done": "Fatto"
-        }
-      },
-      "add_sensor": {
-        "title": "Aggiungi sensore",
-        "description": "Scegli il tipo di sensore e fornisci un nome",
+      "select_values": {
+        "title": "Scegli i valori che vuoi",
+        "description": "L'endpoint ha risposto con HTTP {status} ed è stato letto come **{format}**. Sono stati trovati {count} valori.\n\n```\n{preview}\n```\n\nScegli i valori che devono diventare entità. Tipi di entità, classi dispositivo e unità sensate vengono dedotti automaticamente e possono essere modificati in seguito. Puoi anche saltare questo passaggio e aggiungere le entità più tardi.",
         "data": {
-          "sensor_name": "Nome sensore",
-          "sensor_type": "Tipo sensore"
+          "selected_values": "Valori"
+        },
+        "data_description": {
+          "selected_values": "Cerca nell'elenco, oppure digita un percorso manualmente per aggiungerne uno non rilevato."
         }
       },
-      "sensor_config": {
-        "title": "Configurazione sensore",
-        "description": "Configura le impostazioni del sensore. Il metodo di estrazione (JSON/XPath/CSS/RegEx) verrà rilevato automaticamente in base al tipo di contenuto della risposta.",
+      "reauth_confirm": {
+        "title": "Autentica di nuovo",
+        "description": "L'endpoint ha rifiutato le credenziali salvate per il profilo \"{auth_type}\". Inseriscile di nuovo.",
         "data": {
-          "sensor_state": "Selettore stato (JSON/XPath/CSS/RegEx - rilevato automaticamente)",
-          "sensor_icon": "Selettore icona (JSON/XPath/CSS/RegEx - rilevato automaticamente)",
-          "sensor_color": "Selettore colore (JSON/XPath/CSS/RegEx - rilevato automaticamente)",
-          "sensor_device_class": "Classe dispositivo",
-          "sensor_unit": "Unità di misura",
-          "tracker_latitude": "Selettore latitudine (JSON/XPath/CSS/RegEx - rilevato automaticamente)",
-          "tracker_longitude": "Selettore longitudine (JSON/XPath/CSS/RegEx - rilevato automaticamente)",
-          "tracker_location_name": "Selettore nome posizione (JSON/XPath/CSS/RegEx - rilevato automaticamente)",
-          "tracker_source_type": "Tipo sorgente"
+          "token": "Token Bearer",
+          "api_key": "Chiave API",
+          "api_key_header": "Intestazione della chiave API",
+          "username": "Nome utente",
+          "password": "Password"
         }
       }
     },
     "error": {
-      "invalid_url": "Formato URL non valido",
-      "no_sensors": "Deve essere configurato almeno un sensore"
+      "cannot_connect": "Impossibile raggiungere l'endpoint. Controlla l'URL, la rete e il timeout.",
+      "invalid_auth": "L'endpoint ha rifiutato le credenziali (HTTP 401/403).",
+      "invalid_url": "Inserisci un URL completo, compreso lo schema http o https.",
+      "invalid_headers": "Ogni intestazione deve essere scritta come `Nome: valore` su una riga a sé.",
+      "bad_status": "L'endpoint ha risposto con un codice di stato di errore.",
+      "no_values": "La risposta era vuota o non conteneva valori leggibili."
     },
     "abort": {
-      "already_configured": "Questo endpoint HTTP è già configurato",
-      "no_sensors": "Nessun sensore configurato"
+      "already_configured": "Questa combinazione di URL e metodo è già configurata.",
+      "reauth_successful": "La nuova autenticazione è riuscita.",
+      "reconfigure_successful": "L'endpoint è stato aggiornato."
     }
   },
-  "options": {
-    "step": {
-      "init": {
-        "title": "Configurazione HTTP Agent",
-        "description": "Scegli cosa modificare",
-        "menu_options": {
-          "basic": "Modifica impostazioni di base (URL, metodo, timeout, intervallo, SSL)",
-          "headers": "Modifica intestazioni HTTP",
-          "payload": "Modifica payload richiesta",
-          "sensors": "Modifica configurazione sensori"
+  "config_subentries": {
+    "sensor": {
+      "initiate_flow": {
+        "user": "Aggiungi sensore",
+        "reconfigure": "Modifica sensore"
+      },
+      "entry_type": "Sensore",
+      "step": {
+        "user": {
+          "title": "Aggiungi un sensore",
+          "description": "Scegli un valore dall'ultima risposta, oppure digita tu stesso un percorso.",
+          "data": {
+            "name": "Nome",
+            "value_path": "Valore"
+          },
+          "data_description": {
+            "name": "Il nome dell'entità.",
+            "value_path": "Il percorso da leggere nella risposta."
+          },
+          "sections": {
+            "options": {
+              "name": "Impostazioni dell'entità",
+              "data": {
+                "device_class": "Classe dispositivo",
+                "unit_of_measurement": "Unità di misura",
+                "state_class": "Classe di stato",
+                "icon": "Icona",
+                "attributes": "Attributi aggiuntivi"
+              },
+              "data_description": {
+                "device_class": "Determina come Home Assistant formatta e rappresenta il valore.",
+                "unit_of_measurement": "Ad esempio °C, %, kWh.",
+                "state_class": "Imposta su 'Measurement' o 'Total increasing' per includere il sensore nelle statistiche a lungo termine.",
+                "icon": "Sostituisce l'icona derivata dalla classe dispositivo.",
+                "attributes": "Uno per riga, scritto come `Nome attributo: percorso`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Modifica sensore",
+          "description": "Scegli un valore dall'ultima risposta, oppure digita tu stesso un percorso.",
+          "data": {
+            "name": "Nome",
+            "value_path": "Valore"
+          },
+          "data_description": {
+            "name": "Il nome dell'entità.",
+            "value_path": "Il percorso da leggere nella risposta."
+          },
+          "sections": {
+            "options": {
+              "name": "Impostazioni dell'entità",
+              "data": {
+                "device_class": "Classe dispositivo",
+                "unit_of_measurement": "Unità di misura",
+                "state_class": "Classe di stato",
+                "icon": "Icona",
+                "attributes": "Attributi aggiuntivi"
+              },
+              "data_description": {
+                "device_class": "Determina come Home Assistant formatta e rappresenta il valore.",
+                "unit_of_measurement": "Ad esempio °C, %, kWh.",
+                "state_class": "Imposta su 'Measurement' o 'Total increasing' per includere il sensore nelle statistiche a lungo termine.",
+                "icon": "Sostituisce l'icona derivata dalla classe dispositivo.",
+                "attributes": "Uno per riga, scritto come `Nome attributo: percorso`."
+              }
+            }
+          }
         }
       },
-      "basic": {
-        "title": "Impostazioni di base",
-        "description": "Modifica URL, metodo, timeout, intervallo e verifica SSL",
-        "data": {
-          "url": "URL",
-          "method": "Metodo HTTP",
-          "timeout": "Timeout (secondi)",
-          "interval": "Intervallo di aggiornamento (secondi)",
-          "retries": "Tentativi in caso di errore",
-          "verify_ssl": "Verifica certificato SSL"
-        }
+      "error": {
+        "invalid_attributes": "Ogni attributo deve essere scritto come `Nome attributo: percorso` su una riga a sé."
       },
-      "headers": {
-        "title": "Intestazioni HTTP",
-        "description": "Modifica intestazioni HTTP\n\nIntestazioni correnti:\n{headers}",
-        "menu_options": {
-          "add_header": "Aggiungi",
-          "clear_headers": "Cancella tutto",
-          "headers_done": "Salva modifiche"
-        }
-      },
-      "add_header": {
-        "title": "Aggiungi intestazione HTTP",
-        "description": "Aggiungi una nuova intestazione HTTP",
-        "data": {
-          "key": "Nome intestazione",
-          "value": "Valore intestazione"
-        }
-      },
-      "payload": {
-        "title": "Payload HTTP",
-        "description": "Modifica il payload della richiesta",
-        "data": {
-          "content_type": "Tipo di contenuto",
-          "payload": "Payload (JSON/XML/Testo)"
-        }
-      },
-      "sensors": {
-        "title": "Configurazione sensori",
-        "description": "Modifica configurazione sensori\n\nSensori correnti:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Aggiungi",
-          "select_sensor": "Modifica",
-          "clear_sensors": "Cancella tutto",
-          "sensors_done": "Salva modifiche"
-        }
-      },
-      "select_sensor": {
-        "title": "Seleziona sensore",
-        "description": "Scegli un sensore da modificare o eliminare",
-        "data": {
-          "sensor": "Sensore"
-        }
-      },
-      "edit_sensor": {
-        "title": "Modifica sensore",
-        "description": "Scegli cosa fare con questo sensore:\n\n{sensor_info}",
-        "menu_options": {
-          "modify_sensor": "Modifica",
-          "delete_sensor": "Elimina",
-          "edit_back": "Indietro"
-        }
-      },
-      "modify_sensor": {
-        "title": "Modifica sensore",
-        "description": "Modifica la configurazione del sensore. Il metodo di estrazione (JSON/XPath/CSS/RegEx) verrà rilevato automaticamente in base al tipo di contenuto della risposta.",
-        "data": {
-          "sensor_name": "Nome sensore",
-          "sensor_state": "Selettore stato (JSON/XPath/CSS/RegEx - rilevato automaticamente)",
-          "sensor_icon": "Selettore icona (JSON/XPath/CSS/RegEx - rilevato automaticamente)",
-          "sensor_color": "Selettore colore (JSON/XPath/CSS/RegEx - rilevato automaticamente)",
-          "sensor_device_class": "Classe dispositivo",
-          "sensor_unit": "Unità di misura",
-          "tracker_latitude": "Selettore latitudine (JSON/XPath/CSS/RegEx - rilevato automaticamente)",
-          "tracker_longitude": "Selettore longitudine (JSON/XPath/CSS/RegEx - rilevato automaticamente)",
-          "tracker_location_name": "Selettore nome posizione (JSON/XPath/CSS/RegEx - rilevato automaticamente)",
-          "tracker_source_type": "Tipo sorgente"
-        }
-      },
-      "add_sensor": {
-        "title": "Aggiungi sensore",
-        "description": "Scegli il tipo di sensore e fornisci un nome",
-        "data": {
-          "sensor_name": "Nome sensore",
-          "sensor_type": "Tipo sensore"
-        }
-      },
-      "sensor_config": {
-        "title": "Configurazione sensore",
-        "description": "Configura le impostazioni del sensore. Il metodo di estrazione (JSON/XPath/CSS/RegEx) verrà rilevato automaticamente in base al tipo di contenuto della risposta.",
-        "data": {
-          "sensor_state": "Selettore stato (JSON/XPath/CSS/RegEx - rilevato automaticamente)",
-          "sensor_icon": "Selettore icona (JSON/XPath/CSS/RegEx - rilevato automaticamente)",
-          "sensor_color": "Selettore colore (JSON/XPath/CSS/RegEx - rilevato automaticamente)",
-          "sensor_device_class": "Classe dispositivo",
-          "sensor_unit": "Unità di misura",
-          "tracker_latitude": "Selettore latitudine (JSON/XPath/CSS/RegEx - rilevato automaticamente)",
-          "tracker_longitude": "Selettore longitudine (JSON/XPath/CSS/RegEx - rilevato automaticamente)",
-          "tracker_location_name": "Selettore nome posizione (JSON/XPath/CSS/RegEx - rilevato automaticamente)",
-          "tracker_source_type": "Tipo sorgente"
-        }
+      "abort": {
+        "reconfigure_successful": "Il sensore è stato aggiornato."
       }
     },
-    "error": {
-      "invalid_url": "Formato URL non valido",
-      "no_sensors": "Deve essere configurato almeno un sensore"
+    "binary_sensor": {
+      "initiate_flow": {
+        "user": "Aggiungi sensore binario",
+        "reconfigure": "Modifica sensore binario"
+      },
+      "entry_type": "Sensore binario",
+      "step": {
+        "user": {
+          "title": "Aggiungi un sensore binario",
+          "description": "Scegli un valore dall'ultima risposta, oppure digita tu stesso un percorso.",
+          "data": {
+            "name": "Nome",
+            "value_path": "Valore"
+          },
+          "data_description": {
+            "name": "Il nome dell'entità.",
+            "value_path": "Il percorso da leggere nella risposta."
+          },
+          "sections": {
+            "options": {
+              "name": "Impostazioni dell'entità",
+              "data": {
+                "device_class": "Classe dispositivo",
+                "payload_on": "Valore per acceso",
+                "payload_off": "Valore per spento",
+                "icon": "Icona",
+                "attributes": "Attributi aggiuntivi"
+              },
+              "data_description": {
+                "device_class": "Determina il testo e l'icona acceso/spento.",
+                "payload_on": "Facoltativo. Il valore esatto che significa 'acceso'. Lascia vuoto per rilevare automaticamente true/1/on/yes.",
+                "payload_off": "Facoltativo. Il valore esatto che significa 'spento'.",
+                "icon": "Sostituisce l'icona derivata dalla classe dispositivo.",
+                "attributes": "Uno per riga, scritto come `Nome attributo: percorso`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Modifica sensore binario",
+          "description": "Scegli un valore dall'ultima risposta, oppure digita tu stesso un percorso.",
+          "data": {
+            "name": "Nome",
+            "value_path": "Valore"
+          },
+          "data_description": {
+            "name": "Il nome dell'entità.",
+            "value_path": "Il percorso da leggere nella risposta."
+          },
+          "sections": {
+            "options": {
+              "name": "Impostazioni dell'entità",
+              "data": {
+                "device_class": "Classe dispositivo",
+                "payload_on": "Valore per acceso",
+                "payload_off": "Valore per spento",
+                "icon": "Icona",
+                "attributes": "Attributi aggiuntivi"
+              },
+              "data_description": {
+                "device_class": "Determina il testo e l'icona acceso/spento.",
+                "payload_on": "Facoltativo. Il valore esatto che significa 'acceso'. Lascia vuoto per rilevare automaticamente true/1/on/yes.",
+                "payload_off": "Facoltativo. Il valore esatto che significa 'spento'.",
+                "icon": "Sostituisce l'icona derivata dalla classe dispositivo.",
+                "attributes": "Uno per riga, scritto come `Nome attributo: percorso`."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Ogni attributo deve essere scritto come `Nome attributo: percorso` su una riga a sé."
+      },
+      "abort": {
+        "reconfigure_successful": "Il sensore binario è stato aggiornato."
+      }
     },
-    "abort": {
-      "no_sensors": "Nessun sensore configurato"
+    "device_tracker": {
+      "initiate_flow": {
+        "user": "Aggiungi tracker dispositivo",
+        "reconfigure": "Modifica tracker dispositivo"
+      },
+      "entry_type": "Tracker dispositivo",
+      "step": {
+        "user": {
+          "title": "Aggiungi un tracker dispositivo",
+          "description": "Scegli i valori di latitudine e longitudine dall'ultima risposta.",
+          "data": {
+            "name": "Nome",
+            "latitude_path": "Latitudine",
+            "longitude_path": "Longitudine"
+          },
+          "data_description": {
+            "name": "Il nome dell'entità.",
+            "latitude_path": "Il percorso al valore della latitudine.",
+            "longitude_path": "Il percorso al valore della longitudine."
+          },
+          "sections": {
+            "options": {
+              "name": "Impostazioni dell'entità",
+              "data": {
+                "gps_accuracy_path": "Precisione GPS",
+                "source_type": "Tipo di sorgente",
+                "icon": "Icona",
+                "attributes": "Attributi aggiuntivi"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Facoltativo. La precisione in metri.",
+                "source_type": "Come viene determinata la posizione.",
+                "icon": "Sostituisce l'icona predefinita.",
+                "attributes": "Uno per riga, scritto come `Nome attributo: percorso`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Modifica tracker dispositivo",
+          "description": "Scegli i valori di latitudine e longitudine dall'ultima risposta.",
+          "data": {
+            "name": "Nome",
+            "latitude_path": "Latitudine",
+            "longitude_path": "Longitudine"
+          },
+          "data_description": {
+            "name": "Il nome dell'entità.",
+            "latitude_path": "Il percorso al valore della latitudine.",
+            "longitude_path": "Il percorso al valore della longitudine."
+          },
+          "sections": {
+            "options": {
+              "name": "Impostazioni dell'entità",
+              "data": {
+                "gps_accuracy_path": "Precisione GPS",
+                "source_type": "Tipo di sorgente",
+                "icon": "Icona",
+                "attributes": "Attributi aggiuntivi"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Facoltativo. La precisione in metri.",
+                "source_type": "Come viene determinata la posizione.",
+                "icon": "Sostituisce l'icona predefinita.",
+                "attributes": "Uno per riga, scritto come `Nome attributo: percorso`."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Ogni attributo deve essere scritto come `Nome attributo: percorso` su una riga a sé."
+      },
+      "abort": {
+        "reconfigure_successful": "Il tracker dispositivo è stato aggiornato."
+      }
     }
   },
-  "selector": {
-    "sensor_type": {
-      "options": {
-        "sensor": "Sensore",
-        "binary_sensor": "Sensore binario",
-        "number": "Numero",
-        "device_tracker": "Localizzatore dispositivo"
-      }
+  "exceptions": {
+    "cannot_connect": {
+      "message": "Impossibile raggiungere l'endpoint: {error}"
     },
-    "tracker_source_type": {
-      "options": {
-        "none": "Nessuno (predefinito)",
-        "gps": "GPS",
-        "router": "Router",
-        "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE"
-      }
+    "invalid_auth": {
+      "message": "L'endpoint ha rifiutato le credenziali salvate."
+    },
+    "bad_status": {
+      "message": "L'endpoint ha risposto con HTTP {status}."
+    },
+    "empty_response": {
+      "message": "L'endpoint ha risposto con un corpo vuoto."
     }
   }
 }

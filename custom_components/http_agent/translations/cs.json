@@ -1,223 +1,357 @@
 {
+  "title": "HTTP Agent",
   "config": {
     "step": {
       "user": {
-        "title": "Konfigurace HTTP Agent",
-        "description": "Nakonfigurujte HTTP endpoint",
+        "title": "Připojit k endpointu",
+        "description": "Nasměrujte HTTP Agent na libovolný HTTP endpoint. Po dalších krocích se endpoint jednou zavolá, abyste si mohli vybrat hodnoty, které chcete jako entity.",
         "data": {
           "url": "URL",
-          "method": "HTTP metoda",
-          "timeout": "Timeout (sekundy)",
-          "interval": "Interval aktualizace (sekundy)",
-          "retries": "Opakovani pri chybe",
-          "verify_ssl": "Overit SSL certifikat"
+          "method": "Metoda",
+          "auth_type": "Ověřování",
+          "name": "Název"
+        },
+        "data_description": {
+          "url": "Úplná adresa URL endpointu. Šablony Home Assistant jsou podporovány.",
+          "method": "Metoda HTTP použitá při každém dotazu.",
+          "auth_type": "Vyberte připravený profil ověřování, nebo 'None' a přidejte níže vlastní hlavičky.",
+          "name": "Volitelné. Výchozí je název hostitele z adresy URL."
+        },
+        "sections": {
+          "advanced": {
+            "name": "Pokročilá nastavení",
+            "data": {
+              "scan_interval": "Interval aktualizace",
+              "timeout": "Časový limit požadavku",
+              "retries": "Opakované pokusy při chybě",
+              "extra_headers": "Další hlavičky",
+              "response_format": "Formát odpovědi",
+              "verify_ssl": "Ověřovat certifikát SSL",
+              "follow_redirects": "Následovat přesměrování"
+            },
+            "data_description": {
+              "scan_interval": "Jak často se endpoint dotazuje, v sekundách.",
+              "timeout": "Jak dlouho se čeká na odpověď, v sekundách.",
+              "retries": "Kolik dalších pokusů se provede při neúspěšném dotazu, s jednou sekundou mezi pokusy.",
+              "extra_headers": "Jedna hlavička na řádek ve tvaru `Název: hodnota`. Šablony jsou podporovány.",
+              "response_format": "Ponechte na 'Auto' pro automatické rozpoznání JSON, XML, HTML nebo prostého textu.",
+              "verify_ssl": "Vypněte pouze u endpointů s vlastnoručně podepsaným certifikátem.",
+              "follow_redirects": "Automaticky následovat přesměrování HTTP 3xx."
+            }
+          }
         }
       },
-      "headers": {
-        "title": "HTTP hlavicky",
-        "description": "Nastavte HTTP hlavicky\n\nAktualni hlavicky:\n{headers}",
-        "menu_options": {
-          "add_header": "Pridat",
-          "headers_done": "Hotovo"
-        }
-      },
-      "add_header": {
-        "title": "Pridat HTTP hlavicku",
-        "description": "Pridat novou HTTP hlavicku",
+      "credentials": {
+        "title": "Ověřování",
+        "description": "Zadejte přihlašovací údaje pro profil \"{auth_type}\". Ukládají se šifrovaně a nikdy se nezobrazují v protokolech ani diagnostice.",
         "data": {
-          "key": "Nazev hlavicky",
-          "value": "Hodnota hlavicky"
+          "token": "Token Bearer",
+          "api_key": "Klíč API",
+          "api_key_header": "Hlavička klíče API",
+          "username": "Uživatelské jméno",
+          "password": "Heslo"
+        },
+        "data_description": {
+          "token": "Odesílá se jako hlavička `Authorization: Bearer`.",
+          "api_key": "Samotná hodnota klíče.",
+          "api_key_header": "Hlavička, ve které se klíč odesílá, například `X-API-Key`.",
+          "username": "Uživatelské jméno pro ověřování HTTP basic.",
+          "password": "Heslo pro ověřování HTTP basic."
         }
       },
-      "payload": {
-        "title": "HTTP telo",
-        "description": "Nakonfigurujte telo pozadavku",
+      "body": {
+        "title": "Tělo požadavku",
+        "description": "Požadavky {method} mohou odeslat tělo. Nechte prázdné, pokud jej endpoint nepotřebuje.",
         "data": {
           "content_type": "Typ obsahu",
-          "payload": "Telo (JSON/XML/Text)"
+          "payload": "Tělo"
+        },
+        "data_description": {
+          "content_type": "Odesílá se jako hlavička `Content-Type`.",
+          "payload": "Tělo požadavku. Šablony Home Assistant jsou podporovány."
         }
       },
-      "sensors": {
-        "title": "Konfigurace senzoru",
-        "description": "Nastavte senzory pro extrakci dat\n\nAktualni senzory:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Pridat",
-          "sensors_done": "Hotovo"
-        }
-      },
-      "add_sensor": {
-        "title": "Pridat senzor",
-        "description": "Vyberte typ senzoru a zadejte nazev",
+      "select_values": {
+        "title": "Vyberte hodnoty, které chcete",
+        "description": "Endpoint odpověděl s HTTP {status} a odpověď byla načtena jako **{format}**. Bylo nalezeno {count} hodnot.\n\n```\n{preview}\n```\n\nVyberte hodnoty, které se mají stát entitami. Rozumné typy entit, třídy zařízení a jednotky se odhadnou automaticky a lze je poté změnit. Tento krok můžete také přeskočit a přidat entity později.",
         "data": {
-          "sensor_name": "Nazev senzoru",
-          "sensor_type": "Typ senzoru"
+          "selected_values": "Hodnoty"
+        },
+        "data_description": {
+          "selected_values": "Vyhledejte v seznamu, nebo zadejte cestu ručně a přidejte tak takovou, která nebyla nalezena."
         }
       },
-      "sensor_config": {
-        "title": "Konfigurace senzoru",
-        "description": "Nakonfigurujte nastaveni senzoru. Metoda extrakce (JSON/XPath/CSS/RegEx) bude automaticky detekovana podle typu obsahu odpovedi.",
+      "reauth_confirm": {
+        "title": "Znovu ověřit",
+        "description": "Endpoint odmítl uložené přihlašovací údaje profilu \"{auth_type}\". Zadejte je znovu.",
         "data": {
-          "sensor_state": "Vyber stavu (JSON/XPath/CSS/RegEx - automaticky detekovano)",
-          "sensor_icon": "Vyber ikony (JSON/XPath/CSS/RegEx - automaticky detekovano)",
-          "sensor_color": "Vyber barvy (JSON/XPath/CSS/RegEx - automaticky detekovano)",
-          "sensor_device_class": "Trida zarizeni",
-          "sensor_unit": "Jednotka mereni",
-          "tracker_latitude": "Vyber zemepisne sirky (JSON/XPath/CSS/RegEx - automaticky detekovano)",
-          "tracker_longitude": "Vyber zemepisne delky (JSON/XPath/CSS/RegEx - automaticky detekovano)",
-          "tracker_location_name": "Vyber nazvu polohy (JSON/XPath/CSS/RegEx - automaticky detekovano)",
-          "tracker_source_type": "Typ zdroje"
+          "token": "Token Bearer",
+          "api_key": "Klíč API",
+          "api_key_header": "Hlavička klíče API",
+          "username": "Uživatelské jméno",
+          "password": "Heslo"
         }
       }
     },
     "error": {
-      "invalid_url": "Neplatny format URL",
-      "no_sensors": "Musi byt nakonfigurovan alespon jeden senzor"
+      "cannot_connect": "Endpoint není dostupný. Zkontrolujte adresu URL, síť a časový limit.",
+      "invalid_auth": "Endpoint odmítl přihlašovací údaje (HTTP 401/403).",
+      "invalid_url": "Zadejte úplnou adresu URL včetně schématu http nebo https.",
+      "invalid_headers": "Každá hlavička musí být zapsána jako `Název: hodnota` na vlastním řádku.",
+      "bad_status": "Endpoint odpověděl chybovým stavovým kódem.",
+      "no_values": "Odpověď byla prázdná nebo neobsahovala čitelné hodnoty."
     },
     "abort": {
-      "already_configured": "Tento HTTP endpoint je jiz nakonfigurovan",
-      "no_sensors": "Nebyly nakonfigurovany zadne senzory"
+      "already_configured": "Tato kombinace adresy URL a metody je již nakonfigurována.",
+      "reauth_successful": "Opětovné ověření proběhlo úspěšně.",
+      "reconfigure_successful": "Endpoint byl aktualizován."
     }
   },
-  "options": {
-    "step": {
-      "init": {
-        "title": "Konfigurace HTTP Agent",
-        "description": "Vyberte, co chcete upravit",
-        "menu_options": {
-          "basic": "Upravit zakladni nastaveni (URL, metoda, timeout, interval, SSL)",
-          "headers": "Upravit HTTP hlavicky",
-          "payload": "Upravit telo pozadavku",
-          "sensors": "Upravit konfiguraci senzoru"
+  "config_subentries": {
+    "sensor": {
+      "initiate_flow": {
+        "user": "Přidat senzor",
+        "reconfigure": "Upravit senzor"
+      },
+      "entry_type": "Senzor",
+      "step": {
+        "user": {
+          "title": "Přidat senzor",
+          "description": "Vyberte hodnotu z poslední odpovědi, nebo zadejte cestu sami.",
+          "data": {
+            "name": "Název",
+            "value_path": "Hodnota"
+          },
+          "data_description": {
+            "name": "Název entity.",
+            "value_path": "Cesta, která se čte z odpovědi."
+          },
+          "sections": {
+            "options": {
+              "name": "Nastavení entity",
+              "data": {
+                "device_class": "Třída zařízení",
+                "unit_of_measurement": "Měrná jednotka",
+                "state_class": "Třída stavu",
+                "icon": "Ikona",
+                "attributes": "Další atributy"
+              },
+              "data_description": {
+                "device_class": "Určuje, jak Home Assistant hodnotu formátuje a vykresluje.",
+                "unit_of_measurement": "Například °C, %, kWh.",
+                "state_class": "Nastavte na 'Measurement' nebo 'Total increasing', aby byl senzor zahrnut do dlouhodobých statistik.",
+                "icon": "Přepíše ikonu odvozenou z třídy zařízení.",
+                "attributes": "Jeden na řádek ve tvaru `Název atributu: cesta`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Upravit senzor",
+          "description": "Vyberte hodnotu z poslední odpovědi, nebo zadejte cestu sami.",
+          "data": {
+            "name": "Název",
+            "value_path": "Hodnota"
+          },
+          "data_description": {
+            "name": "Název entity.",
+            "value_path": "Cesta, která se čte z odpovědi."
+          },
+          "sections": {
+            "options": {
+              "name": "Nastavení entity",
+              "data": {
+                "device_class": "Třída zařízení",
+                "unit_of_measurement": "Měrná jednotka",
+                "state_class": "Třída stavu",
+                "icon": "Ikona",
+                "attributes": "Další atributy"
+              },
+              "data_description": {
+                "device_class": "Určuje, jak Home Assistant hodnotu formátuje a vykresluje.",
+                "unit_of_measurement": "Například °C, %, kWh.",
+                "state_class": "Nastavte na 'Measurement' nebo 'Total increasing', aby byl senzor zahrnut do dlouhodobých statistik.",
+                "icon": "Přepíše ikonu odvozenou z třídy zařízení.",
+                "attributes": "Jeden na řádek ve tvaru `Název atributu: cesta`."
+              }
+            }
+          }
         }
       },
-      "basic": {
-        "title": "Zakladni nastaveni",
-        "description": "Upravit URL, metodu, timeout, interval a SSL overeni",
-        "data": {
-          "url": "URL",
-          "method": "HTTP metoda",
-          "timeout": "Timeout (sekundy)",
-          "interval": "Interval aktualizace (sekundy)",
-          "retries": "Opakovani pri chybe",
-          "verify_ssl": "Overit SSL certifikat"
-        }
+      "error": {
+        "invalid_attributes": "Každý atribut musí být zapsán jako `Název atributu: cesta` na vlastním řádku."
       },
-      "headers": {
-        "title": "HTTP hlavicky",
-        "description": "Upravit HTTP hlavicky\n\nAktualni hlavicky:\n{headers}",
-        "menu_options": {
-          "add_header": "Pridat",
-          "clear_headers": "Vymazat vse",
-          "headers_done": "Ulozit zmeny"
-        }
-      },
-      "add_header": {
-        "title": "Pridat HTTP hlavicku",
-        "description": "Pridat novou HTTP hlavicku",
-        "data": {
-          "key": "Nazev hlavicky",
-          "value": "Hodnota hlavicky"
-        }
-      },
-      "payload": {
-        "title": "HTTP telo",
-        "description": "Upravit telo pozadavku",
-        "data": {
-          "content_type": "Typ obsahu",
-          "payload": "Telo (JSON/XML/Text)"
-        }
-      },
-      "sensors": {
-        "title": "Konfigurace senzoru",
-        "description": "Upravit konfiguraci senzoru\n\nAktualni senzory:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Pridat",
-          "select_sensor": "Upravit",
-          "clear_sensors": "Vymazat vse",
-          "sensors_done": "Ulozit zmeny"
-        }
-      },
-      "select_sensor": {
-        "title": "Vyberte senzor",
-        "description": "Vyberte senzor pro upravu nebo smazani",
-        "data": {
-          "sensor": "Senzor"
-        }
-      },
-      "edit_sensor": {
-        "title": "Upravit senzor",
-        "description": "Vyberte, co delat s timto senzorem:\n\n{sensor_info}",
-        "menu_options": {
-          "modify_sensor": "Upravit",
-          "delete_sensor": "Smazat",
-          "edit_back": "Zpet"
-        }
-      },
-      "modify_sensor": {
-        "title": "Upravit senzor",
-        "description": "Upravte konfiguraci senzoru. Metoda extrakce (JSON/XPath/CSS/RegEx) bude automaticky detekovana podle typu obsahu odpovedi.",
-        "data": {
-          "sensor_name": "Nazev senzoru",
-          "sensor_state": "Vyber stavu (JSON/XPath/CSS/RegEx - automaticky detekovano)",
-          "sensor_icon": "Vyber ikony (JSON/XPath/CSS/RegEx - automaticky detekovano)",
-          "sensor_color": "Vyber barvy (JSON/XPath/CSS/RegEx - automaticky detekovano)",
-          "sensor_device_class": "Trida zarizeni",
-          "sensor_unit": "Jednotka mereni",
-          "tracker_latitude": "Vyber zemepisne sirky (JSON/XPath/CSS/RegEx - automaticky detekovano)",
-          "tracker_longitude": "Vyber zemepisne delky (JSON/XPath/CSS/RegEx - automaticky detekovano)",
-          "tracker_location_name": "Vyber nazvu polohy (JSON/XPath/CSS/RegEx - automaticky detekovano)",
-          "tracker_source_type": "Typ zdroje"
-        }
-      },
-      "add_sensor": {
-        "title": "Pridat senzor",
-        "description": "Vyberte typ senzoru a zadejte nazev",
-        "data": {
-          "sensor_name": "Nazev senzoru",
-          "sensor_type": "Typ senzoru"
-        }
-      },
-      "sensor_config": {
-        "title": "Konfigurace senzoru",
-        "description": "Nakonfigurujte nastaveni senzoru. Metoda extrakce (JSON/XPath/CSS/RegEx) bude automaticky detekovana podle typu obsahu odpovedi.",
-        "data": {
-          "sensor_state": "Vyber stavu (JSON/XPath/CSS/RegEx - automaticky detekovano)",
-          "sensor_icon": "Vyber ikony (JSON/XPath/CSS/RegEx - automaticky detekovano)",
-          "sensor_color": "Vyber barvy (JSON/XPath/CSS/RegEx - automaticky detekovano)",
-          "sensor_device_class": "Trida zarizeni",
-          "sensor_unit": "Jednotka mereni",
-          "tracker_latitude": "Vyber zemepisne sirky (JSON/XPath/CSS/RegEx - automaticky detekovano)",
-          "tracker_longitude": "Vyber zemepisne delky (JSON/XPath/CSS/RegEx - automaticky detekovano)",
-          "tracker_location_name": "Vyber nazvu polohy (JSON/XPath/CSS/RegEx - automaticky detekovano)",
-          "tracker_source_type": "Typ zdroje"
-        }
+      "abort": {
+        "reconfigure_successful": "Senzor byl aktualizován."
       }
     },
-    "error": {
-      "invalid_url": "Neplatny format URL",
-      "no_sensors": "Musi byt nakonfigurovan alespon jeden senzor"
+    "binary_sensor": {
+      "initiate_flow": {
+        "user": "Přidat binární senzor",
+        "reconfigure": "Upravit binární senzor"
+      },
+      "entry_type": "Binární senzor",
+      "step": {
+        "user": {
+          "title": "Přidat binární senzor",
+          "description": "Vyberte hodnotu z poslední odpovědi, nebo zadejte cestu sami.",
+          "data": {
+            "name": "Název",
+            "value_path": "Hodnota"
+          },
+          "data_description": {
+            "name": "Název entity.",
+            "value_path": "Cesta, která se čte z odpovědi."
+          },
+          "sections": {
+            "options": {
+              "name": "Nastavení entity",
+              "data": {
+                "device_class": "Třída zařízení",
+                "payload_on": "Hodnota pro zapnuto",
+                "payload_off": "Hodnota pro vypnuto",
+                "icon": "Ikona",
+                "attributes": "Další atributy"
+              },
+              "data_description": {
+                "device_class": "Určuje popis a ikonu pro zapnuto/vypnuto.",
+                "payload_on": "Volitelné. Přesná hodnota znamenající 'zapnuto'. Nechte prázdné pro automatické rozpoznání true/1/on/yes.",
+                "payload_off": "Volitelné. Přesná hodnota znamenající 'vypnuto'.",
+                "icon": "Přepíše ikonu odvozenou z třídy zařízení.",
+                "attributes": "Jeden na řádek ve tvaru `Název atributu: cesta`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Upravit binární senzor",
+          "description": "Vyberte hodnotu z poslední odpovědi, nebo zadejte cestu sami.",
+          "data": {
+            "name": "Název",
+            "value_path": "Hodnota"
+          },
+          "data_description": {
+            "name": "Název entity.",
+            "value_path": "Cesta, která se čte z odpovědi."
+          },
+          "sections": {
+            "options": {
+              "name": "Nastavení entity",
+              "data": {
+                "device_class": "Třída zařízení",
+                "payload_on": "Hodnota pro zapnuto",
+                "payload_off": "Hodnota pro vypnuto",
+                "icon": "Ikona",
+                "attributes": "Další atributy"
+              },
+              "data_description": {
+                "device_class": "Určuje popis a ikonu pro zapnuto/vypnuto.",
+                "payload_on": "Volitelné. Přesná hodnota znamenající 'zapnuto'. Nechte prázdné pro automatické rozpoznání true/1/on/yes.",
+                "payload_off": "Volitelné. Přesná hodnota znamenající 'vypnuto'.",
+                "icon": "Přepíše ikonu odvozenou z třídy zařízení.",
+                "attributes": "Jeden na řádek ve tvaru `Název atributu: cesta`."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Každý atribut musí být zapsán jako `Název atributu: cesta` na vlastním řádku."
+      },
+      "abort": {
+        "reconfigure_successful": "Binární senzor byl aktualizován."
+      }
     },
-    "abort": {
-      "no_sensors": "Nebyly nakonfigurovany zadne senzory"
+    "device_tracker": {
+      "initiate_flow": {
+        "user": "Přidat sledování zařízení",
+        "reconfigure": "Upravit sledování zařízení"
+      },
+      "entry_type": "Sledování zařízení",
+      "step": {
+        "user": {
+          "title": "Přidat sledování zařízení",
+          "description": "Vyberte hodnoty zeměpisné šířky a délky z poslední odpovědi.",
+          "data": {
+            "name": "Název",
+            "latitude_path": "Zeměpisná šířka",
+            "longitude_path": "Zeměpisná délka"
+          },
+          "data_description": {
+            "name": "Název entity.",
+            "latitude_path": "Cesta k hodnotě zeměpisné šířky.",
+            "longitude_path": "Cesta k hodnotě zeměpisné délky."
+          },
+          "sections": {
+            "options": {
+              "name": "Nastavení entity",
+              "data": {
+                "gps_accuracy_path": "Přesnost GPS",
+                "source_type": "Typ zdroje",
+                "icon": "Ikona",
+                "attributes": "Další atributy"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Volitelné. Přesnost v metrech.",
+                "source_type": "Jak se určuje poloha.",
+                "icon": "Přepíše výchozí ikonu.",
+                "attributes": "Jeden na řádek ve tvaru `Název atributu: cesta`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Upravit sledování zařízení",
+          "description": "Vyberte hodnoty zeměpisné šířky a délky z poslední odpovědi.",
+          "data": {
+            "name": "Název",
+            "latitude_path": "Zeměpisná šířka",
+            "longitude_path": "Zeměpisná délka"
+          },
+          "data_description": {
+            "name": "Název entity.",
+            "latitude_path": "Cesta k hodnotě zeměpisné šířky.",
+            "longitude_path": "Cesta k hodnotě zeměpisné délky."
+          },
+          "sections": {
+            "options": {
+              "name": "Nastavení entity",
+              "data": {
+                "gps_accuracy_path": "Přesnost GPS",
+                "source_type": "Typ zdroje",
+                "icon": "Ikona",
+                "attributes": "Další atributy"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Volitelné. Přesnost v metrech.",
+                "source_type": "Jak se určuje poloha.",
+                "icon": "Přepíše výchozí ikonu.",
+                "attributes": "Jeden na řádek ve tvaru `Název atributu: cesta`."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Každý atribut musí být zapsán jako `Název atributu: cesta` na vlastním řádku."
+      },
+      "abort": {
+        "reconfigure_successful": "Sledování zařízení bylo aktualizováno."
+      }
     }
   },
-  "selector": {
-    "sensor_type": {
-      "options": {
-        "sensor": "Senzor",
-        "binary_sensor": "Binarni senzor",
-        "number": "Cislo",
-        "device_tracker": "Sledovani zarizeni"
-      }
+  "exceptions": {
+    "cannot_connect": {
+      "message": "Endpoint není dostupný: {error}"
     },
-    "tracker_source_type": {
-      "options": {
-        "none": "Zadne (vychozi)",
-        "gps": "GPS",
-        "router": "Router",
-        "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE"
-      }
+    "invalid_auth": {
+      "message": "Endpoint odmítl uložené přihlašovací údaje."
+    },
+    "bad_status": {
+      "message": "Endpoint odpověděl s HTTP {status}."
+    },
+    "empty_response": {
+      "message": "Endpoint odpověděl s prázdným tělem."
     }
   }
 }

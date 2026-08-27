@@ -1,126 +1,98 @@
-"""HTTP Agent binary sensor platform."""
+"""Binary sensor platform for HTTP Agent."""
 
 from __future__ import annotations
 
 import logging
 from typing import Any
 
-from homeassistant.components.binary_sensor import BinarySensorEntity
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.components.binary_sensor import (
+    BinarySensorDeviceClass,
+    BinarySensorEntity,
+)
+from homeassistant.const import CONF_DEVICE_CLASS
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from .const import (
-    CONF_SENSOR_NAME,
-    CONF_SENSOR_TYPE,
-    CONF_SENSORS,
+    CONF_PAYLOAD_OFF,
+    CONF_PAYLOAD_ON,
+    FALSY_VALUES,
+    SUBENTRY_TYPE_BINARY_SENSOR,
+    TRUTHY_VALUES,
 )
-from .coordinator import HTTPAgentCoordinator
-from .helpers import (
-    build_device_info,
-    get_device_class,
-    get_sensor_config,
-    merge_entry_data,
-)
+from .coordinator import HTTPAgentConfigEntry
+from .entity import HTTPAgentEntity, async_add_subentry_entities
 
 _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: ConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    entry: HTTPAgentConfigEntry,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Set up HTTP Agent binary sensors from a config entry."""
-    coordinator = entry.runtime_data
-
-    # Merge config data with options
-    data = merge_entry_data(entry)
-
-    sensors = []
-    for sensor_config in data[CONF_SENSORS]:
-        # Only create binary sensors of type "binary_sensor"
-        if sensor_config.get(CONF_SENSOR_TYPE, "sensor") == "binary_sensor":
-            sensor_name = sensor_config[CONF_SENSOR_NAME]
-            sensors.append(HTTPAgentBinarySensor(coordinator, entry, sensor_name))
-
-    if sensors:
-        async_add_entities(sensors)
+    """Set up the HTTP Agent binary sensors."""
+    async_add_subentry_entities(
+        entry, async_add_entities, SUBENTRY_TYPE_BINARY_SENSOR, HTTPAgentBinarySensor
+    )
 
 
-class HTTPAgentBinarySensor(CoordinatorEntity, BinarySensorEntity):
-    """HTTP Agent binary sensor."""
+class HTTPAgentBinarySensor(HTTPAgentEntity, BinarySensorEntity):
+    """A binary sensor reading a single value from the HTTP response."""
 
-    def __init__(
-        self,
-        coordinator: HTTPAgentCoordinator,
-        entry: ConfigEntry,
-        sensor_name: str,
-    ) -> None:
-        """Initialize the binary sensor."""
-        super().__init__(coordinator)
-        self.entry = entry
-        self.sensor_name = sensor_name
-
-        # Entity properties
-        self._attr_name = sensor_name
-        self._attr_unique_id = f"{entry.entry_id}_{sensor_name}"
-        self._attr_device_info = build_device_info(entry)
-
-        self.sensor_config = get_sensor_config(entry, sensor_name)
-        self._attr_device_class = get_device_class(self.sensor_config)
+    def __init__(self, coordinator, subentry) -> None:
+        """Initialise the binary sensor from its subentry configuration."""
+        super().__init__(coordinator, subentry)
+        device_class = self.config.get(CONF_DEVICE_CLASS)
+        try:
+            self._attr_device_class = (
+                BinarySensorDeviceClass(device_class) if device_class else None
+            )
+        except ValueError:
+            _LOGGER.warning("Ignoring unsupported device class '%s'", device_class)
+            self._attr_device_class = None
 
     @property
     def is_on(self) -> bool | None:
-        """Return true if the binary sensor is on."""
-        if not self.coordinator.data:
-            return None
+        """Return whether the extracted value represents an "on" state."""
+        return _as_bool(
+            self.value,
+            self.config.get(CONF_PAYLOAD_ON),
+            self.config.get(CONF_PAYLOAD_OFF),
+        )
 
-        sensor_data = self.coordinator.data.get(self.sensor_name, {})
-        state = sensor_data.get("state")
 
-        # Convert state to boolean
-        if state is None:
-            return None
+def _as_bool(
+    value: Any, payload_on: str | None, payload_off: str | None
+) -> bool | None:
+    """Interpret ``value`` as a boolean, honouring explicit on/off payloads."""
+    if value is None:
+        return None
 
-        if isinstance(state, bool):
-            return state
+    text = str(value).strip()
+    if payload_on and text == payload_on:
+        return True
+    if payload_off and text == payload_off:
+        return False
+    if payload_on and payload_off:
+        return None
+    if payload_on:
+        return False
+    if payload_off:
+        return True
 
-        if isinstance(state, str):
-            return state.lower() in ("true", "on", "yes", "1", "active", "open")
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return value != 0
 
-        if isinstance(state, (int, float)):
-            return state > 0
+    lowered = text.lower()
+    if lowered in TRUTHY_VALUES:
+        return True
+    if lowered in FALSY_VALUES:
+        return False
+    if not lowered:
+        return False
 
-        return bool(state)
-
-    @property
-    def icon(self) -> str | None:
-        """Return the icon of the sensor."""
-        if not self.coordinator.data:
-            return None
-
-        sensor_data = self.coordinator.data.get(self.sensor_name, {})
-        icon = sensor_data.get("icon")
-
-        # If icon is provided, ensure it starts with mdi:
-        if icon and not icon.startswith("mdi:"):
-            icon = f"mdi:{icon}"
-
-        return icon
-
-    @property
-    def extra_state_attributes(self) -> dict[str, Any]:
-        """Return the state attributes of the sensor."""
-        if not self.coordinator.data:
-            return {}
-
-        sensor_data = self.coordinator.data.get(self.sensor_name, {})
-        attributes = {}
-
-        # Add color if available
-        if sensor_data.get("color"):
-            attributes["color"] = sensor_data["color"]
-
-        return attributes
+    _LOGGER.debug("Value %r could not be interpreted as a boolean", value)
+    return None

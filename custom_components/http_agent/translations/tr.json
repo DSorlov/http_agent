@@ -1,223 +1,357 @@
 {
+  "title": "HTTP Agent",
   "config": {
     "step": {
       "user": {
-        "title": "HTTP Agent yapilandirmasi",
-        "description": "HTTP uc noktasini yapilandir",
+        "title": "Bir uç noktaya bağlanın",
+        "description": "HTTP Agent'ı herhangi bir HTTP uç noktasına yöneltin. Sonraki adımlardan sonra uç nokta bir kez çağrılır, böylece varlık olarak istediğiniz değerleri seçebilirsiniz.",
         "data": {
           "url": "URL",
-          "method": "HTTP yontemi",
-          "timeout": "Zaman asimi (saniye)",
-          "interval": "Guncelleme araligi (saniye)",
-          "retries": "Hata durumunda yeniden dene",
-          "verify_ssl": "SSL sertifikasini dogrula"
+          "method": "Yöntem",
+          "auth_type": "Kimlik doğrulama",
+          "name": "Ad"
+        },
+        "data_description": {
+          "url": "Uç noktanın tam URL adresi. Home Assistant şablonları desteklenir.",
+          "method": "Her sorguda kullanılan HTTP yöntemi.",
+          "auth_type": "Hazır bir kimlik doğrulama profili seçin veya 'None' seçip aşağıya kendi başlıklarınızı ekleyin.",
+          "name": "İsteğe bağlı. Varsayılan olarak URL'nin ana bilgisayar adı."
+        },
+        "sections": {
+          "advanced": {
+            "name": "Gelişmiş ayarlar",
+            "data": {
+              "scan_interval": "Güncelleme aralığı",
+              "timeout": "İstek zaman aşımı",
+              "retries": "Hatada yeniden deneme",
+              "extra_headers": "Ek başlıklar",
+              "response_format": "Yanıt biçimi",
+              "verify_ssl": "SSL sertifikasını doğrula",
+              "follow_redirects": "Yönlendirmeleri izle"
+            },
+            "data_description": {
+              "scan_interval": "Uç noktanın ne sıklıkla sorgulanacağı, saniye cinsinden.",
+              "timeout": "Yanıtın ne kadar süre bekleneceği, saniye cinsinden.",
+              "retries": "Bir sorgu başarısız olduğunda kaç ek deneme yapılacağı, denemeler arasında bir saniye ile.",
+              "extra_headers": "Satır başına bir başlık, `Ad: değer` biçiminde. Şablonlar desteklenir.",
+              "response_format": "JSON, XML, HTML veya düz metnin otomatik algılanması için 'Auto' olarak bırakın.",
+              "verify_ssl": "Yalnızca kendinden imzalı sertifikaya sahip uç noktalar için kapatın.",
+              "follow_redirects": "HTTP 3xx yönlendirmelerini otomatik olarak izle."
+            }
+          }
         }
       },
-      "headers": {
-        "title": "HTTP basliklari",
-        "description": "HTTP basliklarini yapilandir\n\nGuncel basliklar:\n{headers}",
-        "menu_options": {
-          "add_header": "Ekle",
-          "headers_done": "Tamam"
-        }
-      },
-      "add_header": {
-        "title": "HTTP basligi ekle",
-        "description": "Yeni HTTP basligi ekle",
+      "credentials": {
+        "title": "Kimlik doğrulama",
+        "description": "\"{auth_type}\" profili için kimlik bilgilerini girin. Şifrelenmiş olarak saklanır ve günlüklerde veya tanılamada asla gösterilmez.",
         "data": {
-          "key": "Baslik adi",
-          "value": "Baslik degeri"
+          "token": "Bearer belirteci",
+          "api_key": "API anahtarı",
+          "api_key_header": "API anahtarı başlığı",
+          "username": "Kullanıcı adı",
+          "password": "Parola"
+        },
+        "data_description": {
+          "token": "`Authorization: Bearer` başlığı olarak gönderilir.",
+          "api_key": "Anahtar değerinin kendisi.",
+          "api_key_header": "Anahtarın gönderildiği başlık, örneğin `X-API-Key`.",
+          "username": "HTTP basic kimlik doğrulaması için kullanıcı adı.",
+          "password": "HTTP basic kimlik doğrulaması için parola."
         }
       },
-      "payload": {
-        "title": "HTTP yuk",
-        "description": "Istek yukunu yapilandir",
+      "body": {
+        "title": "İstek gövdesi",
+        "description": "{method} istekleri bir gövde gönderebilir. Uç noktanın buna ihtiyacı yoksa boş bırakın.",
         "data": {
-          "content_type": "Icerik turu",
-          "payload": "Yuk (JSON/XML/Metin)"
+          "content_type": "İçerik türü",
+          "payload": "Gövde"
+        },
+        "data_description": {
+          "content_type": "`Content-Type` başlığı olarak gönderilir.",
+          "payload": "İsteğin gövdesi. Home Assistant şablonları desteklenir."
         }
       },
-      "sensors": {
-        "title": "Sensor yapilandirmasi",
-        "description": "Veri cikarmak icin sensorleri yapilandir\n\nGuncel sensorler:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Ekle",
-          "sensors_done": "Tamam"
-        }
-      },
-      "add_sensor": {
-        "title": "Sensor ekle",
-        "description": "Sensor turunu secin ve bir ad girin",
+      "select_values": {
+        "title": "İstediğiniz değerleri seçin",
+        "description": "Uç nokta HTTP {status} ile yanıt verdi ve yanıt **{format}** olarak okundu. {count} değer bulundu.\n\n```\n{preview}\n```\n\nVarlığa dönüşmesi gereken değerleri seçin. Uygun varlık türleri, cihaz sınıfları ve birimler otomatik olarak tahmin edilir ve sonradan değiştirilebilir. Bu adımı atlayıp varlıkları daha sonra da ekleyebilirsiniz.",
         "data": {
-          "sensor_name": "Sensor adi",
-          "sensor_type": "Sensor tipi"
+          "selected_values": "Değerler"
+        },
+        "data_description": {
+          "selected_values": "Listede arayın veya algılanmayan bir yolu eklemek için elle yazın."
         }
       },
-      "sensor_config": {
-        "title": "Sensor yapilandirmasi",
-        "description": "Sensor ayarlarini yapilandirin. Cikarma yontemi (JSON/XPath/CSS/RegEx), yanit icerik turune gore otomatik olarak algilanacaktir.",
+      "reauth_confirm": {
+        "title": "Yeniden kimlik doğrula",
+        "description": "Uç nokta, \"{auth_type}\" profili için kayıtlı kimlik bilgilerini reddetti. Bunları yeniden girin.",
         "data": {
-          "sensor_state": "Durum secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
-          "sensor_icon": "Simge secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
-          "sensor_color": "Renk secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
-          "sensor_device_class": "Cihaz sinifi",
-          "sensor_unit": "Olcum birimi",
-          "tracker_latitude": "Enlem secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
-          "tracker_longitude": "Boylam secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
-          "tracker_location_name": "Konum adi secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
-          "tracker_source_type": "Kaynak tipi"
+          "token": "Bearer belirteci",
+          "api_key": "API anahtarı",
+          "api_key_header": "API anahtarı başlığı",
+          "username": "Kullanıcı adı",
+          "password": "Parola"
         }
       }
     },
     "error": {
-      "invalid_url": "Gecersiz URL bicimi",
-      "no_sensors": "En az bir sensor yapilandirilmalidir"
+      "cannot_connect": "Uç noktaya ulaşılamadı. URL'yi, ağınızı ve zaman aşımını kontrol edin.",
+      "invalid_auth": "Uç nokta kimlik bilgilerini reddetti (HTTP 401/403).",
+      "invalid_url": "http veya https şeması dahil olmak üzere tam bir URL girin.",
+      "invalid_headers": "Her başlık kendi satırında `Ad: değer` biçiminde yazılmalıdır.",
+      "bad_status": "Uç nokta bir hata durum koduyla yanıt verdi.",
+      "no_values": "Yanıt boştu veya okunabilir değer içermiyordu."
     },
     "abort": {
-      "already_configured": "Bu HTTP uc noktasi zaten yapilandirildi",
-      "no_sensors": "Hic sensor yapilandirilmadi"
+      "already_configured": "Bu URL ve yöntem birleşimi zaten yapılandırılmış.",
+      "reauth_successful": "Yeniden kimlik doğrulama başarılı oldu.",
+      "reconfigure_successful": "Uç nokta güncellendi."
     }
   },
-  "options": {
-    "step": {
-      "init": {
-        "title": "HTTP Agent yapilandirmasi",
-        "description": "Neyi duzenleyeceginizi secin",
-        "menu_options": {
-          "basic": "Temel ayarlari duzenle (URL, yontem, zaman asimi, aralik, SSL)",
-          "headers": "HTTP basliklarini duzenle",
-          "payload": "Istek yukunu duzenle",
-          "sensors": "Sensor yapilandirmasini duzenle"
+  "config_subentries": {
+    "sensor": {
+      "initiate_flow": {
+        "user": "Sensör ekle",
+        "reconfigure": "Sensörü düzenle"
+      },
+      "entry_type": "Sensör",
+      "step": {
+        "user": {
+          "title": "Bir sensör ekle",
+          "description": "Son yanıttan bir değer seçin veya kendiniz bir yol yazın.",
+          "data": {
+            "name": "Ad",
+            "value_path": "Değer"
+          },
+          "data_description": {
+            "name": "Varlığın adı.",
+            "value_path": "Yanıttan okunacak yol."
+          },
+          "sections": {
+            "options": {
+              "name": "Varlık ayarları",
+              "data": {
+                "device_class": "Cihaz sınıfı",
+                "unit_of_measurement": "Ölçü birimi",
+                "state_class": "Durum sınıfı",
+                "icon": "Simge",
+                "attributes": "Ek öznitelikler"
+              },
+              "data_description": {
+                "device_class": "Home Assistant'ın değeri nasıl biçimlendireceğini ve grafiğe döküleceğini belirler.",
+                "unit_of_measurement": "Örneğin °C, %, kWh.",
+                "state_class": "Sensörü uzun vadeli istatistiklere dahil etmek için 'Measurement' veya 'Total increasing' olarak ayarlayın.",
+                "icon": "Cihaz sınıfından türetilen simgeyi geçersiz kılar.",
+                "attributes": "Satır başına bir tane, `Öznitelik adı: yol` biçiminde."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Sensörü düzenle",
+          "description": "Son yanıttan bir değer seçin veya kendiniz bir yol yazın.",
+          "data": {
+            "name": "Ad",
+            "value_path": "Değer"
+          },
+          "data_description": {
+            "name": "Varlığın adı.",
+            "value_path": "Yanıttan okunacak yol."
+          },
+          "sections": {
+            "options": {
+              "name": "Varlık ayarları",
+              "data": {
+                "device_class": "Cihaz sınıfı",
+                "unit_of_measurement": "Ölçü birimi",
+                "state_class": "Durum sınıfı",
+                "icon": "Simge",
+                "attributes": "Ek öznitelikler"
+              },
+              "data_description": {
+                "device_class": "Home Assistant'ın değeri nasıl biçimlendireceğini ve grafiğe döküleceğini belirler.",
+                "unit_of_measurement": "Örneğin °C, %, kWh.",
+                "state_class": "Sensörü uzun vadeli istatistiklere dahil etmek için 'Measurement' veya 'Total increasing' olarak ayarlayın.",
+                "icon": "Cihaz sınıfından türetilen simgeyi geçersiz kılar.",
+                "attributes": "Satır başına bir tane, `Öznitelik adı: yol` biçiminde."
+              }
+            }
+          }
         }
       },
-      "basic": {
-        "title": "Temel ayarlar",
-        "description": "URL, yontem, zaman asimi, aralik ve SSL dogrulamasini duzenle",
-        "data": {
-          "url": "URL",
-          "method": "HTTP yontemi",
-          "timeout": "Zaman asimi (saniye)",
-          "interval": "Guncelleme araligi (saniye)",
-          "retries": "Hata durumunda yeniden dene",
-          "verify_ssl": "SSL sertifikasini dogrula"
-        }
+      "error": {
+        "invalid_attributes": "Her öznitelik kendi satırında `Öznitelik adı: yol` biçiminde yazılmalıdır."
       },
-      "headers": {
-        "title": "HTTP basliklari",
-        "description": "HTTP basliklarini duzenle\n\nGuncel basliklar:\n{headers}",
-        "menu_options": {
-          "add_header": "Ekle",
-          "clear_headers": "Tumunu temizle",
-          "headers_done": "Degisiklikleri kaydet"
-        }
-      },
-      "add_header": {
-        "title": "HTTP basligi ekle",
-        "description": "Yeni HTTP basligi ekle",
-        "data": {
-          "key": "Baslik adi",
-          "value": "Baslik degeri"
-        }
-      },
-      "payload": {
-        "title": "HTTP yuk",
-        "description": "Istek yukunu duzenle",
-        "data": {
-          "content_type": "Icerik turu",
-          "payload": "Yuk (JSON/XML/Metin)"
-        }
-      },
-      "sensors": {
-        "title": "Sensor yapilandirmasi",
-        "description": "Sensor yapilandirmasini duzenle\n\nGuncel sensorler:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Ekle",
-          "select_sensor": "Duzenle",
-          "clear_sensors": "Tumunu temizle",
-          "sensors_done": "Degisiklikleri kaydet"
-        }
-      },
-      "select_sensor": {
-        "title": "Sensor sec",
-        "description": "Duzenlemek veya silmek icin bir sensor secin",
-        "data": {
-          "sensor": "Sensor"
-        }
-      },
-      "edit_sensor": {
-        "title": "Sensoru duzenle",
-        "description": "Bu sensor ile ne yapilacagini secin:\n\n{sensor_info}",
-        "menu_options": {
-          "modify_sensor": "Duzenle",
-          "delete_sensor": "Sil",
-          "edit_back": "Geri"
-        }
-      },
-      "modify_sensor": {
-        "title": "Sensoru degistir",
-        "description": "Sensor yapilandirmasini duzenleyin. Cikarma yontemi (JSON/XPath/CSS/RegEx), yanit icerik turune gore otomatik olarak algilanacaktir.",
-        "data": {
-          "sensor_name": "Sensor adi",
-          "sensor_state": "Durum secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
-          "sensor_icon": "Simge secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
-          "sensor_color": "Renk secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
-          "sensor_device_class": "Cihaz sinifi",
-          "sensor_unit": "Olcum birimi",
-          "tracker_latitude": "Enlem secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
-          "tracker_longitude": "Boylam secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
-          "tracker_location_name": "Konum adi secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
-          "tracker_source_type": "Kaynak tipi"
-        }
-      },
-      "add_sensor": {
-        "title": "Sensor ekle",
-        "description": "Sensor turunu secin ve bir ad girin",
-        "data": {
-          "sensor_name": "Sensor adi",
-          "sensor_type": "Sensor tipi"
-        }
-      },
-      "sensor_config": {
-        "title": "Sensor yapilandirmasi",
-        "description": "Sensor ayarlarini yapilandirin. Cikarma yontemi (JSON/XPath/CSS/RegEx), yanit icerik turune gore otomatik olarak algilanacaktir.",
-        "data": {
-          "sensor_state": "Durum secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
-          "sensor_icon": "Simge secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
-          "sensor_color": "Renk secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
-          "sensor_device_class": "Cihaz sinifi",
-          "sensor_unit": "Olcum birimi",
-          "tracker_latitude": "Enlem secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
-          "tracker_longitude": "Boylam secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
-          "tracker_location_name": "Konum adi secici (JSON/XPath/CSS/RegEx - otomatik algilandi)",
-          "tracker_source_type": "Kaynak tipi"
-        }
+      "abort": {
+        "reconfigure_successful": "Sensör güncellendi."
       }
     },
-    "error": {
-      "invalid_url": "Gecersiz URL bicimi",
-      "no_sensors": "En az bir sensor yapilandirilmalidir"
+    "binary_sensor": {
+      "initiate_flow": {
+        "user": "İkili sensör ekle",
+        "reconfigure": "İkili sensörü düzenle"
+      },
+      "entry_type": "İkili sensör",
+      "step": {
+        "user": {
+          "title": "Bir ikili sensör ekle",
+          "description": "Son yanıttan bir değer seçin veya kendiniz bir yol yazın.",
+          "data": {
+            "name": "Ad",
+            "value_path": "Değer"
+          },
+          "data_description": {
+            "name": "Varlığın adı.",
+            "value_path": "Yanıttan okunacak yol."
+          },
+          "sections": {
+            "options": {
+              "name": "Varlık ayarları",
+              "data": {
+                "device_class": "Cihaz sınıfı",
+                "payload_on": "Açık için değer",
+                "payload_off": "Kapalı için değer",
+                "icon": "Simge",
+                "attributes": "Ek öznitelikler"
+              },
+              "data_description": {
+                "device_class": "Açık/kapalı ifadesini ve simgesini belirler.",
+                "payload_on": "İsteğe bağlı. 'Açık' anlamına gelen tam değer. true/1/on/yes değerlerinin otomatik algılanması için boş bırakın.",
+                "payload_off": "İsteğe bağlı. 'Kapalı' anlamına gelen tam değer.",
+                "icon": "Cihaz sınıfından türetilen simgeyi geçersiz kılar.",
+                "attributes": "Satır başına bir tane, `Öznitelik adı: yol` biçiminde."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "İkili sensörü düzenle",
+          "description": "Son yanıttan bir değer seçin veya kendiniz bir yol yazın.",
+          "data": {
+            "name": "Ad",
+            "value_path": "Değer"
+          },
+          "data_description": {
+            "name": "Varlığın adı.",
+            "value_path": "Yanıttan okunacak yol."
+          },
+          "sections": {
+            "options": {
+              "name": "Varlık ayarları",
+              "data": {
+                "device_class": "Cihaz sınıfı",
+                "payload_on": "Açık için değer",
+                "payload_off": "Kapalı için değer",
+                "icon": "Simge",
+                "attributes": "Ek öznitelikler"
+              },
+              "data_description": {
+                "device_class": "Açık/kapalı ifadesini ve simgesini belirler.",
+                "payload_on": "İsteğe bağlı. 'Açık' anlamına gelen tam değer. true/1/on/yes değerlerinin otomatik algılanması için boş bırakın.",
+                "payload_off": "İsteğe bağlı. 'Kapalı' anlamına gelen tam değer.",
+                "icon": "Cihaz sınıfından türetilen simgeyi geçersiz kılar.",
+                "attributes": "Satır başına bir tane, `Öznitelik adı: yol` biçiminde."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Her öznitelik kendi satırında `Öznitelik adı: yol` biçiminde yazılmalıdır."
+      },
+      "abort": {
+        "reconfigure_successful": "İkili sensör güncellendi."
+      }
     },
-    "abort": {
-      "no_sensors": "Hic sensor yapilandirilmadi"
+    "device_tracker": {
+      "initiate_flow": {
+        "user": "Cihaz izleyici ekle",
+        "reconfigure": "Cihaz izleyiciyi düzenle"
+      },
+      "entry_type": "Cihaz izleyici",
+      "step": {
+        "user": {
+          "title": "Bir cihaz izleyici ekle",
+          "description": "Son yanıttan enlem ve boylam değerlerini seçin.",
+          "data": {
+            "name": "Ad",
+            "latitude_path": "Enlem",
+            "longitude_path": "Boylam"
+          },
+          "data_description": {
+            "name": "Varlığın adı.",
+            "latitude_path": "Enlem değerine giden yol.",
+            "longitude_path": "Boylam değerine giden yol."
+          },
+          "sections": {
+            "options": {
+              "name": "Varlık ayarları",
+              "data": {
+                "gps_accuracy_path": "GPS doğruluğu",
+                "source_type": "Kaynak türü",
+                "icon": "Simge",
+                "attributes": "Ek öznitelikler"
+              },
+              "data_description": {
+                "gps_accuracy_path": "İsteğe bağlı. Metre cinsinden doğruluk.",
+                "source_type": "Konumun nasıl belirlendiği.",
+                "icon": "Varsayılan simgeyi geçersiz kılar.",
+                "attributes": "Satır başına bir tane, `Öznitelik adı: yol` biçiminde."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Cihaz izleyiciyi düzenle",
+          "description": "Son yanıttan enlem ve boylam değerlerini seçin.",
+          "data": {
+            "name": "Ad",
+            "latitude_path": "Enlem",
+            "longitude_path": "Boylam"
+          },
+          "data_description": {
+            "name": "Varlığın adı.",
+            "latitude_path": "Enlem değerine giden yol.",
+            "longitude_path": "Boylam değerine giden yol."
+          },
+          "sections": {
+            "options": {
+              "name": "Varlık ayarları",
+              "data": {
+                "gps_accuracy_path": "GPS doğruluğu",
+                "source_type": "Kaynak türü",
+                "icon": "Simge",
+                "attributes": "Ek öznitelikler"
+              },
+              "data_description": {
+                "gps_accuracy_path": "İsteğe bağlı. Metre cinsinden doğruluk.",
+                "source_type": "Konumun nasıl belirlendiği.",
+                "icon": "Varsayılan simgeyi geçersiz kılar.",
+                "attributes": "Satır başına bir tane, `Öznitelik adı: yol` biçiminde."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Her öznitelik kendi satırında `Öznitelik adı: yol` biçiminde yazılmalıdır."
+      },
+      "abort": {
+        "reconfigure_successful": "Cihaz izleyici güncellendi."
+      }
     }
   },
-  "selector": {
-    "sensor_type": {
-      "options": {
-        "sensor": "Sensor",
-        "binary_sensor": "Ikili sensor",
-        "number": "Sayi",
-        "device_tracker": "Cihaz izleyici"
-      }
+  "exceptions": {
+    "cannot_connect": {
+      "message": "Uç noktaya ulaşılamadı: {error}"
     },
-    "tracker_source_type": {
-      "options": {
-        "none": "Yok (varsayilan)",
-        "gps": "GPS",
-        "router": "Yonlendirici",
-        "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE"
-      }
+    "invalid_auth": {
+      "message": "Uç nokta kayıtlı kimlik bilgilerini reddetti."
+    },
+    "bad_status": {
+      "message": "Uç nokta HTTP {status} ile yanıt verdi."
+    },
+    "empty_response": {
+      "message": "Uç nokta boş bir gövdeyle yanıt verdi."
     }
   }
 }
