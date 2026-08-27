@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Publish release asset
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set the version from the tag
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          jq --arg version "$version" '.version = $version' \
+            custom_components/http_agent/manifest.json > manifest.tmp
+          mv manifest.tmp custom_components/http_agent/manifest.json
+
+      - name: Create the zip archive
+        run: |
+          cd custom_components/http_agent
+          zip -r ../../http_agent.zip . -x '*__pycache__*'
+
+      - name: Attach the archive to the release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: http_agent.zip

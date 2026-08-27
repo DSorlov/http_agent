@@ -1,187 +1,240 @@
-![maintained](https://img.shields.io/maintenance/yes/2026.svg)
-[![hacs_badge](https://img.shields.io/badge/hacs-default-green.svg)](https://github.com/custom-components/hacs)
-[![ha_version](https://img.shields.io/badge/home%20assistant-2025.10%2B-green.svg)](https://www.home-assistant.io)
-![version](https://img.shields.io/badge/version-1.1.0-green.svg)
-![stability](https://img.shields.io/badge/stability-stable-green.svg)
-[![CI](https://github.com/DSorlov/http_agent/workflows/CI/badge.svg)](https://github.com/DSorlov/http_agent/actions/workflows/ci.yaml)
-[![hassfest](https://github.com/DSorlov/http_agent/workflows/Validate%20with%20hassfest/badge.svg)](https://github.com/DSorlov/http_agent/actions/workflows/hassfest.yaml)
-[![HACS](https://github.com/DSorlov/http_agent/workflows/HACS%20Validation/badge.svg)](https://github.com/DSorlov/http_agent/actions/workflows/hacs.yaml)
-[![maintainer](https://img.shields.io/badge/maintainer-dsorlov-blue.svg)](https://github.com/DSorlov)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+# HTTP Agent
 
-# HTTP Agent for Home Assistant
+[![hacs][hacs-badge]][hacs]
+[![release][release-badge]][release]
+[![ci][ci-badge]][ci]
+[![license][license-badge]][license]
 
-HTTP Agent is a powerful Home Assistant custom integration that creates individual HTTP sensor instances with advanced data extraction capabilities supporting JSON, XML, HTML/CSS-Selectors and Regular Expressions. Unlike traditional hub-based integrations, each HTTP endpoint becomes its own integration instance and then you can define multiple sensors for that request.
+Turn any HTTP endpoint into Home Assistant entities. Point HTTP Agent at a URL,
+let it call the endpoint once, and pick the values you want from a list — no
+hand-written JSON paths or XPath expressions required.
+
+<p align="center">
+  <img src="brands/custom_integrations/http_agent/logo.png" alt="HTTP Agent" width="320">
+</p>
+
+## Features
+
+- **Guided setup.** URL, method, authentication — then a live test request.
+- **Visual value picker.** The response is flattened into a searchable list of
+  `path = value` pairs. Tick the ones you want; entity type, device class, unit
+  and state class are guessed for you.
+- **JSON, XML, HTML and plain text** are detected automatically.
+- **Authentication presets** for bearer tokens, API keys and HTTP basic auth,
+  plus free-form headers when you need something else.
+- **One entity per subentry**, so entities can be added, edited and deleted
+  individually straight from the integration page.
+- **Templates** are supported in the URL, headers and request body.
+- **Configurable retries** so a flaky endpoint does not mark everything
+  unavailable.
+- Automatic re-authentication, reconfiguration and redacted diagnostics.
+- Fully translated into 24 languages.
 
 ## Installation
 
-### Via HACS (Recommended)
+### HACS (recommended)
 
-1. Open HACS in Home Assistant
-2. Go to "Integrations"
-3. Click the "+" button
-4. Search for "HTTP Agent"
-5. Install the integration
-6. Restart Home Assistant
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.][hacs-repo-badge]][hacs-repo]
 
-### Manual Installation
+1. Add `https://github.com/DSorlov/http_agent` as a custom repository of type
+   **Integration**.
+2. Install **HTTP Agent** and restart Home Assistant.
 
-1. Copy the `custom_components/http_agent` folder to your `custom_components` directory
-2. Restart Home Assistant
+### Manual
 
-## Configuration
+Copy `custom_components/http_agent` into your `config/custom_components/`
+directory and restart Home Assistant.
 
-### Adding the Integration
+Home Assistant 2026.4.4 or newer is required.
 
-1. Go to **Configuration** → **Integrations**
-2. Click **+ Add Integration**
-3. Search for "HTTP Agent"
-4. Follow the setup wizard to configure your integration
+## Setup
 
-## Configuration
+**Settings → Devices & services → Add integration → HTTP Agent**
 
-### Step 1: URL Configuration
-- **URL**: The HTTP endpoint to poll (supports templates)
-- **Method**: HTTP method (GET, POST, PUT, DELETE, PATCH)
-- **Timeout**: Request timeout in seconds (1-300)
-- **Update Interval**: How often to poll in seconds (5-86400)
+### 1. The endpoint
 
-### Step 2: Headers (Optional)
-Add any HTTP headers needed for authentication or content negotiation.
+| Field          | Description                                        |
+| -------------- | -------------------------------------------------- |
+| URL            | Full endpoint URL. Templates are supported.        |
+| Method         | `GET`, `POST`, `PUT`, `PATCH`, `DELETE` or `HEAD`. |
+| Authentication | `none`, `bearer`, `api_key` or `basic`.            |
+| Name           | Optional. Defaults to the hostname.                |
 
-### Step 3: Payload (For POST/PUT/DELETE/PATCH)
-Configure request body with content type selection. The field supports templates.
+Everything else lives under **Advanced settings**: update interval, timeout,
+retries, extra headers, forced response format, SSL verification and redirect
+handling.
 
-### Step 4: Sensors
-Define sensors to extract data from the response:
-- **Name**: Sensor name
-- **Extraction Method**: JSON, XML, CSS selectors or Regular Expression.
-- **State**: Main sensor value selector/template
-- **Icon**: Icon selector/template (auto-prefixed with `mdi:`)
-- **Color**: Color selector/template
+Extra headers are written one per line:
 
-## Extraction Methods
-
-### JSON
-Use dot notation to access JSON properties:
 ```
-temperature          # Simple property
-sensors.0.value      # Array index
-metadata.device.id   # Nested objects
+Accept: application/json
+X-Client-Id: home-assistant
+X-Signature: {{ states('input_text.signature') }}
 ```
 
-### XML
-Use XPath expressions:
+### 2. Authentication
+
+Only shown when you pick a preset:
+
+| Preset    | Sends                                            |
+| --------- | ------------------------------------------------ |
+| `bearer`  | `Authorization: Bearer <token>`                  |
+| `api_key` | A header of your choice, e.g. `X-API-Key: <key>` |
+| `basic`   | HTTP basic authentication                        |
+
+Credentials are stored in the config entry and are redacted from logs and
+diagnostics.
+
+### 3. Request body
+
+Only shown for methods that carry a body. Pick a content type and enter the
+payload; templates are supported.
+
+### 4. Pick your values
+
+HTTP Agent calls the endpoint and shows you what came back:
+
+> The endpoint answered with HTTP 200 and was read as **JSON**. 12 values were
+> found.
+
+The picker lists every addressable value together with the value it currently
+has, so you can recognise what you are looking at:
+
 ```
-./temperature        # Direct child
-.//sensor[@name='temp1']/@value  # Attribute search
-./metadata/battery   # Nested elements
+current.temp_c     = 21.5
+current.humidity   = 48
+current.is_raining = false
+location.name      = Stockholm
 ```
 
-### CSS Selectors
-Use CSS selectors for HTML content:
+Select what you want and HTTP Agent creates the entities, guessing the entity
+type, device class, unit and state class from the key name and value. Anything
+guessed wrong can be corrected afterwards.
+
+You can also skip this step and add entities later.
+
+## Adding entities later
+
+On the integration page each endpoint has **Add sensor**, **Add binary sensor**
+and **Add device tracker** buttons. Every entity is its own subentry, so it can
+be reconfigured or deleted on its own. The value picker in these dialogs is
+populated from the most recent response, and you can always type a path
+manually.
+
+## Path syntax
+
+The picker fills these in for you, but they can be written by hand too.
+
+| Format | Syntax             | Examples                                              |
+| ------ | ------------------ | ----------------------------------------------------- |
+| JSON   | Dot / bracket path | `current.temp_c`, `items[0].id`, `$.data.value`        |
+| XML    | ElementTree XPath  | `./current/temperature`, `./sensor[2]`, `./@id`        |
+| XML    | Attribute suffix   | `./current/temperature/@unit`                          |
+| HTML   | CSS selector       | `#temp`, `.reading .value`, `table tr:nth-of-type(2)`  |
+| HTML   | Attribute suffix   | `#link::attr(href)`                                    |
+| Text   | Regular expression | `temperature=([\d.]+)`, or `.` for the whole body      |
+
+For text bodies the first capture group is used, or the whole match when the
+expression has no groups.
+
+## Entity types
+
+| Type           | Reads                                           | Notes                                                       |
+| -------------- | ----------------------------------------------- | ----------------------------------------------------------- |
+| Sensor         | One value                                       | Device class, unit and state class configurable             |
+| Binary sensor  | One value                                       | `true/1/on/yes/open/…` auto-detected, or set exact payloads |
+| Device tracker | Latitude and longitude, optionally GPS accuracy | Source type configurable                                    |
+
+Every entity can also expose extra state attributes, written one per line:
+
 ```
-.temperature         # Class selector
-#sensor-value        # ID selector
-div[data-sensor="temp"]  # Attribute selector
+humidity: current.humidity
+station: location.name
 ```
 
-### Regular Expressions
-Use regular expressions for text content, use PCRE-format delimiters `/pattern/flags`:
-```
-/Some Text: ([0-9]+)/      # single group
-/some text: ([0-9]+)/i     # case insensitive
-/Some Text: ([0-9]+) other text ([a-z]+)     # multiple groups, result will be merged "group 1|group 2"
-```
+## Templates
 
-## Template Support
+Home Assistant templates are rendered on every poll in the URL, header values
+and request body:
 
-All configuration fields support Home Assistant templates:
-
-### URL Templates
 ```
-http://api.example.com/sensors/{{ states('input_text.device_id') }}
-```
-
-### Header Templates  
-```
-Key: Authorization
-Value: Bearer {{ states('input_text.api_token') }}
-```
-
-### Payload Templates
-```json
-{
-  "device": "{{ states('input_text.device_name') }}",
-  "timestamp": "{{ now().isoformat() }}"
-}
-```
-
-## Examples
-
-### JSON API Example
-```yaml
-URL: https://api.weather.com/v1/current
-Method: GET
-Headers:
-  - API-Key: your-api-key
-Sensors:
-  - Name: Temperature
-    Method: JSON
-    State: current.temperature
-    Icon: current.condition_icon
-    Attributes:
-      - Humidity: current.humidity
-      - Pressure: current.pressure
-```
-
-### XML API Example  
-```yaml
-URL: https://api.example.com/data.xml
-Method: GET
-Sensors:
-  - Name: Sensor Value
-    Method: XML
-    State: ./sensors/sensor[@id='temp1']/value
-    Icon: ./sensors/sensor[@id='temp1']/icon
-```
-
-### HTML Scraping Example
-```yaml
-URL: https://example.com/status
-Method: GET
-Sensors:
-  - Name: Status
-    Method: CSS
-    State: .status-value
-    Color: .status-indicator
-    Icon: .status-icon
+https://api.example.com/weather?city={{ states('input_text.city') }}
 ```
 
 ## Troubleshooting
 
-### Enable Debug Logging
-Add to `configuration.yaml`:
+Enable debug logging:
+
 ```yaml
 logger:
+  default: warning
   logs:
     custom_components.http_agent: debug
 ```
 
-## Contributing
+Then use **Download diagnostics** on the integration page. The URL, headers and
+credentials are redacted, so the file is safe to attach to an issue.
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+| Symptom                   | Likely cause                                                     |
+| ------------------------- | ---------------------------------------------------------------- |
+| `cannot_connect`          | Wrong URL, DNS, firewall, or the timeout is too short            |
+| `invalid_auth`            | The endpoint answered 401/403 — check the preset and credentials |
+| `bad_status`              | The endpoint answered 4xx/5xx                                    |
+| `no_values`               | The response body was empty                                      |
+| Entity state is `unknown` | The configured path no longer resolves — reconfigure the entity  |
+
+For endpoints that fail occasionally, raise **Retries on error** under advanced
+settings. Each retry waits one second, and the poll only fails once every
+attempt has been used.
+
+## Upgrading from 1.x
+
+Existing config entries are migrated automatically on first start:
+
+- Headers move from a list to a dictionary.
+- Each configured sensor becomes its own subentry.
+- Read-only `number` entities become sensors; the `number` platform is gone.
+- The `sensor_color` field becomes an extra state attribute named `color`.
+
+Entity IDs change because entities now follow the `has_entity_name` convention.
+Check automations and dashboards after upgrading.
+
+## Security
+
+- XML is parsed with `defusedxml`, so XXE and entity-expansion payloads are
+  rejected.
+- Credentials are redacted from logs and diagnostics.
+- Disabling SSL verification is possible, but hidden under advanced settings.
+
+Report vulnerabilities as described in [SECURITY.md](SECURITY.md).
+
+## Development
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -r requirements-dev.txt
+
+.venv/bin/ruff check custom_components tests
+.venv/bin/ruff format custom_components tests
+.venv/bin/pytest
+python script/validate_assets.py
+```
+
+Brand assets live in [`brands/`](brands/README.md) and mirror what is published
+in [home-assistant/brands][brands].
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+[MIT](LICENSE)
 
-## Support
-
-- :bug: [Report a Bug](https://github.com/dsorlov/snmpPrinter/issues)
-- :bulb: [Request a Feature](https://github.com/dsorlov/snmpPrinter/issues)
-- :book: [Documentation](https://github.com/dsorlov/snmpPrinter)
-
-## Changelog
-
-See [CHANGELOG.md](CHANGELOG.md) for version history.
+[hacs]: https://github.com/hacs/integration
+[hacs-badge]: https://img.shields.io/badge/HACS-Custom-41BDF5.svg
+[hacs-repo]: https://my.home-assistant.io/redirect/hacs_repository/?owner=DSorlov&repository=http_agent&category=integration
+[hacs-repo-badge]: https://my.home-assistant.io/badges/hacs_repository.svg
+[release]: https://github.com/DSorlov/http_agent/releases
+[release-badge]: https://img.shields.io/github/v/release/DSorlov/http_agent
+[ci]: https://github.com/DSorlov/http_agent/actions/workflows/ci.yaml
+[ci-badge]: https://github.com/DSorlov/http_agent/actions/workflows/ci.yaml/badge.svg
+[license]: LICENSE
+[license-badge]: https://img.shields.io/github/license/DSorlov/http_agent
+[brands]: https://github.com/home-assistant/brands/tree/master/custom_integrations/http_agent

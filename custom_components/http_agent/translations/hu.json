@@ -1,223 +1,357 @@
 {
+  "title": "HTTP Agent",
   "config": {
     "step": {
       "user": {
-        "title": "HTTP Agent konfiguracio",
-        "description": "HTTP vegpont beallitasa",
+        "title": "Csatlakozás egy végponthoz",
+        "description": "Irányítsd a HTTP Agentet bármelyik HTTP végpontra. A következő lépések után a végpont egyszer meghívásra kerül, hogy kiválaszthasd, mely értékekből legyen entitás.",
         "data": {
           "url": "URL",
-          "method": "HTTP modszer",
-          "timeout": "Timeout (masodperc)",
-          "interval": "Frissitesi intervallum (masodperc)",
-          "retries": "Ujraprobalas hiba eseten",
-          "verify_ssl": "SSL tanusitvany ellenorzese"
+          "method": "Metódus",
+          "auth_type": "Hitelesítés",
+          "name": "Név"
+        },
+        "data_description": {
+          "url": "A végpont teljes URL-címe. A Home Assistant sablonok támogatottak.",
+          "method": "Minden lekérdezéshez használt HTTP metódus.",
+          "auth_type": "Válassz egy kész hitelesítési profilt, vagy a 'None' lehetőséget, és add meg lent a saját fejléceidet.",
+          "name": "Nem kötelező. Alapértelmezés szerint az URL gazdagépneve."
+        },
+        "sections": {
+          "advanced": {
+            "name": "Speciális beállítások",
+            "data": {
+              "scan_interval": "Frissítési időköz",
+              "timeout": "Kérés időkorlátja",
+              "retries": "Újrapróbálkozások hiba esetén",
+              "extra_headers": "További fejlécek",
+              "response_format": "Válasz formátuma",
+              "verify_ssl": "SSL-tanúsítvány ellenőrzése",
+              "follow_redirects": "Átirányítások követése"
+            },
+            "data_description": {
+              "scan_interval": "Milyen gyakran kérdezi le a végpontot, másodpercben.",
+              "timeout": "Mennyi ideig vár a válaszra, másodpercben.",
+              "retries": "Hány további próbálkozás történjen, ha egy lekérdezés sikertelen, egy másodperc szünettel a próbálkozások között.",
+              "extra_headers": "Soronként egy fejléc, `Név: érték` alakban. A sablonok támogatottak.",
+              "response_format": "Hagyd 'Auto' értéken a JSON, XML, HTML vagy egyszerű szöveg automatikus felismeréséhez.",
+              "verify_ssl": "Csak saját aláírású tanúsítvánnyal rendelkező végpontoknál kapcsold ki.",
+              "follow_redirects": "HTTP 3xx átirányítások automatikus követése."
+            }
+          }
         }
       },
-      "headers": {
-        "title": "HTTP fejlecek",
-        "description": "HTTP fejlecek beallitasa\n\nAktualis fejlecek:\n{headers}",
-        "menu_options": {
-          "add_header": "Hozzaadas",
-          "headers_done": "Kesz"
-        }
-      },
-      "add_header": {
-        "title": "HTTP fejlec hozzaadasa",
-        "description": "Uj HTTP fejlec hozzaadasa",
+      "credentials": {
+        "title": "Hitelesítés",
+        "description": "Add meg a \"{auth_type}\" profil hitelesítő adatait. Titkosítva tárolódnak, és soha nem jelennek meg a naplókban vagy a diagnosztikában.",
         "data": {
-          "key": "Fejlec neve",
-          "value": "Fejlec erteke"
+          "token": "Bearer token",
+          "api_key": "API-kulcs",
+          "api_key_header": "API-kulcs fejléce",
+          "username": "Felhasználónév",
+          "password": "Jelszó"
+        },
+        "data_description": {
+          "token": "`Authorization: Bearer` fejlécként kerül elküldésre.",
+          "api_key": "Maga a kulcsérték.",
+          "api_key_header": "A fejléc, amelyben a kulcsot elküldi, például `X-API-Key`.",
+          "username": "Felhasználónév a HTTP basic hitelesítéshez.",
+          "password": "Jelszó a HTTP basic hitelesítéshez."
         }
       },
-      "payload": {
-        "title": "HTTP payload",
-        "description": "Keres payload beallitasa",
+      "body": {
+        "title": "Kérés törzse",
+        "description": "A {method} kérések küldhetnek törzset. Hagyd üresen, ha a végpontnak nincs rá szüksége.",
         "data": {
-          "content_type": "Tartalomtipus",
-          "payload": "Payload (JSON/XML/Szoveg)"
+          "content_type": "Tartalomtípus",
+          "payload": "Törzs"
+        },
+        "data_description": {
+          "content_type": "`Content-Type` fejlécként kerül elküldésre.",
+          "payload": "A kérés törzse. A Home Assistant sablonok támogatottak."
         }
       },
-      "sensors": {
-        "title": "Erzekelo konfiguracio",
-        "description": "Erzekelok beallitasa adatok kinyeresehez\n\nAktualis erzekelok:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Hozzaadas",
-          "sensors_done": "Kesz"
-        }
-      },
-      "add_sensor": {
-        "title": "Erzekelo hozzaadasa",
-        "description": "Valassza ki az erzekelo tipusat es adjon nevet",
+      "select_values": {
+        "title": "Válaszd ki a kívánt értékeket",
+        "description": "A végpont HTTP {status} kóddal válaszolt, és a válasz **{format}** formátumként lett beolvasva. {count} érték található.\n\n```\n{preview}\n```\n\nVálaszd ki azokat az értékeket, amelyekből entitás legyen. Az észszerű entitástípusokat, eszközosztályokat és mértékegységeket a rendszer automatikusan kitalálja, és utólag módosíthatók. Ezt a lépést át is ugorhatod, és később adhatsz hozzá entitásokat.",
         "data": {
-          "sensor_name": "Erzekelo neve",
-          "sensor_type": "Erzekelo tipusa"
+          "selected_values": "Értékek"
+        },
+        "data_description": {
+          "selected_values": "Keress a listában, vagy írj be kézzel egy útvonalat olyan érték hozzáadásához, amelyet nem ismert fel."
         }
       },
-      "sensor_config": {
-        "title": "Erzekelo konfiguracio",
-        "description": "Allitsa be az erzekelo beallitasait. A kinyeresi mod (JSON/XPath/CSS/RegEx) automatikusan felismeresre kerul a valasz tartalomtípusa alapjan.",
+      "reauth_confirm": {
+        "title": "Újbóli hitelesítés",
+        "description": "A végpont elutasította a \"{auth_type}\" profilhoz mentett hitelesítő adatokat. Add meg őket újra.",
         "data": {
-          "sensor_state": "Allapot valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
-          "sensor_icon": "Ikon valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
-          "sensor_color": "Szin valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
-          "sensor_device_class": "Eszkozosztaly",
-          "sensor_unit": "Meroegyseg",
-          "tracker_latitude": "Szelesseg valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
-          "tracker_longitude": "Hosszusag valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
-          "tracker_location_name": "Helynev valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
-          "tracker_source_type": "Forras tipusa"
+          "token": "Bearer token",
+          "api_key": "API-kulcs",
+          "api_key_header": "API-kulcs fejléce",
+          "username": "Felhasználónév",
+          "password": "Jelszó"
         }
       }
     },
     "error": {
-      "invalid_url": "Ervenytelen URL formatum",
-      "no_sensors": "Legalabb egy erzekelot be kell allitani"
+      "cannot_connect": "A végpont nem érhető el. Ellenőrizd az URL-t, a hálózatot és az időkorlátot.",
+      "invalid_auth": "A végpont elutasította a hitelesítő adatokat (HTTP 401/403).",
+      "invalid_url": "Adj meg teljes URL-t, a http vagy https sémával együtt.",
+      "invalid_headers": "Minden fejlécet `Név: érték` alakban, külön sorban kell megadni.",
+      "bad_status": "A végpont hibás állapotkóddal válaszolt.",
+      "no_values": "A válasz üres volt, vagy nem tartalmazott olvasható értéket."
     },
     "abort": {
-      "already_configured": "Ez a HTTP vegpont mar be van allitva",
-      "no_sensors": "Nincs konfiguralt erzekelo"
+      "already_configured": "Ez az URL és metódus kombináció már be van állítva.",
+      "reauth_successful": "Az újbóli hitelesítés sikerült.",
+      "reconfigure_successful": "A végpont frissítve lett."
     }
   },
-  "options": {
-    "step": {
-      "init": {
-        "title": "HTTP Agent konfiguracio",
-        "description": "Valassza ki, mit szerkeszt",
-        "menu_options": {
-          "basic": "Alapbeallitasok szerkesztese (URL, modszer, timeout, intervallum, SSL)",
-          "headers": "HTTP fejlecek szerkesztese",
-          "payload": "Keres payload szerkesztese",
-          "sensors": "Erzekelo konfiguracio szerkesztese"
+  "config_subentries": {
+    "sensor": {
+      "initiate_flow": {
+        "user": "Érzékelő hozzáadása",
+        "reconfigure": "Érzékelő szerkesztése"
+      },
+      "entry_type": "Érzékelő",
+      "step": {
+        "user": {
+          "title": "Érzékelő hozzáadása",
+          "description": "Válassz egy értéket a legutóbbi válaszból, vagy írj be magad egy útvonalat.",
+          "data": {
+            "name": "Név",
+            "value_path": "Érték"
+          },
+          "data_description": {
+            "name": "Az entitás neve.",
+            "value_path": "A válaszból beolvasandó útvonal."
+          },
+          "sections": {
+            "options": {
+              "name": "Entitásbeállítások",
+              "data": {
+                "device_class": "Eszközosztály",
+                "unit_of_measurement": "Mértékegység",
+                "state_class": "Állapotosztály",
+                "icon": "Ikon",
+                "attributes": "További attribútumok"
+              },
+              "data_description": {
+                "device_class": "Meghatározza, hogyan formázza és ábrázolja a Home Assistant az értéket.",
+                "unit_of_measurement": "Például °C, %, kWh.",
+                "state_class": "Állítsd 'Measurement' vagy 'Total increasing' értékre, hogy az érzékelő bekerüljön a hosszú távú statisztikákba.",
+                "icon": "Felülírja az eszközosztályból származó ikont.",
+                "attributes": "Soronként egy, `Attribútum neve: útvonal` alakban."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Érzékelő szerkesztése",
+          "description": "Válassz egy értéket a legutóbbi válaszból, vagy írj be magad egy útvonalat.",
+          "data": {
+            "name": "Név",
+            "value_path": "Érték"
+          },
+          "data_description": {
+            "name": "Az entitás neve.",
+            "value_path": "A válaszból beolvasandó útvonal."
+          },
+          "sections": {
+            "options": {
+              "name": "Entitásbeállítások",
+              "data": {
+                "device_class": "Eszközosztály",
+                "unit_of_measurement": "Mértékegység",
+                "state_class": "Állapotosztály",
+                "icon": "Ikon",
+                "attributes": "További attribútumok"
+              },
+              "data_description": {
+                "device_class": "Meghatározza, hogyan formázza és ábrázolja a Home Assistant az értéket.",
+                "unit_of_measurement": "Például °C, %, kWh.",
+                "state_class": "Állítsd 'Measurement' vagy 'Total increasing' értékre, hogy az érzékelő bekerüljön a hosszú távú statisztikákba.",
+                "icon": "Felülírja az eszközosztályból származó ikont.",
+                "attributes": "Soronként egy, `Attribútum neve: útvonal` alakban."
+              }
+            }
+          }
         }
       },
-      "basic": {
-        "title": "Alapbeallitasok",
-        "description": "URL, modszer, timeout, intervallum es SSL ellenorzes szerkesztese",
-        "data": {
-          "url": "URL",
-          "method": "HTTP modszer",
-          "timeout": "Timeout (masodperc)",
-          "interval": "Frissitesi intervallum (masodperc)",
-          "retries": "Ujraprobalas hiba eseten",
-          "verify_ssl": "SSL tanusitvany ellenorzese"
-        }
+      "error": {
+        "invalid_attributes": "Minden attribútumot `Attribútum neve: útvonal` alakban, külön sorban kell megadni."
       },
-      "headers": {
-        "title": "HTTP fejlecek",
-        "description": "HTTP fejlecek szerkesztese\n\nAktualis fejlecek:\n{headers}",
-        "menu_options": {
-          "add_header": "Hozzaadas",
-          "clear_headers": "Osszes torlese",
-          "headers_done": "Valtoztatasok mentese"
-        }
-      },
-      "add_header": {
-        "title": "HTTP fejlec hozzaadasa",
-        "description": "Uj HTTP fejlec hozzaadasa",
-        "data": {
-          "key": "Fejlec neve",
-          "value": "Fejlec erteke"
-        }
-      },
-      "payload": {
-        "title": "HTTP payload",
-        "description": "Keres payload szerkesztese",
-        "data": {
-          "content_type": "Tartalomtipus",
-          "payload": "Payload (JSON/XML/Szoveg)"
-        }
-      },
-      "sensors": {
-        "title": "Erzekelo konfiguracio",
-        "description": "Erzekelo konfiguracio szerkesztese\n\nAktualis erzekelok:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Hozzaadas",
-          "select_sensor": "Szerkesztes",
-          "clear_sensors": "Osszes torlese",
-          "sensors_done": "Valtoztatasok mentese"
-        }
-      },
-      "select_sensor": {
-        "title": "Erzekelo kivalasztasa",
-        "description": "Valasszon erzekelot szerkeszteshez vagy torleshez",
-        "data": {
-          "sensor": "Erzekelo"
-        }
-      },
-      "edit_sensor": {
-        "title": "Erzekelo szerkesztese",
-        "description": "Valassza ki, mit tegyen ezzel az erzekelovel:\n\n{sensor_info}",
-        "menu_options": {
-          "modify_sensor": "Szerkesztes",
-          "delete_sensor": "Torles",
-          "edit_back": "Vissza"
-        }
-      },
-      "modify_sensor": {
-        "title": "Erzekelo modositas",
-        "description": "Szerkessze az erzekelo konfiguraciojat. A kinyeresi mod (JSON/XPath/CSS/RegEx) automatikusan felismeresre kerul a valasz tartalomtípusa alapjan.",
-        "data": {
-          "sensor_name": "Erzekelo neve",
-          "sensor_state": "Allapot valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
-          "sensor_icon": "Ikon valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
-          "sensor_color": "Szin valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
-          "sensor_device_class": "Eszkozosztaly",
-          "sensor_unit": "Meroegyseg",
-          "tracker_latitude": "Szelesseg valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
-          "tracker_longitude": "Hosszusag valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
-          "tracker_location_name": "Helynev valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
-          "tracker_source_type": "Forras tipusa"
-        }
-      },
-      "add_sensor": {
-        "title": "Erzekelo hozzaadasa",
-        "description": "Valassza ki az erzekelo tipusat es adjon nevet",
-        "data": {
-          "sensor_name": "Erzekelo neve",
-          "sensor_type": "Erzekelo tipusa"
-        }
-      },
-      "sensor_config": {
-        "title": "Erzekelo konfiguracio",
-        "description": "Allitsa be az erzekelo beallitasait. A kinyeresi mod (JSON/XPath/CSS/RegEx) automatikusan felismeresre kerul a valasz tartalomtípusa alapjan.",
-        "data": {
-          "sensor_state": "Allapot valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
-          "sensor_icon": "Ikon valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
-          "sensor_color": "Szin valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
-          "sensor_device_class": "Eszkozosztaly",
-          "sensor_unit": "Meroegyseg",
-          "tracker_latitude": "Szelesseg valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
-          "tracker_longitude": "Hosszusag valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
-          "tracker_location_name": "Helynev valaszto (JSON/XPath/CSS/RegEx - automatikus felismeres)",
-          "tracker_source_type": "Forras tipusa"
-        }
+      "abort": {
+        "reconfigure_successful": "Az érzékelő frissítve lett."
       }
     },
-    "error": {
-      "invalid_url": "Ervenytelen URL formatum",
-      "no_sensors": "Legalabb egy erzekelot be kell allitani"
+    "binary_sensor": {
+      "initiate_flow": {
+        "user": "Bináris érzékelő hozzáadása",
+        "reconfigure": "Bináris érzékelő szerkesztése"
+      },
+      "entry_type": "Bináris érzékelő",
+      "step": {
+        "user": {
+          "title": "Bináris érzékelő hozzáadása",
+          "description": "Válassz egy értéket a legutóbbi válaszból, vagy írj be magad egy útvonalat.",
+          "data": {
+            "name": "Név",
+            "value_path": "Érték"
+          },
+          "data_description": {
+            "name": "Az entitás neve.",
+            "value_path": "A válaszból beolvasandó útvonal."
+          },
+          "sections": {
+            "options": {
+              "name": "Entitásbeállítások",
+              "data": {
+                "device_class": "Eszközosztály",
+                "payload_on": "Bekapcsolt érték",
+                "payload_off": "Kikapcsolt érték",
+                "icon": "Ikon",
+                "attributes": "További attribútumok"
+              },
+              "data_description": {
+                "device_class": "Meghatározza a be/ki feliratot és ikont.",
+                "payload_on": "Nem kötelező. A pontos érték, amely 'bekapcsolt' állapotot jelent. Hagyd üresen a true/1/on/yes automatikus felismeréséhez.",
+                "payload_off": "Nem kötelező. A pontos érték, amely 'kikapcsolt' állapotot jelent.",
+                "icon": "Felülírja az eszközosztályból származó ikont.",
+                "attributes": "Soronként egy, `Attribútum neve: útvonal` alakban."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Bináris érzékelő szerkesztése",
+          "description": "Válassz egy értéket a legutóbbi válaszból, vagy írj be magad egy útvonalat.",
+          "data": {
+            "name": "Név",
+            "value_path": "Érték"
+          },
+          "data_description": {
+            "name": "Az entitás neve.",
+            "value_path": "A válaszból beolvasandó útvonal."
+          },
+          "sections": {
+            "options": {
+              "name": "Entitásbeállítások",
+              "data": {
+                "device_class": "Eszközosztály",
+                "payload_on": "Bekapcsolt érték",
+                "payload_off": "Kikapcsolt érték",
+                "icon": "Ikon",
+                "attributes": "További attribútumok"
+              },
+              "data_description": {
+                "device_class": "Meghatározza a be/ki feliratot és ikont.",
+                "payload_on": "Nem kötelező. A pontos érték, amely 'bekapcsolt' állapotot jelent. Hagyd üresen a true/1/on/yes automatikus felismeréséhez.",
+                "payload_off": "Nem kötelező. A pontos érték, amely 'kikapcsolt' állapotot jelent.",
+                "icon": "Felülírja az eszközosztályból származó ikont.",
+                "attributes": "Soronként egy, `Attribútum neve: útvonal` alakban."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Minden attribútumot `Attribútum neve: útvonal` alakban, külön sorban kell megadni."
+      },
+      "abort": {
+        "reconfigure_successful": "A bináris érzékelő frissítve lett."
+      }
     },
-    "abort": {
-      "no_sensors": "Nincs konfiguralt erzekelo"
+    "device_tracker": {
+      "initiate_flow": {
+        "user": "Eszközkövető hozzáadása",
+        "reconfigure": "Eszközkövető szerkesztése"
+      },
+      "entry_type": "Eszközkövető",
+      "step": {
+        "user": {
+          "title": "Eszközkövető hozzáadása",
+          "description": "Válaszd ki a szélességi és hosszúsági fok értékeit a legutóbbi válaszból.",
+          "data": {
+            "name": "Név",
+            "latitude_path": "Szélességi fok",
+            "longitude_path": "Hosszúsági fok"
+          },
+          "data_description": {
+            "name": "Az entitás neve.",
+            "latitude_path": "A szélességi fok értékének útvonala.",
+            "longitude_path": "A hosszúsági fok értékének útvonala."
+          },
+          "sections": {
+            "options": {
+              "name": "Entitásbeállítások",
+              "data": {
+                "gps_accuracy_path": "GPS-pontosság",
+                "source_type": "Forrás típusa",
+                "icon": "Ikon",
+                "attributes": "További attribútumok"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Nem kötelező. A pontosság méterben.",
+                "source_type": "Hogyan határozza meg a rendszer a helyzetet.",
+                "icon": "Felülírja az alapértelmezett ikont.",
+                "attributes": "Soronként egy, `Attribútum neve: útvonal` alakban."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Eszközkövető szerkesztése",
+          "description": "Válaszd ki a szélességi és hosszúsági fok értékeit a legutóbbi válaszból.",
+          "data": {
+            "name": "Név",
+            "latitude_path": "Szélességi fok",
+            "longitude_path": "Hosszúsági fok"
+          },
+          "data_description": {
+            "name": "Az entitás neve.",
+            "latitude_path": "A szélességi fok értékének útvonala.",
+            "longitude_path": "A hosszúsági fok értékének útvonala."
+          },
+          "sections": {
+            "options": {
+              "name": "Entitásbeállítások",
+              "data": {
+                "gps_accuracy_path": "GPS-pontosság",
+                "source_type": "Forrás típusa",
+                "icon": "Ikon",
+                "attributes": "További attribútumok"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Nem kötelező. A pontosság méterben.",
+                "source_type": "Hogyan határozza meg a rendszer a helyzetet.",
+                "icon": "Felülírja az alapértelmezett ikont.",
+                "attributes": "Soronként egy, `Attribútum neve: útvonal` alakban."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Minden attribútumot `Attribútum neve: útvonal` alakban, külön sorban kell megadni."
+      },
+      "abort": {
+        "reconfigure_successful": "Az eszközkövető frissítve lett."
+      }
     }
   },
-  "selector": {
-    "sensor_type": {
-      "options": {
-        "sensor": "Erzekelo",
-        "binary_sensor": "Binaris erzekelo",
-        "number": "Szam",
-        "device_tracker": "Eszkozkoveto"
-      }
+  "exceptions": {
+    "cannot_connect": {
+      "message": "A végpont nem érhető el: {error}"
     },
-    "tracker_source_type": {
-      "options": {
-        "none": "Nincs (alapertelmezett)",
-        "gps": "GPS",
-        "router": "Router",
-        "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE"
-      }
+    "invalid_auth": {
+      "message": "A végpont elutasította a mentett hitelesítő adatokat."
+    },
+    "bad_status": {
+      "message": "A végpont HTTP {status} kóddal válaszolt."
+    },
+    "empty_response": {
+      "message": "A végpont üres törzzsel válaszolt."
     }
   }
 }

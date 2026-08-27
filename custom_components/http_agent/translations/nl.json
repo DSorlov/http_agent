@@ -1,223 +1,357 @@
 {
+  "title": "HTTP Agent",
   "config": {
     "step": {
       "user": {
-        "title": "HTTP Agent-configuratie",
-        "description": "HTTP-eindpunt configureren",
+        "title": "Verbinden met een endpoint",
+        "description": "Richt HTTP Agent op een willekeurig HTTP-endpoint. Na de volgende stappen wordt het endpoint één keer aangeroepen zodat je de gewenste waarden als entiteiten kunt kiezen.",
         "data": {
           "url": "URL",
-          "method": "HTTP-methode",
-          "timeout": "Time-out (seconden)",
-          "interval": "Update-interval (seconden)",
-          "retries": "Opnieuw proberen bij fout",
-          "verify_ssl": "SSL-certificaat verifiëren"
+          "method": "Methode",
+          "auth_type": "Authenticatie",
+          "name": "Naam"
+        },
+        "data_description": {
+          "url": "De volledige URL van het endpoint. Home Assistant-sjablonen worden ondersteund.",
+          "method": "HTTP-methode die bij elke opvraging wordt gebruikt.",
+          "auth_type": "Kies een kant-en-klaar authenticatieprofiel, of 'None' en voeg hieronder je eigen headers toe.",
+          "name": "Optioneel. Standaard de hostnaam van de URL."
+        },
+        "sections": {
+          "advanced": {
+            "name": "Geavanceerde instellingen",
+            "data": {
+              "scan_interval": "Vernieuwingsinterval",
+              "timeout": "Time-out van verzoek",
+              "retries": "Nieuwe pogingen bij fouten",
+              "extra_headers": "Extra headers",
+              "response_format": "Antwoordformaat",
+              "verify_ssl": "SSL-certificaat verifiëren",
+              "follow_redirects": "Omleidingen volgen"
+            },
+            "data_description": {
+              "scan_interval": "Hoe vaak het endpoint wordt opgevraagd, in seconden.",
+              "timeout": "Hoelang op een antwoord wordt gewacht, in seconden.",
+              "retries": "Hoeveel extra pogingen worden gedaan wanneer een opvraging mislukt, met één seconde ertussen.",
+              "extra_headers": "Eén header per regel, geschreven als `Naam: waarde`. Sjablonen worden ondersteund.",
+              "response_format": "Laat op 'Auto' staan om JSON, XML, HTML of platte tekst automatisch te herkennen.",
+              "verify_ssl": "Schakel dit alleen uit voor endpoints met een zelfondertekend certificaat.",
+              "follow_redirects": "HTTP 3xx-omleidingen automatisch volgen."
+            }
+          }
         }
       },
-      "headers": {
-        "title": "HTTP-headers",
-        "description": "HTTP-headers configureren\n\nHuidige headers:\n{headers}",
-        "menu_options": {
-          "add_header": "Toevoegen",
-          "headers_done": "Klaar"
-        }
-      },
-      "add_header": {
-        "title": "HTTP-header toevoegen",
-        "description": "Een nieuwe HTTP-header toevoegen",
+      "credentials": {
+        "title": "Authenticatie",
+        "description": "Voer de gegevens in voor het profiel \"{auth_type}\". Ze worden versleuteld opgeslagen en nooit in logboeken of diagnostiek getoond.",
         "data": {
-          "key": "Headernaam",
-          "value": "Headerwaarde"
+          "token": "Bearer-token",
+          "api_key": "API-sleutel",
+          "api_key_header": "Header voor API-sleutel",
+          "username": "Gebruikersnaam",
+          "password": "Wachtwoord"
+        },
+        "data_description": {
+          "token": "Wordt verzonden als een `Authorization: Bearer`-header.",
+          "api_key": "De sleutelwaarde zelf.",
+          "api_key_header": "De header waarin de sleutel wordt verzonden, bijvoorbeeld `X-API-Key`.",
+          "username": "Gebruikersnaam voor HTTP basic-authenticatie.",
+          "password": "Wachtwoord voor HTTP basic-authenticatie."
         }
       },
-      "payload": {
-        "title": "HTTP-payload",
-        "description": "De verzoekpayload configureren",
+      "body": {
+        "title": "Verzoektekst",
+        "description": "{method}-verzoeken kunnen een tekst versturen. Laat dit leeg als het endpoint er geen nodig heeft.",
         "data": {
           "content_type": "Inhoudstype",
-          "payload": "Payload (JSON/XML/Tekst)"
+          "payload": "Tekst"
+        },
+        "data_description": {
+          "content_type": "Wordt verzonden als de `Content-Type`-header.",
+          "payload": "De tekst van het verzoek. Home Assistant-sjablonen worden ondersteund."
         }
       },
-      "sensors": {
-        "title": "Sensorconfiguratie",
-        "description": "Sensors configureren om gegevens te extraheren\n\nHuidige sensors:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Toevoegen",
-          "sensors_done": "Klaar"
-        }
-      },
-      "add_sensor": {
-        "title": "Sensor toevoegen",
-        "description": "Kies het sensortype en geef een naam op",
+      "select_values": {
+        "title": "Kies de gewenste waarden",
+        "description": "Het endpoint antwoordde met HTTP {status} en werd gelezen als **{format}**. Er zijn {count} waarden gevonden.\n\n```\n{preview}\n```\n\nKies de waarden die entiteiten moeten worden. Zinnige entiteitstypen, apparaatklassen en eenheden worden automatisch geraden en kunnen daarna worden aangepast. Je kunt dit ook overslaan en later entiteiten toevoegen.",
         "data": {
-          "sensor_name": "Sensornaam",
-          "sensor_type": "Sensortype"
+          "selected_values": "Waarden"
+        },
+        "data_description": {
+          "selected_values": "Doorzoek de lijst, of typ zelf een pad in om er een toe te voegen die niet is gevonden."
         }
       },
-      "sensor_config": {
-        "title": "Sensorconfiguratie",
-        "description": "Configureer de sensorinstellingen. De extractiemethode (JSON/XPath/CSS/RegEx) wordt automatisch gedetecteerd op basis van het inhoudstype van het antwoord.",
+      "reauth_confirm": {
+        "title": "Opnieuw verifiëren",
+        "description": "Het endpoint heeft de opgeslagen gegevens voor het profiel \"{auth_type}\" geweigerd. Voer ze opnieuw in.",
         "data": {
-          "sensor_state": "Statusselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
-          "sensor_icon": "Icoonselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
-          "sensor_color": "Kleurselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
-          "sensor_device_class": "Apparaatklasse",
-          "sensor_unit": "Meeteenheid",
-          "tracker_latitude": "Breedtegraadselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
-          "tracker_longitude": "Lengtegraadselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
-          "tracker_location_name": "Locatienaamselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
-          "tracker_source_type": "Brontype"
+          "token": "Bearer-token",
+          "api_key": "API-sleutel",
+          "api_key_header": "Header voor API-sleutel",
+          "username": "Gebruikersnaam",
+          "password": "Wachtwoord"
         }
       }
     },
     "error": {
-      "invalid_url": "Ongeldig URL-formaat",
-      "no_sensors": "Er moet minstens één sensor worden geconfigureerd"
+      "cannot_connect": "Het endpoint is niet bereikbaar. Controleer de URL, je netwerk en de time-out.",
+      "invalid_auth": "Het endpoint heeft de gegevens geweigerd (HTTP 401/403).",
+      "invalid_url": "Voer een volledige URL in, inclusief het http- of https-schema.",
+      "invalid_headers": "Elke header moet als `Naam: waarde` op een eigen regel staan.",
+      "bad_status": "Het endpoint antwoordde met een foutstatuscode.",
+      "no_values": "Het antwoord was leeg of bevatte geen leesbare waarden."
     },
     "abort": {
-      "already_configured": "Dit HTTP-eindpunt is al geconfigureerd",
-      "no_sensors": "Er zijn geen sensors geconfigureerd"
+      "already_configured": "Deze combinatie van URL en methode is al geconfigureerd.",
+      "reauth_successful": "Opnieuw verifiëren is gelukt.",
+      "reconfigure_successful": "Het endpoint is bijgewerkt."
     }
   },
-  "options": {
-    "step": {
-      "init": {
-        "title": "HTTP Agent-configuratie",
-        "description": "Kies wat je wilt bewerken",
-        "menu_options": {
-          "basic": "Basisinstellingen bewerken (URL, methode, time-out, interval, SSL)",
-          "headers": "HTTP-headers bewerken",
-          "payload": "Verzoekpayload bewerken",
-          "sensors": "Sensorconfiguratie bewerken"
+  "config_subentries": {
+    "sensor": {
+      "initiate_flow": {
+        "user": "Sensor toevoegen",
+        "reconfigure": "Sensor bewerken"
+      },
+      "entry_type": "Sensor",
+      "step": {
+        "user": {
+          "title": "Een sensor toevoegen",
+          "description": "Kies een waarde uit het laatste antwoord, of typ zelf een pad in.",
+          "data": {
+            "name": "Naam",
+            "value_path": "Waarde"
+          },
+          "data_description": {
+            "name": "De naam van de entiteit.",
+            "value_path": "Het pad dat uit het antwoord wordt gelezen."
+          },
+          "sections": {
+            "options": {
+              "name": "Entiteitsinstellingen",
+              "data": {
+                "device_class": "Apparaatklasse",
+                "unit_of_measurement": "Meeteenheid",
+                "state_class": "Statusklasse",
+                "icon": "Pictogram",
+                "attributes": "Extra attributen"
+              },
+              "data_description": {
+                "device_class": "Bepaalt hoe Home Assistant de waarde opmaakt en in grafieken toont.",
+                "unit_of_measurement": "Bijvoorbeeld °C, %, kWh.",
+                "state_class": "Zet op 'Measurement' of 'Total increasing' om de sensor in langetermijnstatistieken op te nemen.",
+                "icon": "Overschrijft het pictogram dat van de apparaatklasse is afgeleid.",
+                "attributes": "Eén per regel, geschreven als `Attribuutnaam: pad`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Sensor bewerken",
+          "description": "Kies een waarde uit het laatste antwoord, of typ zelf een pad in.",
+          "data": {
+            "name": "Naam",
+            "value_path": "Waarde"
+          },
+          "data_description": {
+            "name": "De naam van de entiteit.",
+            "value_path": "Het pad dat uit het antwoord wordt gelezen."
+          },
+          "sections": {
+            "options": {
+              "name": "Entiteitsinstellingen",
+              "data": {
+                "device_class": "Apparaatklasse",
+                "unit_of_measurement": "Meeteenheid",
+                "state_class": "Statusklasse",
+                "icon": "Pictogram",
+                "attributes": "Extra attributen"
+              },
+              "data_description": {
+                "device_class": "Bepaalt hoe Home Assistant de waarde opmaakt en in grafieken toont.",
+                "unit_of_measurement": "Bijvoorbeeld °C, %, kWh.",
+                "state_class": "Zet op 'Measurement' of 'Total increasing' om de sensor in langetermijnstatistieken op te nemen.",
+                "icon": "Overschrijft het pictogram dat van de apparaatklasse is afgeleid.",
+                "attributes": "Eén per regel, geschreven als `Attribuutnaam: pad`."
+              }
+            }
+          }
         }
       },
-      "basic": {
-        "title": "Basisinstellingen",
-        "description": "URL, methode, time-out, interval en SSL-verificatie bewerken",
-        "data": {
-          "url": "URL",
-          "method": "HTTP-methode",
-          "timeout": "Time-out (seconden)",
-          "interval": "Update-interval (seconden)",
-          "retries": "Opnieuw proberen bij fout",
-          "verify_ssl": "SSL-certificaat verifiëren"
-        }
+      "error": {
+        "invalid_attributes": "Elk attribuut moet als `Attribuutnaam: pad` op een eigen regel staan."
       },
-      "headers": {
-        "title": "HTTP-headers",
-        "description": "HTTP-headers bewerken\n\nHuidige headers:\n{headers}",
-        "menu_options": {
-          "add_header": "Toevoegen",
-          "clear_headers": "Alles wissen",
-          "headers_done": "Wijzigingen opslaan"
-        }
-      },
-      "add_header": {
-        "title": "HTTP-header toevoegen",
-        "description": "Een nieuwe HTTP-header toevoegen",
-        "data": {
-          "key": "Headernaam",
-          "value": "Headerwaarde"
-        }
-      },
-      "payload": {
-        "title": "HTTP-payload",
-        "description": "De verzoekpayload bewerken",
-        "data": {
-          "content_type": "Inhoudstype",
-          "payload": "Payload (JSON/XML/Tekst)"
-        }
-      },
-      "sensors": {
-        "title": "Sensorconfiguratie",
-        "description": "Sensorconfiguratie bewerken\n\nHuidige sensors:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Toevoegen",
-          "select_sensor": "Bewerken",
-          "clear_sensors": "Alles wissen",
-          "sensors_done": "Wijzigingen opslaan"
-        }
-      },
-      "select_sensor": {
-        "title": "Sensor selecteren",
-        "description": "Kies een sensor om te bewerken of te verwijderen",
-        "data": {
-          "sensor": "Sensor"
-        }
-      },
-      "edit_sensor": {
-        "title": "Sensor bewerken",
-        "description": "Kies wat je met deze sensor wilt doen:\n\n{sensor_info}",
-        "menu_options": {
-          "modify_sensor": "Bewerken",
-          "delete_sensor": "Verwijderen",
-          "edit_back": "Terug"
-        }
-      },
-      "modify_sensor": {
-        "title": "Sensor wijzigen",
-        "description": "Bewerk de sensorconfiguratie. De extractiemethode (JSON/XPath/CSS/RegEx) wordt automatisch gedetecteerd op basis van het inhoudstype van het antwoord.",
-        "data": {
-          "sensor_name": "Sensornaam",
-          "sensor_state": "Statusselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
-          "sensor_icon": "Icoonselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
-          "sensor_color": "Kleurselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
-          "sensor_device_class": "Apparaatklasse",
-          "sensor_unit": "Meeteenheid",
-          "tracker_latitude": "Breedtegraadselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
-          "tracker_longitude": "Lengtegraadselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
-          "tracker_location_name": "Locatienaamselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
-          "tracker_source_type": "Brontype"
-        }
-      },
-      "add_sensor": {
-        "title": "Sensor toevoegen",
-        "description": "Kies het sensortype en geef een naam op",
-        "data": {
-          "sensor_name": "Sensornaam",
-          "sensor_type": "Sensortype"
-        }
-      },
-      "sensor_config": {
-        "title": "Sensorconfiguratie",
-        "description": "Configureer de sensorinstellingen. De extractiemethode (JSON/XPath/CSS/RegEx) wordt automatisch gedetecteerd op basis van het inhoudstype van het antwoord.",
-        "data": {
-          "sensor_state": "Statusselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
-          "sensor_icon": "Icoonselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
-          "sensor_color": "Kleurselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
-          "sensor_device_class": "Apparaatklasse",
-          "sensor_unit": "Meeteenheid",
-          "tracker_latitude": "Breedtegraadselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
-          "tracker_longitude": "Lengtegraadselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
-          "tracker_location_name": "Locatienaamselector (JSON/XPath/CSS/RegEx - automatisch gedetecteerd)",
-          "tracker_source_type": "Brontype"
-        }
+      "abort": {
+        "reconfigure_successful": "De sensor is bijgewerkt."
       }
     },
-    "error": {
-      "invalid_url": "Ongeldig URL-formaat",
-      "no_sensors": "Er moet minstens één sensor worden geconfigureerd"
+    "binary_sensor": {
+      "initiate_flow": {
+        "user": "Binaire sensor toevoegen",
+        "reconfigure": "Binaire sensor bewerken"
+      },
+      "entry_type": "Binaire sensor",
+      "step": {
+        "user": {
+          "title": "Een binaire sensor toevoegen",
+          "description": "Kies een waarde uit het laatste antwoord, of typ zelf een pad in.",
+          "data": {
+            "name": "Naam",
+            "value_path": "Waarde"
+          },
+          "data_description": {
+            "name": "De naam van de entiteit.",
+            "value_path": "Het pad dat uit het antwoord wordt gelezen."
+          },
+          "sections": {
+            "options": {
+              "name": "Entiteitsinstellingen",
+              "data": {
+                "device_class": "Apparaatklasse",
+                "payload_on": "Waarde voor aan",
+                "payload_off": "Waarde voor uit",
+                "icon": "Pictogram",
+                "attributes": "Extra attributen"
+              },
+              "data_description": {
+                "device_class": "Bepaalt de aan/uit-tekst en het pictogram.",
+                "payload_on": "Optioneel. De exacte waarde die 'aan' betekent. Laat leeg om true/1/on/yes automatisch te herkennen.",
+                "payload_off": "Optioneel. De exacte waarde die 'uit' betekent.",
+                "icon": "Overschrijft het pictogram dat van de apparaatklasse is afgeleid.",
+                "attributes": "Eén per regel, geschreven als `Attribuutnaam: pad`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Binaire sensor bewerken",
+          "description": "Kies een waarde uit het laatste antwoord, of typ zelf een pad in.",
+          "data": {
+            "name": "Naam",
+            "value_path": "Waarde"
+          },
+          "data_description": {
+            "name": "De naam van de entiteit.",
+            "value_path": "Het pad dat uit het antwoord wordt gelezen."
+          },
+          "sections": {
+            "options": {
+              "name": "Entiteitsinstellingen",
+              "data": {
+                "device_class": "Apparaatklasse",
+                "payload_on": "Waarde voor aan",
+                "payload_off": "Waarde voor uit",
+                "icon": "Pictogram",
+                "attributes": "Extra attributen"
+              },
+              "data_description": {
+                "device_class": "Bepaalt de aan/uit-tekst en het pictogram.",
+                "payload_on": "Optioneel. De exacte waarde die 'aan' betekent. Laat leeg om true/1/on/yes automatisch te herkennen.",
+                "payload_off": "Optioneel. De exacte waarde die 'uit' betekent.",
+                "icon": "Overschrijft het pictogram dat van de apparaatklasse is afgeleid.",
+                "attributes": "Eén per regel, geschreven als `Attribuutnaam: pad`."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Elk attribuut moet als `Attribuutnaam: pad` op een eigen regel staan."
+      },
+      "abort": {
+        "reconfigure_successful": "De binaire sensor is bijgewerkt."
+      }
     },
-    "abort": {
-      "no_sensors": "Er zijn geen sensors geconfigureerd"
+    "device_tracker": {
+      "initiate_flow": {
+        "user": "Apparaattracker toevoegen",
+        "reconfigure": "Apparaattracker bewerken"
+      },
+      "entry_type": "Apparaattracker",
+      "step": {
+        "user": {
+          "title": "Een apparaattracker toevoegen",
+          "description": "Kies de waarden voor breedtegraad en lengtegraad uit het laatste antwoord.",
+          "data": {
+            "name": "Naam",
+            "latitude_path": "Breedtegraad",
+            "longitude_path": "Lengtegraad"
+          },
+          "data_description": {
+            "name": "De naam van de entiteit.",
+            "latitude_path": "Het pad naar de waarde voor de breedtegraad.",
+            "longitude_path": "Het pad naar de waarde voor de lengtegraad."
+          },
+          "sections": {
+            "options": {
+              "name": "Entiteitsinstellingen",
+              "data": {
+                "gps_accuracy_path": "GPS-nauwkeurigheid",
+                "source_type": "Brontype",
+                "icon": "Pictogram",
+                "attributes": "Extra attributen"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Optioneel. De nauwkeurigheid in meters.",
+                "source_type": "Hoe de locatie wordt bepaald.",
+                "icon": "Overschrijft het standaardpictogram.",
+                "attributes": "Eén per regel, geschreven als `Attribuutnaam: pad`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Apparaattracker bewerken",
+          "description": "Kies de waarden voor breedtegraad en lengtegraad uit het laatste antwoord.",
+          "data": {
+            "name": "Naam",
+            "latitude_path": "Breedtegraad",
+            "longitude_path": "Lengtegraad"
+          },
+          "data_description": {
+            "name": "De naam van de entiteit.",
+            "latitude_path": "Het pad naar de waarde voor de breedtegraad.",
+            "longitude_path": "Het pad naar de waarde voor de lengtegraad."
+          },
+          "sections": {
+            "options": {
+              "name": "Entiteitsinstellingen",
+              "data": {
+                "gps_accuracy_path": "GPS-nauwkeurigheid",
+                "source_type": "Brontype",
+                "icon": "Pictogram",
+                "attributes": "Extra attributen"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Optioneel. De nauwkeurigheid in meters.",
+                "source_type": "Hoe de locatie wordt bepaald.",
+                "icon": "Overschrijft het standaardpictogram.",
+                "attributes": "Eén per regel, geschreven als `Attribuutnaam: pad`."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Elk attribuut moet als `Attribuutnaam: pad` op een eigen regel staan."
+      },
+      "abort": {
+        "reconfigure_successful": "De apparaattracker is bijgewerkt."
+      }
     }
   },
-  "selector": {
-    "sensor_type": {
-      "options": {
-        "sensor": "Sensor",
-        "binary_sensor": "Binaire sensor",
-        "number": "Getal",
-        "device_tracker": "Apparaattracker"
-      }
+  "exceptions": {
+    "cannot_connect": {
+      "message": "Het endpoint is niet bereikbaar: {error}"
     },
-    "tracker_source_type": {
-      "options": {
-        "none": "Geen (standaard)",
-        "gps": "GPS",
-        "router": "Router",
-        "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE"
-      }
+    "invalid_auth": {
+      "message": "Het endpoint heeft de opgeslagen gegevens geweigerd."
+    },
+    "bad_status": {
+      "message": "Het endpoint antwoordde met HTTP {status}."
+    },
+    "empty_response": {
+      "message": "Het endpoint antwoordde met een lege tekst."
     }
   }
 }

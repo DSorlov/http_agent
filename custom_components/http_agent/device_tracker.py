@@ -1,177 +1,77 @@
-"""HTTP Agent device tracker platform."""
+"""Device tracker platform for HTTP Agent."""
 
 from __future__ import annotations
 
 import logging
 from typing import Any
 
-from homeassistant.components.device_tracker import TrackerEntity
-from homeassistant.components.device_tracker.const import SourceType
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.components.device_tracker import SourceType, TrackerEntity
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from .const import (
-    CONF_SENSOR_NAME,
-    CONF_SENSOR_TYPE,
-    CONF_SENSORS,
+    CONF_GPS_ACCURACY_PATH,
+    CONF_LATITUDE_PATH,
+    CONF_LONGITUDE_PATH,
+    CONF_SOURCE_TYPE,
+    SUBENTRY_TYPE_DEVICE_TRACKER,
 )
-from .coordinator import HTTPAgentCoordinator
-from .helpers import build_device_info, get_sensor_config, merge_entry_data
+from .coordinator import HTTPAgentConfigEntry
+from .entity import HTTPAgentEntity, async_add_subentry_entities
 
 _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: ConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    entry: HTTPAgentConfigEntry,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Set up HTTP Agent device trackers from a config entry."""
-    coordinator = entry.runtime_data
-
-    # Merge config data with options
-    data = merge_entry_data(entry)
-
-    trackers = []
-    for sensor_config in data[CONF_SENSORS]:
-        # Only create device trackers of type "device_tracker"
-        if sensor_config.get(CONF_SENSOR_TYPE, "sensor") == "device_tracker":
-            sensor_name = sensor_config[CONF_SENSOR_NAME]
-            trackers.append(HTTPAgentDeviceTracker(coordinator, entry, sensor_name))
-
-    if trackers:
-        async_add_entities(trackers)
+    """Set up the HTTP Agent device trackers."""
+    async_add_subentry_entities(
+        entry, async_add_entities, SUBENTRY_TYPE_DEVICE_TRACKER, HTTPAgentDeviceTracker
+    )
 
 
-class HTTPAgentDeviceTracker(CoordinatorEntity, TrackerEntity):
-    """HTTP Agent device tracker."""
+class HTTPAgentDeviceTracker(HTTPAgentEntity, TrackerEntity):
+    """A device tracker reading coordinates from the HTTP response."""
 
-    def __init__(
-        self,
-        coordinator: HTTPAgentCoordinator,
-        entry: ConfigEntry,
-        sensor_name: str,
-    ) -> None:
-        """Initialize the device tracker."""
-        super().__init__(coordinator)
-        self.entry = entry
-        self.sensor_name = sensor_name
-
-        # Entity properties
-        self._attr_name = sensor_name
-        self._attr_unique_id = f"{entry.entry_id}_{sensor_name}"
-        self._attr_device_info = build_device_info(entry)
-
-        self.sensor_config = get_sensor_config(entry, sensor_name)
-
-    @property
-    def latitude(self) -> float | None:
-        """Return latitude value of the device."""
-        if not self.coordinator.data:
-            return None
-
-        sensor_data = self.coordinator.data.get(self.sensor_name, {})
-        lat = sensor_data.get("latitude")
-
-        if lat is not None:
-            try:
-                return float(lat)
-            except (ValueError, TypeError):
-                _LOGGER.warning(
-                    "Could not convert latitude '%s' to float for %s",
-                    lat,
-                    self.sensor_name,
-                )
-        return None
-
-    @property
-    def longitude(self) -> float | None:
-        """Return longitude value of the device."""
-        if not self.coordinator.data:
-            return None
-
-        sensor_data = self.coordinator.data.get(self.sensor_name, {})
-        lng = sensor_data.get("longitude")
-
-        if lng is not None:
-            try:
-                return float(lng)
-            except (ValueError, TypeError):
-                _LOGGER.warning(
-                    "Could not convert longitude '%s' to float for %s",
-                    lng,
-                    self.sensor_name,
-                )
-        return None
-
-    @property
-    def location_name(self) -> str | None:
-        """Return a location name for the current location of the device."""
-        if not self.coordinator.data:
-            return None
-
-        sensor_data = self.coordinator.data.get(self.sensor_name, {})
-        location = sensor_data.get("location_name")
-
-        # Fallback to state if no location_name is provided
-        if not location:
-            location = sensor_data.get("state")
-
-        return str(location) if location is not None else None
+    def __init__(self, coordinator, subentry) -> None:
+        """Initialise the tracker from its subentry configuration."""
+        super().__init__(coordinator, subentry)
+        try:
+            self._source_type = SourceType(self.config.get(CONF_SOURCE_TYPE, "gps"))
+        except ValueError:
+            self._source_type = SourceType.GPS
 
     @property
     def source_type(self) -> SourceType:
-        """Return the source type, eg gps or router, of the device."""
-        if not self.coordinator.data:
-            return SourceType.GPS
-
-        sensor_data = self.coordinator.data.get(self.sensor_name, {})
-        source = sensor_data.get("source_type", "gps")
-
-        # Convert string to SourceType
-        if source.lower() == "router":
-            return SourceType.ROUTER
-        elif source.lower() == "bluetooth":
-            return SourceType.BLUETOOTH
-        elif source.lower() == "bluetooth_le":
-            return SourceType.BLUETOOTH_LE
-        else:
-            return SourceType.GPS
+        """Return the configured source type."""
+        return self._source_type
 
     @property
-    def icon(self) -> str | None:
-        """Return the icon of the device tracker."""
-        if not self.coordinator.data:
-            return None
-
-        sensor_data = self.coordinator.data.get(self.sensor_name, {})
-        icon = sensor_data.get("icon")
-
-        # If icon is provided, ensure it starts with mdi:
-        if icon and not icon.startswith("mdi:"):
-            icon = f"mdi:{icon}"
-
-        return icon
+    def latitude(self) -> float | None:
+        """Return the current latitude."""
+        return _as_float(self.path_value(CONF_LATITUDE_PATH))
 
     @property
-    def extra_state_attributes(self) -> dict[str, Any]:
-        """Return the state attributes of the device tracker."""
-        if not self.coordinator.data:
-            return {}
+    def longitude(self) -> float | None:
+        """Return the current longitude."""
+        return _as_float(self.path_value(CONF_LONGITUDE_PATH))
 
-        sensor_data = self.coordinator.data.get(self.sensor_name, {})
-        attributes = {}
+    @property
+    def location_accuracy(self) -> int:
+        """Return the GPS accuracy in meters."""
+        accuracy = _as_float(self.path_value(CONF_GPS_ACCURACY_PATH))
+        return int(accuracy) if accuracy is not None else 0
 
-        # Add color if available
-        if sensor_data.get("color"):
-            attributes["color"] = sensor_data["color"]
 
-        # Add raw coordinates for debugging
-        if sensor_data.get("latitude") is not None:
-            attributes["raw_latitude"] = sensor_data["latitude"]
-        if sensor_data.get("longitude") is not None:
-            attributes["raw_longitude"] = sensor_data["longitude"]
-
-        return attributes
+def _as_float(value: Any) -> float | None:
+    """Return ``value`` as a float, or None when it is not numeric."""
+    if value is None:
+        return None
+    try:
+        return float(str(value).strip().replace(",", "."))
+    except (TypeError, ValueError):
+        _LOGGER.debug("Value %r is not a valid coordinate", value)
+        return None

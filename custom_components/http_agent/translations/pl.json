@@ -1,223 +1,357 @@
 {
+  "title": "HTTP Agent",
   "config": {
     "step": {
       "user": {
-        "title": "Konfiguracja HTTP Agent",
-        "description": "Skonfiguruj endpoint HTTP",
+        "title": "Połącz z punktem końcowym",
+        "description": "Skieruj HTTP Agent na dowolny punkt końcowy HTTP. Po kolejnych krokach punkt końcowy zostanie wywołany raz, abyś mógł wybrać wartości, które mają stać się encjami.",
         "data": {
           "url": "URL",
-          "method": "Metoda HTTP",
-          "timeout": "Limit czasu (sekundy)",
-          "interval": "Interwal aktualizacji (sekundy)",
-          "retries": "Ponowienia po bledzie",
-          "verify_ssl": "Weryfikuj certyfikat SSL"
+          "method": "Metoda",
+          "auth_type": "Uwierzytelnianie",
+          "name": "Nazwa"
+        },
+        "data_description": {
+          "url": "Pełny adres URL punktu końcowego. Szablony Home Assistant są obsługiwane.",
+          "method": "Metoda HTTP używana przy każdym odpytaniu.",
+          "auth_type": "Wybierz gotowy profil uwierzytelniania albo 'None' i dodaj własne nagłówki poniżej.",
+          "name": "Opcjonalne. Domyślnie nazwa hosta z adresu URL."
+        },
+        "sections": {
+          "advanced": {
+            "name": "Ustawienia zaawansowane",
+            "data": {
+              "scan_interval": "Interwał aktualizacji",
+              "timeout": "Limit czasu żądania",
+              "retries": "Ponowne próby przy błędzie",
+              "extra_headers": "Dodatkowe nagłówki",
+              "response_format": "Format odpowiedzi",
+              "verify_ssl": "Weryfikuj certyfikat SSL",
+              "follow_redirects": "Podążaj za przekierowaniami"
+            },
+            "data_description": {
+              "scan_interval": "Jak często punkt końcowy jest odpytywany, w sekundach.",
+              "timeout": "Jak długo czekać na odpowiedź, w sekundach.",
+              "retries": "Ile dodatkowych prób wykonać, gdy odpytanie się nie powiedzie, z sekundą przerwy między próbami.",
+              "extra_headers": "Jeden nagłówek w wierszu, zapisany jako `Nazwa: wartość`. Szablony są obsługiwane.",
+              "response_format": "Pozostaw 'Auto', aby automatycznie wykrywać JSON, XML, HTML lub zwykły tekst.",
+              "verify_ssl": "Wyłącz tylko dla punktów końcowych z certyfikatem samopodpisanym.",
+              "follow_redirects": "Automatycznie podążaj za przekierowaniami HTTP 3xx."
+            }
+          }
         }
       },
-      "headers": {
-        "title": "Naglowki HTTP",
-        "description": "Skonfiguruj naglowki HTTP\n\nAktualne naglowki:\n{headers}",
-        "menu_options": {
-          "add_header": "Dodaj",
-          "headers_done": "Gotowe"
-        }
-      },
-      "add_header": {
-        "title": "Dodaj naglowek HTTP",
-        "description": "Dodaj nowy naglowek HTTP",
+      "credentials": {
+        "title": "Uwierzytelnianie",
+        "description": "Wprowadź dane uwierzytelniające dla profilu \"{auth_type}\". Są zapisywane w postaci zaszyfrowanej i nigdy nie pojawiają się w dziennikach ani diagnostyce.",
         "data": {
-          "key": "Nazwa naglowka",
-          "value": "Wartosc naglowka"
+          "token": "Token Bearer",
+          "api_key": "Klucz API",
+          "api_key_header": "Nagłówek klucza API",
+          "username": "Nazwa użytkownika",
+          "password": "Hasło"
+        },
+        "data_description": {
+          "token": "Wysyłany jako nagłówek `Authorization: Bearer`.",
+          "api_key": "Sama wartość klucza.",
+          "api_key_header": "Nagłówek, w którym wysyłany jest klucz, na przykład `X-API-Key`.",
+          "username": "Nazwa użytkownika do uwierzytelniania HTTP basic.",
+          "password": "Hasło do uwierzytelniania HTTP basic."
         }
       },
-      "payload": {
-        "title": "Ladunek HTTP",
-        "description": "Skonfiguruj ladunek zapytania",
+      "body": {
+        "title": "Treść żądania",
+        "description": "Żądania {method} mogą wysyłać treść. Pozostaw puste, jeśli punkt końcowy jej nie potrzebuje.",
         "data": {
-          "content_type": "Typ zawartosci",
-          "payload": "Ladunek (JSON/XML/Tekst)"
+          "content_type": "Typ zawartości",
+          "payload": "Treść"
+        },
+        "data_description": {
+          "content_type": "Wysyłany jako nagłówek `Content-Type`.",
+          "payload": "Treść żądania. Szablony Home Assistant są obsługiwane."
         }
       },
-      "sensors": {
-        "title": "Konfiguracja sensorow",
-        "description": "Skonfiguruj sensory do wyodrebniania danych\n\nAktualne sensory:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Dodaj",
-          "sensors_done": "Gotowe"
-        }
-      },
-      "add_sensor": {
-        "title": "Dodaj sensor",
-        "description": "Wybierz typ sensora i podaj nazwe",
+      "select_values": {
+        "title": "Wybierz interesujące Cię wartości",
+        "description": "Punkt końcowy odpowiedział kodem HTTP {status}, a odpowiedź odczytano jako **{format}**. Znaleziono {count} wartości.\n\n```\n{preview}\n```\n\nWybierz wartości, które mają stać się encjami. Sensowne typy encji, klasy urządzeń i jednostki są odgadywane automatycznie i można je później zmienić. Możesz też pominąć ten krok i dodać encje później.",
         "data": {
-          "sensor_name": "Nazwa sensora",
-          "sensor_type": "Typ sensora"
+          "selected_values": "Wartości"
+        },
+        "data_description": {
+          "selected_values": "Przeszukaj listę albo wpisz ścieżkę ręcznie, aby dodać taką, której nie wykryto."
         }
       },
-      "sensor_config": {
-        "title": "Konfiguracja sensora",
-        "description": "Skonfiguruj ustawienia sensora. Metoda ekstrakcji (JSON/XPath/CSS/RegEx) zostanie automatycznie wykryta na podstawie typu zawartosci odpowiedzi.",
+      "reauth_confirm": {
+        "title": "Uwierzytelnij ponownie",
+        "description": "Punkt końcowy odrzucił zapisane dane uwierzytelniające dla profilu \"{auth_type}\". Wprowadź je ponownie.",
         "data": {
-          "sensor_state": "Selektor stanu (JSON/XPath/CSS/RegEx - wykrywany automatycznie)",
-          "sensor_icon": "Selektor ikony (JSON/XPath/CSS/RegEx - wykrywany automatycznie)",
-          "sensor_color": "Selektor koloru (JSON/XPath/CSS/RegEx - wykrywany automatycznie)",
-          "sensor_device_class": "Klasa urzadzenia",
-          "sensor_unit": "Jednostka miary",
-          "tracker_latitude": "Selektor szerokosci geograficznej (JSON/XPath/CSS/RegEx - wykrywany automatycznie)",
-          "tracker_longitude": "Selektor dlugosci geograficznej (JSON/XPath/CSS/RegEx - wykrywany automatycznie)",
-          "tracker_location_name": "Selektor nazwy lokalizacji (JSON/XPath/CSS/RegEx - wykrywany automatycznie)",
-          "tracker_source_type": "Typ zrodla"
+          "token": "Token Bearer",
+          "api_key": "Klucz API",
+          "api_key_header": "Nagłówek klucza API",
+          "username": "Nazwa użytkownika",
+          "password": "Hasło"
         }
       }
     },
     "error": {
-      "invalid_url": "Nieprawidlowy format URL",
-      "no_sensors": "Nalezy skonfigurowac co najmniej jeden sensor"
+      "cannot_connect": "Nie udało się połączyć z punktem końcowym. Sprawdź adres URL, sieć i limit czasu.",
+      "invalid_auth": "Punkt końcowy odrzucił dane uwierzytelniające (HTTP 401/403).",
+      "invalid_url": "Wprowadź pełny adres URL wraz ze schematem http lub https.",
+      "invalid_headers": "Każdy nagłówek musi być zapisany jako `Nazwa: wartość` w osobnym wierszu.",
+      "bad_status": "Punkt końcowy odpowiedział kodem błędu.",
+      "no_values": "Odpowiedź była pusta lub nie zawierała czytelnych wartości."
     },
     "abort": {
-      "already_configured": "Ten endpoint HTTP jest juz skonfigurowany",
-      "no_sensors": "Nie skonfigurowano zadnych sensorow"
+      "already_configured": "Ta kombinacja adresu URL i metody jest już skonfigurowana.",
+      "reauth_successful": "Ponowne uwierzytelnianie powiodło się.",
+      "reconfigure_successful": "Punkt końcowy został zaktualizowany."
     }
   },
-  "options": {
-    "step": {
-      "init": {
-        "title": "Konfiguracja HTTP Agent",
-        "description": "Wybierz, co chcesz edytowac",
-        "menu_options": {
-          "basic": "Edytuj ustawienia podstawowe (URL, metoda, limit czasu, interwal, SSL)",
-          "headers": "Edytuj naglowki HTTP",
-          "payload": "Edytuj ladunek zapytania",
-          "sensors": "Edytuj konfiguracje sensorow"
+  "config_subentries": {
+    "sensor": {
+      "initiate_flow": {
+        "user": "Dodaj czujnik",
+        "reconfigure": "Edytuj czujnik"
+      },
+      "entry_type": "Czujnik",
+      "step": {
+        "user": {
+          "title": "Dodaj czujnik",
+          "description": "Wybierz wartość z ostatniej odpowiedzi albo wpisz ścieżkę samodzielnie.",
+          "data": {
+            "name": "Nazwa",
+            "value_path": "Wartość"
+          },
+          "data_description": {
+            "name": "Nazwa encji.",
+            "value_path": "Ścieżka odczytywana z odpowiedzi."
+          },
+          "sections": {
+            "options": {
+              "name": "Ustawienia encji",
+              "data": {
+                "device_class": "Klasa urządzenia",
+                "unit_of_measurement": "Jednostka miary",
+                "state_class": "Klasa stanu",
+                "icon": "Ikona",
+                "attributes": "Dodatkowe atrybuty"
+              },
+              "data_description": {
+                "device_class": "Określa, jak Home Assistant formatuje i przedstawia wartość na wykresach.",
+                "unit_of_measurement": "Na przykład °C, %, kWh.",
+                "state_class": "Ustaw na 'Measurement' lub 'Total increasing', aby uwzględnić czujnik w statystykach długoterminowych.",
+                "icon": "Zastępuje ikonę wynikającą z klasy urządzenia.",
+                "attributes": "Jeden w wierszu, zapisany jako `Nazwa atrybutu: ścieżka`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Edytuj czujnik",
+          "description": "Wybierz wartość z ostatniej odpowiedzi albo wpisz ścieżkę samodzielnie.",
+          "data": {
+            "name": "Nazwa",
+            "value_path": "Wartość"
+          },
+          "data_description": {
+            "name": "Nazwa encji.",
+            "value_path": "Ścieżka odczytywana z odpowiedzi."
+          },
+          "sections": {
+            "options": {
+              "name": "Ustawienia encji",
+              "data": {
+                "device_class": "Klasa urządzenia",
+                "unit_of_measurement": "Jednostka miary",
+                "state_class": "Klasa stanu",
+                "icon": "Ikona",
+                "attributes": "Dodatkowe atrybuty"
+              },
+              "data_description": {
+                "device_class": "Określa, jak Home Assistant formatuje i przedstawia wartość na wykresach.",
+                "unit_of_measurement": "Na przykład °C, %, kWh.",
+                "state_class": "Ustaw na 'Measurement' lub 'Total increasing', aby uwzględnić czujnik w statystykach długoterminowych.",
+                "icon": "Zastępuje ikonę wynikającą z klasy urządzenia.",
+                "attributes": "Jeden w wierszu, zapisany jako `Nazwa atrybutu: ścieżka`."
+              }
+            }
+          }
         }
       },
-      "basic": {
-        "title": "Ustawienia podstawowe",
-        "description": "Edytuj URL, metode, limit czasu, interwal i weryfikacje SSL",
-        "data": {
-          "url": "URL",
-          "method": "Metoda HTTP",
-          "timeout": "Limit czasu (sekundy)",
-          "interval": "Interwal aktualizacji (sekundy)",
-          "retries": "Ponowienia po bledzie",
-          "verify_ssl": "Weryfikuj certyfikat SSL"
-        }
+      "error": {
+        "invalid_attributes": "Każdy atrybut musi być zapisany jako `Nazwa atrybutu: ścieżka` w osobnym wierszu."
       },
-      "headers": {
-        "title": "Naglowki HTTP",
-        "description": "Edytuj naglowki HTTP\n\nAktualne naglowki:\n{headers}",
-        "menu_options": {
-          "add_header": "Dodaj",
-          "clear_headers": "Wyczysc wszystko",
-          "headers_done": "Zapisz zmiany"
-        }
-      },
-      "add_header": {
-        "title": "Dodaj naglowek HTTP",
-        "description": "Dodaj nowy naglowek HTTP",
-        "data": {
-          "key": "Nazwa naglowka",
-          "value": "Wartosc naglowka"
-        }
-      },
-      "payload": {
-        "title": "Ladunek HTTP",
-        "description": "Edytuj ladunek zapytania",
-        "data": {
-          "content_type": "Typ zawartosci",
-          "payload": "Ladunek (JSON/XML/Tekst)"
-        }
-      },
-      "sensors": {
-        "title": "Konfiguracja sensorow",
-        "description": "Edytuj konfiguracje sensorow\n\nAktualne sensory:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Dodaj",
-          "select_sensor": "Edytuj",
-          "clear_sensors": "Wyczysc wszystko",
-          "sensors_done": "Zapisz zmiany"
-        }
-      },
-      "select_sensor": {
-        "title": "Wybierz sensor",
-        "description": "Wybierz sensor do edycji lub usuniecia",
-        "data": {
-          "sensor": "Sensor"
-        }
-      },
-      "edit_sensor": {
-        "title": "Edytuj sensor",
-        "description": "Wybierz, co zrobic z tym sensorem:\n\n{sensor_info}",
-        "menu_options": {
-          "modify_sensor": "Edytuj",
-          "delete_sensor": "Usun",
-          "edit_back": "Wstecz"
-        }
-      },
-      "modify_sensor": {
-        "title": "Modyfikuj sensor",
-        "description": "Edytuj konfiguracje sensora. Metoda ekstrakcji (JSON/XPath/CSS/RegEx) zostanie automatycznie wykryta na podstawie typu zawartosci odpowiedzi.",
-        "data": {
-          "sensor_name": "Nazwa sensora",
-          "sensor_state": "Selektor stanu (JSON/XPath/CSS/RegEx - wykrywany automatycznie)",
-          "sensor_icon": "Selektor ikony (JSON/XPath/CSS/RegEx - wykrywany automatycznie)",
-          "sensor_color": "Selektor koloru (JSON/XPath/CSS/RegEx - wykrywany automatycznie)",
-          "sensor_device_class": "Klasa urzadzenia",
-          "sensor_unit": "Jednostka miary",
-          "tracker_latitude": "Selektor szerokosci geograficznej (JSON/XPath/CSS/RegEx - wykrywany automatycznie)",
-          "tracker_longitude": "Selektor dlugosci geograficznej (JSON/XPath/CSS/RegEx - wykrywany automatycznie)",
-          "tracker_location_name": "Selektor nazwy lokalizacji (JSON/XPath/CSS/RegEx - wykrywany automatycznie)",
-          "tracker_source_type": "Typ zrodla"
-        }
-      },
-      "add_sensor": {
-        "title": "Dodaj sensor",
-        "description": "Wybierz typ sensora i podaj nazwe",
-        "data": {
-          "sensor_name": "Nazwa sensora",
-          "sensor_type": "Typ sensora"
-        }
-      },
-      "sensor_config": {
-        "title": "Konfiguracja sensora",
-        "description": "Skonfiguruj ustawienia sensora. Metoda ekstrakcji (JSON/XPath/CSS/RegEx) zostanie automatycznie wykryta na podstawie typu zawartosci odpowiedzi.",
-        "data": {
-          "sensor_state": "Selektor stanu (JSON/XPath/CSS/RegEx - wykrywany automatycznie)",
-          "sensor_icon": "Selektor ikony (JSON/XPath/CSS/RegEx - wykrywany automatycznie)",
-          "sensor_color": "Selektor koloru (JSON/XPath/CSS/RegEx - wykrywany automatycznie)",
-          "sensor_device_class": "Klasa urzadzenia",
-          "sensor_unit": "Jednostka miary",
-          "tracker_latitude": "Selektor szerokosci geograficznej (JSON/XPath/CSS/RegEx - wykrywany automatycznie)",
-          "tracker_longitude": "Selektor dlugosci geograficznej (JSON/XPath/CSS/RegEx - wykrywany automatycznie)",
-          "tracker_location_name": "Selektor nazwy lokalizacji (JSON/XPath/CSS/RegEx - wykrywany automatycznie)",
-          "tracker_source_type": "Typ zrodla"
-        }
+      "abort": {
+        "reconfigure_successful": "Czujnik został zaktualizowany."
       }
     },
-    "error": {
-      "invalid_url": "Nieprawidlowy format URL",
-      "no_sensors": "Nalezy skonfigurowac co najmniej jeden sensor"
+    "binary_sensor": {
+      "initiate_flow": {
+        "user": "Dodaj czujnik binarny",
+        "reconfigure": "Edytuj czujnik binarny"
+      },
+      "entry_type": "Czujnik binarny",
+      "step": {
+        "user": {
+          "title": "Dodaj czujnik binarny",
+          "description": "Wybierz wartość z ostatniej odpowiedzi albo wpisz ścieżkę samodzielnie.",
+          "data": {
+            "name": "Nazwa",
+            "value_path": "Wartość"
+          },
+          "data_description": {
+            "name": "Nazwa encji.",
+            "value_path": "Ścieżka odczytywana z odpowiedzi."
+          },
+          "sections": {
+            "options": {
+              "name": "Ustawienia encji",
+              "data": {
+                "device_class": "Klasa urządzenia",
+                "payload_on": "Wartość dla włączenia",
+                "payload_off": "Wartość dla wyłączenia",
+                "icon": "Ikona",
+                "attributes": "Dodatkowe atrybuty"
+              },
+              "data_description": {
+                "device_class": "Określa opis i ikonę dla stanu włączony/wyłączony.",
+                "payload_on": "Opcjonalne. Dokładna wartość oznaczająca 'włączony'. Pozostaw puste, aby automatycznie wykrywać true/1/on/yes.",
+                "payload_off": "Opcjonalne. Dokładna wartość oznaczająca 'wyłączony'.",
+                "icon": "Zastępuje ikonę wynikającą z klasy urządzenia.",
+                "attributes": "Jeden w wierszu, zapisany jako `Nazwa atrybutu: ścieżka`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Edytuj czujnik binarny",
+          "description": "Wybierz wartość z ostatniej odpowiedzi albo wpisz ścieżkę samodzielnie.",
+          "data": {
+            "name": "Nazwa",
+            "value_path": "Wartość"
+          },
+          "data_description": {
+            "name": "Nazwa encji.",
+            "value_path": "Ścieżka odczytywana z odpowiedzi."
+          },
+          "sections": {
+            "options": {
+              "name": "Ustawienia encji",
+              "data": {
+                "device_class": "Klasa urządzenia",
+                "payload_on": "Wartość dla włączenia",
+                "payload_off": "Wartość dla wyłączenia",
+                "icon": "Ikona",
+                "attributes": "Dodatkowe atrybuty"
+              },
+              "data_description": {
+                "device_class": "Określa opis i ikonę dla stanu włączony/wyłączony.",
+                "payload_on": "Opcjonalne. Dokładna wartość oznaczająca 'włączony'. Pozostaw puste, aby automatycznie wykrywać true/1/on/yes.",
+                "payload_off": "Opcjonalne. Dokładna wartość oznaczająca 'wyłączony'.",
+                "icon": "Zastępuje ikonę wynikającą z klasy urządzenia.",
+                "attributes": "Jeden w wierszu, zapisany jako `Nazwa atrybutu: ścieżka`."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Każdy atrybut musi być zapisany jako `Nazwa atrybutu: ścieżka` w osobnym wierszu."
+      },
+      "abort": {
+        "reconfigure_successful": "Czujnik binarny został zaktualizowany."
+      }
     },
-    "abort": {
-      "no_sensors": "Nie skonfigurowano zadnych sensorow"
+    "device_tracker": {
+      "initiate_flow": {
+        "user": "Dodaj lokalizator urządzenia",
+        "reconfigure": "Edytuj lokalizator urządzenia"
+      },
+      "entry_type": "Lokalizator urządzenia",
+      "step": {
+        "user": {
+          "title": "Dodaj lokalizator urządzenia",
+          "description": "Wybierz wartości szerokości i długości geograficznej z ostatniej odpowiedzi.",
+          "data": {
+            "name": "Nazwa",
+            "latitude_path": "Szerokość geograficzna",
+            "longitude_path": "Długość geograficzna"
+          },
+          "data_description": {
+            "name": "Nazwa encji.",
+            "latitude_path": "Ścieżka do wartości szerokości geograficznej.",
+            "longitude_path": "Ścieżka do wartości długości geograficznej."
+          },
+          "sections": {
+            "options": {
+              "name": "Ustawienia encji",
+              "data": {
+                "gps_accuracy_path": "Dokładność GPS",
+                "source_type": "Typ źródła",
+                "icon": "Ikona",
+                "attributes": "Dodatkowe atrybuty"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Opcjonalne. Dokładność w metrach.",
+                "source_type": "Sposób ustalania położenia.",
+                "icon": "Zastępuje domyślną ikonę.",
+                "attributes": "Jeden w wierszu, zapisany jako `Nazwa atrybutu: ścieżka`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Edytuj lokalizator urządzenia",
+          "description": "Wybierz wartości szerokości i długości geograficznej z ostatniej odpowiedzi.",
+          "data": {
+            "name": "Nazwa",
+            "latitude_path": "Szerokość geograficzna",
+            "longitude_path": "Długość geograficzna"
+          },
+          "data_description": {
+            "name": "Nazwa encji.",
+            "latitude_path": "Ścieżka do wartości szerokości geograficznej.",
+            "longitude_path": "Ścieżka do wartości długości geograficznej."
+          },
+          "sections": {
+            "options": {
+              "name": "Ustawienia encji",
+              "data": {
+                "gps_accuracy_path": "Dokładność GPS",
+                "source_type": "Typ źródła",
+                "icon": "Ikona",
+                "attributes": "Dodatkowe atrybuty"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Opcjonalne. Dokładność w metrach.",
+                "source_type": "Sposób ustalania położenia.",
+                "icon": "Zastępuje domyślną ikonę.",
+                "attributes": "Jeden w wierszu, zapisany jako `Nazwa atrybutu: ścieżka`."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Każdy atrybut musi być zapisany jako `Nazwa atrybutu: ścieżka` w osobnym wierszu."
+      },
+      "abort": {
+        "reconfigure_successful": "Lokalizator urządzenia został zaktualizowany."
+      }
     }
   },
-  "selector": {
-    "sensor_type": {
-      "options": {
-        "sensor": "Sensor",
-        "binary_sensor": "Sensor binarny",
-        "number": "Liczba",
-        "device_tracker": "Sledzenie urzadzenia"
-      }
+  "exceptions": {
+    "cannot_connect": {
+      "message": "Nie udało się połączyć z punktem końcowym: {error}"
     },
-    "tracker_source_type": {
-      "options": {
-        "none": "Brak (domyslnie)",
-        "gps": "GPS",
-        "router": "Router",
-        "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE"
-      }
+    "invalid_auth": {
+      "message": "Punkt końcowy odrzucił zapisane dane uwierzytelniające."
+    },
+    "bad_status": {
+      "message": "Punkt końcowy odpowiedział kodem HTTP {status}."
+    },
+    "empty_response": {
+      "message": "Punkt końcowy odpowiedział pustą treścią."
     }
   }
 }

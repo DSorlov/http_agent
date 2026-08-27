@@ -2,13 +2,13 @@
   "domain": "http_agent",
   "name": "HTTP Agent",
   "codeowners": ["@DSorlov"],
-  "config_flow": true, 
+  "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/dsorlov/http_agent",
-  "integration_type": "device",
+  "documentation": "https://github.com/DSorlov/http_agent",
+  "integration_type": "service",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/DSorlov/http_agent/issues",
   "loggers": ["custom_components.http_agent"],
-  "requirements": ["beautifulsoup4>=4.11.0", "lxml>=4.9.0"],
-  "version": "1.2.0"
-} 
+  "requirements": ["beautifulsoup4>=4.13.0", "defusedxml>=0.7.1"],
+  "version": "2.0.0"
+}

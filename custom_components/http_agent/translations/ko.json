@@ -1,223 +1,357 @@
 {
+  "title": "HTTP Agent",
   "config": {
     "step": {
       "user": {
-        "title": "HTTP Agent 구성",
-        "description": "HTTP 엔드포인트 구성",
+        "title": "엔드포인트에 연결",
+        "description": "HTTP Agent를 원하는 HTTP 엔드포인트로 지정하세요. 다음 단계를 마치면 엔드포인트를 한 번 호출하여 엔티티로 만들 값을 고를 수 있습니다.",
         "data": {
           "url": "URL",
-          "method": "HTTP 메서드",
-          "timeout": "시간 초과 (초)",
-          "interval": "업데이트 간격 (초)",
-          "retries": "오류 시 재시도",
-          "verify_ssl": "SSL 인증서 확인"
+          "method": "메서드",
+          "auth_type": "인증",
+          "name": "이름"
+        },
+        "data_description": {
+          "url": "엔드포인트의 전체 URL입니다. Home Assistant 템플릿을 지원합니다.",
+          "method": "매 조회에 사용할 HTTP 메서드입니다.",
+          "auth_type": "미리 준비된 인증 프리셋을 고르거나 'None'을 선택하고 아래에 직접 헤더를 추가하세요.",
+          "name": "선택 사항. 기본값은 URL의 호스트 이름입니다."
+        },
+        "sections": {
+          "advanced": {
+            "name": "고급 설정",
+            "data": {
+              "scan_interval": "업데이트 간격",
+              "timeout": "요청 제한 시간",
+              "retries": "오류 시 재시도",
+              "extra_headers": "추가 헤더",
+              "response_format": "응답 형식",
+              "verify_ssl": "SSL 인증서 확인",
+              "follow_redirects": "리디렉션 따라가기"
+            },
+            "data_description": {
+              "scan_interval": "엔드포인트를 조회하는 주기(초).",
+              "timeout": "응답을 기다리는 시간(초).",
+              "retries": "조회에 실패했을 때 추가로 시도하는 횟수이며, 시도 사이에 1초를 기다립니다.",
+              "extra_headers": "한 줄에 헤더 하나씩 `이름: 값` 형식으로 작성합니다. 템플릿을 지원합니다.",
+              "response_format": "'Auto'로 두면 JSON, XML, HTML 또는 일반 텍스트를 자동으로 감지합니다.",
+              "verify_ssl": "자체 서명 인증서를 사용하는 엔드포인트에서만 끄세요.",
+              "follow_redirects": "HTTP 3xx 리디렉션을 자동으로 따라갑니다."
+            }
+          }
         }
       },
-      "headers": {
-        "title": "HTTP 헤더",
-        "description": "HTTP 헤더 구성\n\n현재 헤더:\n{headers}",
-        "menu_options": {
-          "add_header": "추가",
-          "headers_done": "완료"
-        }
-      },
-      "add_header": {
-        "title": "HTTP 헤더 추가",
-        "description": "새 HTTP 헤더 추가",
+      "credentials": {
+        "title": "인증",
+        "description": "\"{auth_type}\" 프리셋의 자격 증명을 입력하세요. 암호화되어 저장되며 로그나 진단 정보에 표시되지 않습니다.",
         "data": {
-          "key": "헤더 이름",
-          "value": "헤더 값"
+          "token": "Bearer 토큰",
+          "api_key": "API 키",
+          "api_key_header": "API 키 헤더",
+          "username": "사용자 이름",
+          "password": "비밀번호"
+        },
+        "data_description": {
+          "token": "`Authorization: Bearer` 헤더로 전송됩니다.",
+          "api_key": "키 값 자체입니다.",
+          "api_key_header": "키를 전송할 헤더입니다. 예: `X-API-Key`.",
+          "username": "HTTP basic 인증에 사용할 사용자 이름입니다.",
+          "password": "HTTP basic 인증에 사용할 비밀번호입니다."
         }
       },
-      "payload": {
-        "title": "HTTP 페이로드",
-        "description": "요청 페이로드 구성",
+      "body": {
+        "title": "요청 본문",
+        "description": "{method} 요청은 본문을 보낼 수 있습니다. 엔드포인트에 필요하지 않다면 비워 두세요.",
         "data": {
           "content_type": "콘텐츠 유형",
-          "payload": "페이로드 (JSON/XML/텍스트)"
+          "payload": "본문"
+        },
+        "data_description": {
+          "content_type": "`Content-Type` 헤더로 전송됩니다.",
+          "payload": "요청의 본문입니다. Home Assistant 템플릿을 지원합니다."
         }
       },
-      "sensors": {
-        "title": "센서 구성",
-        "description": "데이터 추출용 센서 구성\n\n현재 센서:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "추가",
-          "sensors_done": "완료"
-        }
-      },
-      "add_sensor": {
-        "title": "센서 추가",
-        "description": "센서 유형을 선택하고 이름을 입력하세요",
+      "select_values": {
+        "title": "원하는 값을 선택하세요",
+        "description": "엔드포인트가 HTTP {status}로 응답했으며 응답은 **{format}** 형식으로 읽었습니다. {count}개의 값을 찾았습니다.\n\n```\n{preview}\n```\n\n엔티티로 만들 값을 선택하세요. 적절한 엔티티 유형, 기기 클래스, 단위는 자동으로 추정되며 나중에 변경할 수 있습니다. 이 단계를 건너뛰고 나중에 엔티티를 추가할 수도 있습니다.",
         "data": {
-          "sensor_name": "센서 이름",
-          "sensor_type": "센서 유형"
+          "selected_values": "값"
+        },
+        "data_description": {
+          "selected_values": "목록에서 검색하거나, 감지되지 않은 경로를 직접 입력해 추가하세요."
         }
       },
-      "sensor_config": {
-        "title": "센서 구성",
-        "description": "센서 설정을 구성합니다. 추출 방법(JSON/XPath/CSS/RegEx)은 응답 콘텐츠 유형에 따라 자동으로 감지됩니다.",
+      "reauth_confirm": {
+        "title": "다시 인증",
+        "description": "엔드포인트가 \"{auth_type}\" 프리셋에 저장된 자격 증명을 거부했습니다. 다시 입력하세요.",
         "data": {
-          "sensor_state": "상태 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
-          "sensor_icon": "아이콘 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
-          "sensor_color": "색상 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
-          "sensor_device_class": "장치 클래스",
-          "sensor_unit": "측정 단위",
-          "tracker_latitude": "위도 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
-          "tracker_longitude": "경도 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
-          "tracker_location_name": "위치 이름 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
-          "tracker_source_type": "소스 유형"
+          "token": "Bearer 토큰",
+          "api_key": "API 키",
+          "api_key_header": "API 키 헤더",
+          "username": "사용자 이름",
+          "password": "비밀번호"
         }
       }
     },
     "error": {
-      "invalid_url": "잘못된 URL 형식",
-      "no_sensors": "최소 하나의 센서를 구성해야 합니다"
+      "cannot_connect": "엔드포인트에 연결할 수 없습니다. URL, 네트워크, 제한 시간을 확인하세요.",
+      "invalid_auth": "엔드포인트가 자격 증명을 거부했습니다 (HTTP 401/403).",
+      "invalid_url": "http 또는 https 스킴을 포함한 전체 URL을 입력하세요.",
+      "invalid_headers": "각 헤더는 한 줄에 하나씩 `이름: 값` 형식으로 작성해야 합니다.",
+      "bad_status": "엔드포인트가 오류 상태 코드로 응답했습니다.",
+      "no_values": "응답이 비어 있거나 읽을 수 있는 값이 없습니다."
     },
     "abort": {
-      "already_configured": "이 HTTP 엔드포인트는 이미 구성되어 있습니다",
-      "no_sensors": "구성된 센서가 없습니다"
+      "already_configured": "이 URL과 메서드 조합은 이미 구성되어 있습니다.",
+      "reauth_successful": "다시 인증에 성공했습니다.",
+      "reconfigure_successful": "엔드포인트를 업데이트했습니다."
     }
   },
-  "options": {
-    "step": {
-      "init": {
-        "title": "HTTP Agent 구성",
-        "description": "수정할 항목 선택",
-        "menu_options": {
-          "basic": "기본 설정 수정 (URL, 메서드, 시간 초과, 간격, SSL)",
-          "headers": "HTTP 헤더 수정",
-          "payload": "요청 페이로드 수정",
-          "sensors": "센서 구성 수정"
+  "config_subentries": {
+    "sensor": {
+      "initiate_flow": {
+        "user": "센서 추가",
+        "reconfigure": "센서 편집"
+      },
+      "entry_type": "센서",
+      "step": {
+        "user": {
+          "title": "센서 추가",
+          "description": "최근 응답에서 값을 고르거나 직접 경로를 입력하세요.",
+          "data": {
+            "name": "이름",
+            "value_path": "값"
+          },
+          "data_description": {
+            "name": "엔티티 이름입니다.",
+            "value_path": "응답에서 읽어올 경로입니다."
+          },
+          "sections": {
+            "options": {
+              "name": "엔티티 설정",
+              "data": {
+                "device_class": "기기 클래스",
+                "unit_of_measurement": "측정 단위",
+                "state_class": "상태 클래스",
+                "icon": "아이콘",
+                "attributes": "추가 속성"
+              },
+              "data_description": {
+                "device_class": "Home Assistant가 값을 표시하고 그래프로 그리는 방식을 결정합니다.",
+                "unit_of_measurement": "예: °C, %, kWh.",
+                "state_class": "장기 통계에 센서를 포함하려면 'Measurement' 또는 'Total increasing'으로 설정하세요.",
+                "icon": "기기 클래스에서 파생된 아이콘을 대체합니다.",
+                "attributes": "한 줄에 하나씩 `속성 이름: 경로` 형식으로 작성합니다."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "센서 편집",
+          "description": "최근 응답에서 값을 고르거나 직접 경로를 입력하세요.",
+          "data": {
+            "name": "이름",
+            "value_path": "값"
+          },
+          "data_description": {
+            "name": "엔티티 이름입니다.",
+            "value_path": "응답에서 읽어올 경로입니다."
+          },
+          "sections": {
+            "options": {
+              "name": "엔티티 설정",
+              "data": {
+                "device_class": "기기 클래스",
+                "unit_of_measurement": "측정 단위",
+                "state_class": "상태 클래스",
+                "icon": "아이콘",
+                "attributes": "추가 속성"
+              },
+              "data_description": {
+                "device_class": "Home Assistant가 값을 표시하고 그래프로 그리는 방식을 결정합니다.",
+                "unit_of_measurement": "예: °C, %, kWh.",
+                "state_class": "장기 통계에 센서를 포함하려면 'Measurement' 또는 'Total increasing'으로 설정하세요.",
+                "icon": "기기 클래스에서 파생된 아이콘을 대체합니다.",
+                "attributes": "한 줄에 하나씩 `속성 이름: 경로` 형식으로 작성합니다."
+              }
+            }
+          }
         }
       },
-      "basic": {
-        "title": "기본 설정",
-        "description": "URL, 메서드, 시간 초과, 간격 및 SSL 확인 수정",
-        "data": {
-          "url": "URL",
-          "method": "HTTP 메서드",
-          "timeout": "시간 초과 (초)",
-          "interval": "업데이트 간격 (초)",
-          "retries": "오류 시 재시도",
-          "verify_ssl": "SSL 인증서 확인"
-        }
+      "error": {
+        "invalid_attributes": "각 속성은 한 줄에 하나씩 `속성 이름: 경로` 형식으로 작성해야 합니다."
       },
-      "headers": {
-        "title": "HTTP 헤더",
-        "description": "HTTP 헤더 수정\n\n현재 헤더:\n{headers}",
-        "menu_options": {
-          "add_header": "추가",
-          "clear_headers": "모두 지우기",
-          "headers_done": "변경 사항 저장"
-        }
-      },
-      "add_header": {
-        "title": "HTTP 헤더 추가",
-        "description": "새 HTTP 헤더 추가",
-        "data": {
-          "key": "헤더 이름",
-          "value": "헤더 값"
-        }
-      },
-      "payload": {
-        "title": "HTTP 페이로드",
-        "description": "요청 페이로드 수정",
-        "data": {
-          "content_type": "콘텐츠 유형",
-          "payload": "페이로드 (JSON/XML/텍스트)"
-        }
-      },
-      "sensors": {
-        "title": "센서 구성",
-        "description": "센서 구성 수정\n\n현재 센서:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "추가",
-          "select_sensor": "수정",
-          "clear_sensors": "모두 지우기",
-          "sensors_done": "변경 사항 저장"
-        }
-      },
-      "select_sensor": {
-        "title": "센서 선택",
-        "description": "수정하거나 삭제할 센서를 선택하세요",
-        "data": {
-          "sensor": "센서"
-        }
-      },
-      "edit_sensor": {
-        "title": "센서 수정",
-        "description": "이 센서에 대해 수행할 작업을 선택하세요:\n\n{sensor_info}",
-        "menu_options": {
-          "modify_sensor": "수정",
-          "delete_sensor": "삭제",
-          "edit_back": "뒤로"
-        }
-      },
-      "modify_sensor": {
-        "title": "센서 수정",
-        "description": "센서 구성을 수정합니다. 추출 방법(JSON/XPath/CSS/RegEx)은 응답 콘텐츠 유형에 따라 자동으로 감지됩니다.",
-        "data": {
-          "sensor_name": "센서 이름",
-          "sensor_state": "상태 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
-          "sensor_icon": "아이콘 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
-          "sensor_color": "색상 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
-          "sensor_device_class": "장치 클래스",
-          "sensor_unit": "측정 단위",
-          "tracker_latitude": "위도 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
-          "tracker_longitude": "경도 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
-          "tracker_location_name": "위치 이름 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
-          "tracker_source_type": "소스 유형"
-        }
-      },
-      "add_sensor": {
-        "title": "센서 추가",
-        "description": "센서 유형을 선택하고 이름을 입력하세요",
-        "data": {
-          "sensor_name": "센서 이름",
-          "sensor_type": "센서 유형"
-        }
-      },
-      "sensor_config": {
-        "title": "센서 구성",
-        "description": "센서 설정을 구성합니다. 추출 방법(JSON/XPath/CSS/RegEx)은 응답 콘텐츠 유형에 따라 자동으로 감지됩니다.",
-        "data": {
-          "sensor_state": "상태 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
-          "sensor_icon": "아이콘 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
-          "sensor_color": "색상 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
-          "sensor_device_class": "장치 클래스",
-          "sensor_unit": "측정 단위",
-          "tracker_latitude": "위도 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
-          "tracker_longitude": "경도 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
-          "tracker_location_name": "위치 이름 선택기 (JSON/XPath/CSS/RegEx - 자동 감지)",
-          "tracker_source_type": "소스 유형"
-        }
+      "abort": {
+        "reconfigure_successful": "센서를 업데이트했습니다."
       }
     },
-    "error": {
-      "invalid_url": "잘못된 URL 형식",
-      "no_sensors": "최소 하나의 센서를 구성해야 합니다"
+    "binary_sensor": {
+      "initiate_flow": {
+        "user": "바이너리 센서 추가",
+        "reconfigure": "바이너리 센서 편집"
+      },
+      "entry_type": "바이너리 센서",
+      "step": {
+        "user": {
+          "title": "바이너리 센서 추가",
+          "description": "최근 응답에서 값을 고르거나 직접 경로를 입력하세요.",
+          "data": {
+            "name": "이름",
+            "value_path": "값"
+          },
+          "data_description": {
+            "name": "엔티티 이름입니다.",
+            "value_path": "응답에서 읽어올 경로입니다."
+          },
+          "sections": {
+            "options": {
+              "name": "엔티티 설정",
+              "data": {
+                "device_class": "기기 클래스",
+                "payload_on": "켜짐을 나타내는 값",
+                "payload_off": "꺼짐을 나타내는 값",
+                "icon": "아이콘",
+                "attributes": "추가 속성"
+              },
+              "data_description": {
+                "device_class": "켜짐/꺼짐 표현과 아이콘을 결정합니다.",
+                "payload_on": "선택 사항. '켜짐'을 의미하는 정확한 값입니다. 비워 두면 true/1/on/yes를 자동으로 감지합니다.",
+                "payload_off": "선택 사항. '꺼짐'을 의미하는 정확한 값입니다.",
+                "icon": "기기 클래스에서 파생된 아이콘을 대체합니다.",
+                "attributes": "한 줄에 하나씩 `속성 이름: 경로` 형식으로 작성합니다."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "바이너리 센서 편집",
+          "description": "최근 응답에서 값을 고르거나 직접 경로를 입력하세요.",
+          "data": {
+            "name": "이름",
+            "value_path": "값"
+          },
+          "data_description": {
+            "name": "엔티티 이름입니다.",
+            "value_path": "응답에서 읽어올 경로입니다."
+          },
+          "sections": {
+            "options": {
+              "name": "엔티티 설정",
+              "data": {
+                "device_class": "기기 클래스",
+                "payload_on": "켜짐을 나타내는 값",
+                "payload_off": "꺼짐을 나타내는 값",
+                "icon": "아이콘",
+                "attributes": "추가 속성"
+              },
+              "data_description": {
+                "device_class": "켜짐/꺼짐 표현과 아이콘을 결정합니다.",
+                "payload_on": "선택 사항. '켜짐'을 의미하는 정확한 값입니다. 비워 두면 true/1/on/yes를 자동으로 감지합니다.",
+                "payload_off": "선택 사항. '꺼짐'을 의미하는 정확한 값입니다.",
+                "icon": "기기 클래스에서 파생된 아이콘을 대체합니다.",
+                "attributes": "한 줄에 하나씩 `속성 이름: 경로` 형식으로 작성합니다."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "각 속성은 한 줄에 하나씩 `속성 이름: 경로` 형식으로 작성해야 합니다."
+      },
+      "abort": {
+        "reconfigure_successful": "바이너리 센서를 업데이트했습니다."
+      }
     },
-    "abort": {
-      "no_sensors": "구성된 센서가 없습니다"
+    "device_tracker": {
+      "initiate_flow": {
+        "user": "기기 트래커 추가",
+        "reconfigure": "기기 트래커 편집"
+      },
+      "entry_type": "기기 트래커",
+      "step": {
+        "user": {
+          "title": "기기 트래커 추가",
+          "description": "최근 응답에서 위도와 경도 값을 선택하세요.",
+          "data": {
+            "name": "이름",
+            "latitude_path": "위도",
+            "longitude_path": "경도"
+          },
+          "data_description": {
+            "name": "엔티티 이름입니다.",
+            "latitude_path": "위도 값의 경로입니다.",
+            "longitude_path": "경도 값의 경로입니다."
+          },
+          "sections": {
+            "options": {
+              "name": "엔티티 설정",
+              "data": {
+                "gps_accuracy_path": "GPS 정확도",
+                "source_type": "소스 유형",
+                "icon": "아이콘",
+                "attributes": "추가 속성"
+              },
+              "data_description": {
+                "gps_accuracy_path": "선택 사항. 미터 단위의 정확도입니다.",
+                "source_type": "위치를 판별하는 방식입니다.",
+                "icon": "기본 아이콘을 대체합니다.",
+                "attributes": "한 줄에 하나씩 `속성 이름: 경로` 형식으로 작성합니다."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "기기 트래커 편집",
+          "description": "최근 응답에서 위도와 경도 값을 선택하세요.",
+          "data": {
+            "name": "이름",
+            "latitude_path": "위도",
+            "longitude_path": "경도"
+          },
+          "data_description": {
+            "name": "엔티티 이름입니다.",
+            "latitude_path": "위도 값의 경로입니다.",
+            "longitude_path": "경도 값의 경로입니다."
+          },
+          "sections": {
+            "options": {
+              "name": "엔티티 설정",
+              "data": {
+                "gps_accuracy_path": "GPS 정확도",
+                "source_type": "소스 유형",
+                "icon": "아이콘",
+                "attributes": "추가 속성"
+              },
+              "data_description": {
+                "gps_accuracy_path": "선택 사항. 미터 단위의 정확도입니다.",
+                "source_type": "위치를 판별하는 방식입니다.",
+                "icon": "기본 아이콘을 대체합니다.",
+                "attributes": "한 줄에 하나씩 `속성 이름: 경로` 형식으로 작성합니다."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "각 속성은 한 줄에 하나씩 `속성 이름: 경로` 형식으로 작성해야 합니다."
+      },
+      "abort": {
+        "reconfigure_successful": "기기 트래커를 업데이트했습니다."
+      }
     }
   },
-  "selector": {
-    "sensor_type": {
-      "options": {
-        "sensor": "센서",
-        "binary_sensor": "바이너리 센서",
-        "number": "숫자",
-        "device_tracker": "장치 추적기"
-      }
+  "exceptions": {
+    "cannot_connect": {
+      "message": "엔드포인트에 연결할 수 없습니다: {error}"
     },
-    "tracker_source_type": {
-      "options": {
-        "none": "없음 (기본값)",
-        "gps": "GPS",
-        "router": "라우터",
-        "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE"
-      }
+    "invalid_auth": {
+      "message": "엔드포인트가 저장된 자격 증명을 거부했습니다."
+    },
+    "bad_status": {
+      "message": "엔드포인트가 HTTP {status}로 응답했습니다."
+    },
+    "empty_response": {
+      "message": "엔드포인트가 빈 본문으로 응답했습니다."
     }
   }
 }

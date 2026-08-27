@@ -1,223 +1,357 @@
 {
+  "title": "HTTP Agent",
   "config": {
     "step": {
       "user": {
-        "title": "HTTP Agent Konfiguration",
-        "description": "Konfigurera HTTP-slutpunkten",
+        "title": "Anslut till en slutpunkt",
+        "description": "Peka HTTP Agent mot valfri HTTP-slutpunkt. Efter nästa steg anropas slutpunkten en gång så att du kan välja vilka värden du vill göra till entiteter.",
         "data": {
           "url": "URL",
-          "method": "HTTP-metod",
-          "timeout": "Timeout (sekunder)",
-          "interval": "Uppdateringsintervall (sekunder)",
-          "retries": "Försök igen vid fel",
-          "verify_ssl": "Verifiera SSL-certifikat"
+          "method": "Metod",
+          "auth_type": "Autentisering",
+          "name": "Namn"
+        },
+        "data_description": {
+          "url": "Fullständig URL till slutpunkten. Home Assistant-mallar stöds.",
+          "method": "HTTP-metod som används vid varje hämtning.",
+          "auth_type": "Välj en färdig autentiseringsprofil, eller \"None\" och lägg till egna headers nedan.",
+          "name": "Valfritt. Standard är URL:ens värdnamn."
+        },
+        "sections": {
+          "advanced": {
+            "name": "Avancerade inställningar",
+            "data": {
+              "scan_interval": "Uppdateringsintervall",
+              "timeout": "Tidsgräns för anrop",
+              "retries": "Återförsök vid fel",
+              "extra_headers": "Extra headers",
+              "response_format": "Svarsformat",
+              "verify_ssl": "Verifiera SSL-certifikat",
+              "follow_redirects": "Följ omdirigeringar"
+            },
+            "data_description": {
+              "scan_interval": "Hur ofta slutpunkten hämtas, i sekunder.",
+              "timeout": "Hur länge svaret väntas in, i sekunder.",
+              "retries": "Hur många extra försök som görs när en hämtning misslyckas, med en sekund mellan försöken.",
+              "extra_headers": "En header per rad, skriven som `Namn: värde`. Mallar stöds.",
+              "response_format": "Lämna på \"Auto\" för att känna av JSON, XML, HTML eller vanlig text automatiskt.",
+              "verify_ssl": "Stäng bara av för slutpunkter med självsignerat certifikat.",
+              "follow_redirects": "Följ HTTP 3xx-omdirigeringar automatiskt."
+            }
+          }
         }
       },
-      "headers": {
-        "title": "HTTP-huvuden",
-        "description": "Konfigurera HTTP-huvuden.\n\nAktuella huvuden:\n{headers}",
-        "menu_options": {
-          "add_header": "Lägg till huvud",
-          "headers_done": "Fortsätt"
-        }
-      },
-      "add_header": {
-        "title": "Lägg till HTTP-huvud",
-        "description": "Lägg till ett nytt HTTP-huvud",
+      "credentials": {
+        "title": "Autentisering",
+        "description": "Ange uppgifterna för profilen \"{auth_type}\". De lagras krypterat och visas aldrig i loggar eller diagnostik.",
         "data": {
-          "key": "Huvudnamn",
-          "value": "Huvudvärde"
+          "token": "Bearer-token",
+          "api_key": "API-nyckel",
+          "api_key_header": "Header för API-nyckel",
+          "username": "Användarnamn",
+          "password": "Lösenord"
+        },
+        "data_description": {
+          "token": "Skickas som headern `Authorization: Bearer`.",
+          "api_key": "Själva nyckelvärdet.",
+          "api_key_header": "Headern som nyckeln skickas i, till exempel `X-API-Key`.",
+          "username": "Användarnamn för HTTP basic-autentisering.",
+          "password": "Lösenord för HTTP basic-autentisering."
         }
       },
-      "payload": {
-        "title": "HTTP-nyttolast",
-        "description": "Konfigurera förfrågansnyttolasten",
+      "body": {
+        "title": "Anropskropp",
+        "description": "{method}-anrop kan skicka en kropp. Lämna tomt om slutpunkten inte behöver någon.",
         "data": {
           "content_type": "Innehållstyp",
-          "payload": "Nyttolast (JSON/XML/Text)"
+          "payload": "Kropp"
+        },
+        "data_description": {
+          "content_type": "Skickas som headern `Content-Type`.",
+          "payload": "Anropets kropp. Home Assistant-mallar stöds."
         }
       },
-      "sensors": {
-        "title": "Sensorkonfiguration",
-        "description": "Konfigurera sensorer för att extrahera data.\n\nAktuella sensorer:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Lägg till sensor",
-          "sensors_done": "Slutför"
-        }
-      },
-      "add_sensor": {
-        "title": "Lägg till sensor",
-        "description": "Välj sensortyp och ange ett namn",
+      "select_values": {
+        "title": "Välj de värden du vill ha",
+        "description": "Slutpunkten svarade med HTTP {status} och tolkades som **{format}**. {count} värden hittades.\n\n```\n{preview}\n```\n\nVälj de värden som ska bli entiteter. Rimliga entitetstyper, enhetsklasser och enheter gissas automatiskt och kan ändras efteråt. Du kan också hoppa över detta och lägga till entiteter senare.",
         "data": {
-          "sensor_name": "Sensornamn",
-          "sensor_type": "Sensortyp"
+          "selected_values": "Värden"
+        },
+        "data_description": {
+          "selected_values": "Sök i listan, eller skriv en sökväg manuellt för att lägga till en som inte hittades."
         }
       },
-      "sensor_config": {
-        "title": "Sensorkonfiguration",
-        "description": "Konfigurera sensorinställningarna. Extraktionsmetoden (JSON/XPath/CSS/RegEx) kommer automatiskt att detekteras baserat på svarsinnehållstypen.",
+      "reauth_confirm": {
+        "title": "Autentisera på nytt",
+        "description": "Slutpunkten avvisade de sparade uppgifterna för profilen \"{auth_type}\". Ange dem igen.",
         "data": {
-          "sensor_state": "Tillståndsväljare (JSON/XPath/CSS/RegEx - auto-detekterad)",
-          "sensor_icon": "Ikonväljare (JSON/XPath/CSS/RegEx - auto-detekterad)",
-          "sensor_color": "Färgväljare (JSON/XPath/CSS/RegEx - auto-detekterad)",
-          "sensor_device_class": "Enhetsklass",
-          "sensor_unit": "Mätenhet",
-          "tracker_latitude": "Latitudväljare (JSON/XPath/CSS/RegEx - auto-detekterad)",
-          "tracker_longitude": "Longitudväljare (JSON/XPath/CSS/RegEx - auto-detekterad)",
-          "tracker_location_name": "Platsnamnsväljare (JSON/XPath/CSS/RegEx - auto-detekterad)",
-          "tracker_source_type": "Källtyp"
+          "token": "Bearer-token",
+          "api_key": "API-nyckel",
+          "api_key_header": "Header för API-nyckel",
+          "username": "Användarnamn",
+          "password": "Lösenord"
         }
       }
     },
     "error": {
-      "invalid_url": "Ogiltigt URL-format",
-      "no_sensors": "Minst en sensor måste konfigureras"
+      "cannot_connect": "Kunde inte nå slutpunkten. Kontrollera URL, nätverk och tidsgräns.",
+      "invalid_auth": "Slutpunkten avvisade uppgifterna (HTTP 401/403).",
+      "invalid_url": "Ange en fullständig URL som börjar med http eller https.",
+      "invalid_headers": "Varje header måste skrivas som `Namn: värde` på egen rad.",
+      "bad_status": "Slutpunkten svarade med en felstatuskod.",
+      "no_values": "Svaret var tomt eller innehöll inga läsbara värden."
     },
     "abort": {
-      "already_configured": "Denna HTTP-slutpunkt är redan konfigurerad",
-      "no_sensors": "Inga sensorer konfigurerades"
+      "already_configured": "Denna kombination av URL och metod är redan konfigurerad.",
+      "reauth_successful": "Autentiseringen lyckades.",
+      "reconfigure_successful": "Slutpunkten uppdaterades."
     }
   },
-  "options": {
-    "step": {
-      "init": {
-        "title": "HTTP Agent Konfiguration",
-        "description": "Välj vad som ska redigeras",
-        "menu_options": {
-          "basic": "Redigera grundinställningar (URL, metod, timeout, intervall, SSL)",
-          "headers": "Redigera HTTP-huvuden",
-          "payload": "Redigera förfrågansnyttolast",
-          "sensors": "Redigera sensorkonfiguration"
+  "config_subentries": {
+    "sensor": {
+      "initiate_flow": {
+        "user": "Lägg till sensor",
+        "reconfigure": "Redigera sensor"
+      },
+      "entry_type": "Sensor",
+      "step": {
+        "user": {
+          "title": "Lägg till en sensor",
+          "description": "Välj ett värde från det senaste svaret, eller skriv en sökväg själv.",
+          "data": {
+            "name": "Namn",
+            "value_path": "Värde"
+          },
+          "data_description": {
+            "name": "Entitetens namn.",
+            "value_path": "Sökvägen som läses från svaret."
+          },
+          "sections": {
+            "options": {
+              "name": "Entitetsinställningar",
+              "data": {
+                "device_class": "Enhetsklass",
+                "unit_of_measurement": "Måttenhet",
+                "state_class": "Tillståndsklass",
+                "icon": "Ikon",
+                "attributes": "Extra attribut"
+              },
+              "data_description": {
+                "device_class": "Styr hur Home Assistant formaterar och grafar värdet.",
+                "unit_of_measurement": "Till exempel °C, %, kWh.",
+                "state_class": "Sätt till \"Measurement\" eller \"Total increasing\" för att ta med sensorn i långtidsstatistik.",
+                "icon": "Ersätter ikonen som härleds från enhetsklassen.",
+                "attributes": "En per rad, skriven som `Attributnamn: sökväg`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Redigera sensor",
+          "description": "Välj ett värde från det senaste svaret, eller skriv en sökväg själv.",
+          "data": {
+            "name": "Namn",
+            "value_path": "Värde"
+          },
+          "data_description": {
+            "name": "Entitetens namn.",
+            "value_path": "Sökvägen som läses från svaret."
+          },
+          "sections": {
+            "options": {
+              "name": "Entitetsinställningar",
+              "data": {
+                "device_class": "Enhetsklass",
+                "unit_of_measurement": "Måttenhet",
+                "state_class": "Tillståndsklass",
+                "icon": "Ikon",
+                "attributes": "Extra attribut"
+              },
+              "data_description": {
+                "device_class": "Styr hur Home Assistant formaterar och grafar värdet.",
+                "unit_of_measurement": "Till exempel °C, %, kWh.",
+                "state_class": "Sätt till \"Measurement\" eller \"Total increasing\" för att ta med sensorn i långtidsstatistik.",
+                "icon": "Ersätter ikonen som härleds från enhetsklassen.",
+                "attributes": "En per rad, skriven som `Attributnamn: sökväg`."
+              }
+            }
+          }
         }
       },
-      "basic": {
-        "title": "Grundinställningar",
-        "description": "Redigera URL, metod, timeout, intervall och SSL-verifiering",
-        "data": {
-          "url": "URL",
-          "method": "HTTP-metod",
-          "timeout": "Timeout (sekunder)",
-          "interval": "Uppdateringsintervall (sekunder)",
-          "retries": "Försök igen vid fel",
-          "verify_ssl": "Verifiera SSL-certifikat"
-        }
+      "error": {
+        "invalid_attributes": "Varje attribut måste skrivas som `Attributnamn: sökväg` på egen rad."
       },
-      "headers": {
-        "title": "HTTP-huvuden",
-        "description": "Redigera HTTP-huvuden.\n\nAktuella huvuden:\n{headers}",
-        "menu_options": {
-          "add_header": "Lägg till huvud",
-          "clear_headers": "Rensa alla huvuden",
-          "headers_done": "Spara"
-        }
-      },
-      "add_header": {
-        "title": "Lägg till HTTP-huvud",
-        "description": "Lägg till ett nytt HTTP-huvud",
-        "data": {
-          "key": "Huvudnamn",
-          "value": "Huvudvärde"
-        }
-      },
-      "payload": {
-        "title": "HTTP-nyttolast",
-        "description": "Redigera förfrågansnyttolasten",
-        "data": {
-          "content_type": "Innehållstyp",
-          "payload": "Nyttolast (JSON/XML/Text)"
-        }
-      },
-      "sensors": {
-        "title": "Sensorkonfiguration",
-        "description": "Redigera sensorkonfiguration.\n\nAktuella sensorer:\n{sensors}",
-        "menu_options": {
-          "add_sensor": "Lägg till sensor",
-          "select_sensor": "Redigera en sensor",
-          "clear_sensors": "Rensa alla sensorer",
-          "sensors_done": "Spara"
-        }
-      },
-      "select_sensor": {
-        "title": "Välj sensor",
-        "description": "Välj en sensor att redigera eller ta bort",
-        "data": {
-          "sensor": "Sensor"
-        }
-      },
-      "edit_sensor": {
-        "title": "Redigera sensor",
-        "description": "Välj vad som ska göras med denna sensor:\n\n{sensor_info}",
-        "menu_options": {
-          "modify_sensor": "Redigera sensor",
-          "delete_sensor": "Ta bort sensor",
-          "edit_back": "Tillbaka"
-        }
-      },
-      "modify_sensor": {
-        "title": "Ändra sensor",
-        "description": "Redigera sensorkonfiguration. Extraktionsmetoden (JSON/XPath/CSS/RegEx) kommer automatiskt att detekteras baserat på svarsinnehållstypen.",
-        "data": {
-          "sensor_name": "Sensornamn",
-          "sensor_state": "Tillståndsväljare (JSON/XPath/CSS/RegEx - auto-detekterad)",
-          "sensor_icon": "Ikonväljare (JSON/XPath/CSS/RegEx - auto-detekterad)",
-          "sensor_color": "Färgväljare (JSON/XPath/CSS/RegEx - auto-detekterad)",
-          "sensor_device_class": "Enhetsklass",
-          "sensor_unit": "Mätenhet",
-          "tracker_latitude": "Latitudväljare (JSON/XPath/CSS/RegEx - auto-detekterad)",
-          "tracker_longitude": "Longitudväljare (JSON/XPath/CSS/RegEx - auto-detekterad)",
-          "tracker_location_name": "Platsnamnsväljare (JSON/XPath/CSS/RegEx - auto-detekterad)",
-          "tracker_source_type": "Källtyp"
-        }
-      },
-      "add_sensor": {
-        "title": "Lägg till sensor",
-        "description": "Välj sensortyp och ange ett namn",
-        "data": {
-          "sensor_name": "Sensornamn",
-          "sensor_type": "Sensortyp"
-        }
-      },
-      "sensor_config": {
-        "title": "Sensorkonfiguration",
-        "description": "Konfigurera sensorinställningarna. Extraktionsmetoden (JSON/XPath/CSS/RegEx) kommer automatiskt att detekteras baserat på svarsinnehållstypen.",
-        "data": {
-          "sensor_state": "Tillståndsväljare (JSON/XPath/CSS/RegEx - auto-detekterad)",
-          "sensor_icon": "Ikonväljare (JSON/XPath/CSS/RegEx - auto-detekterad)",
-          "sensor_color": "Färgväljare (JSON/XPath/CSS/RegEx - auto-detekterad)",
-          "sensor_device_class": "Enhetsklass",
-          "sensor_unit": "Mätenhet",
-          "tracker_latitude": "Latitudväljare (JSON/XPath/CSS/RegEx - auto-detekterad)",
-          "tracker_longitude": "Longitudväljare (JSON/XPath/CSS/RegEx - auto-detekterad)",
-          "tracker_location_name": "Platsnamnsväljare (JSON/XPath/CSS/RegEx - auto-detekterad)",
-          "tracker_source_type": "Källtyp"
-        }
+      "abort": {
+        "reconfigure_successful": "Sensorn uppdaterades."
       }
     },
-    "error": {
-      "invalid_url": "Ogiltigt URL-format",
-      "no_sensors": "Minst en sensor måste konfigureras"
+    "binary_sensor": {
+      "initiate_flow": {
+        "user": "Lägg till binärsensor",
+        "reconfigure": "Redigera binärsensor"
+      },
+      "entry_type": "Binärsensor",
+      "step": {
+        "user": {
+          "title": "Lägg till en binärsensor",
+          "description": "Välj ett värde från det senaste svaret, eller skriv en sökväg själv.",
+          "data": {
+            "name": "Namn",
+            "value_path": "Värde"
+          },
+          "data_description": {
+            "name": "Entitetens namn.",
+            "value_path": "Sökvägen som läses från svaret."
+          },
+          "sections": {
+            "options": {
+              "name": "Entitetsinställningar",
+              "data": {
+                "device_class": "Enhetsklass",
+                "payload_on": "Värde för på",
+                "payload_off": "Värde för av",
+                "icon": "Ikon",
+                "attributes": "Extra attribut"
+              },
+              "data_description": {
+                "device_class": "Styr text och ikon för på/av.",
+                "payload_on": "Valfritt. Exakt värde som betyder \"på\". Lämna tomt för att känna av true/1/on/yes automatiskt.",
+                "payload_off": "Valfritt. Exakt värde som betyder \"av\".",
+                "icon": "Ersätter ikonen som härleds från enhetsklassen.",
+                "attributes": "En per rad, skriven som `Attributnamn: sökväg`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Redigera binärsensor",
+          "description": "Välj ett värde från det senaste svaret, eller skriv en sökväg själv.",
+          "data": {
+            "name": "Namn",
+            "value_path": "Värde"
+          },
+          "data_description": {
+            "name": "Entitetens namn.",
+            "value_path": "Sökvägen som läses från svaret."
+          },
+          "sections": {
+            "options": {
+              "name": "Entitetsinställningar",
+              "data": {
+                "device_class": "Enhetsklass",
+                "payload_on": "Värde för på",
+                "payload_off": "Värde för av",
+                "icon": "Ikon",
+                "attributes": "Extra attribut"
+              },
+              "data_description": {
+                "device_class": "Styr text och ikon för på/av.",
+                "payload_on": "Valfritt. Exakt värde som betyder \"på\". Lämna tomt för att känna av true/1/on/yes automatiskt.",
+                "payload_off": "Valfritt. Exakt värde som betyder \"av\".",
+                "icon": "Ersätter ikonen som härleds från enhetsklassen.",
+                "attributes": "En per rad, skriven som `Attributnamn: sökväg`."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Varje attribut måste skrivas som `Attributnamn: sökväg` på egen rad."
+      },
+      "abort": {
+        "reconfigure_successful": "Binärsensorn uppdaterades."
+      }
     },
-    "abort": {
-      "no_sensors": "Inga sensorer konfigurerades"
+    "device_tracker": {
+      "initiate_flow": {
+        "user": "Lägg till enhetsspårare",
+        "reconfigure": "Redigera enhetsspårare"
+      },
+      "entry_type": "Enhetsspårare",
+      "step": {
+        "user": {
+          "title": "Lägg till en enhetsspårare",
+          "description": "Välj värden för latitud och longitud från det senaste svaret.",
+          "data": {
+            "name": "Namn",
+            "latitude_path": "Latitud",
+            "longitude_path": "Longitud"
+          },
+          "data_description": {
+            "name": "Entitetens namn.",
+            "latitude_path": "Sökvägen till latitudvärdet.",
+            "longitude_path": "Sökvägen till longitudvärdet."
+          },
+          "sections": {
+            "options": {
+              "name": "Entitetsinställningar",
+              "data": {
+                "gps_accuracy_path": "GPS-noggrannhet",
+                "source_type": "Källtyp",
+                "icon": "Ikon",
+                "attributes": "Extra attribut"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Valfritt. Noggrannheten i meter.",
+                "source_type": "Hur positionen fastställs.",
+                "icon": "Ersätter standardikonen.",
+                "attributes": "En per rad, skriven som `Attributnamn: sökväg`."
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "Redigera enhetsspårare",
+          "description": "Välj värden för latitud och longitud från det senaste svaret.",
+          "data": {
+            "name": "Namn",
+            "latitude_path": "Latitud",
+            "longitude_path": "Longitud"
+          },
+          "data_description": {
+            "name": "Entitetens namn.",
+            "latitude_path": "Sökvägen till latitudvärdet.",
+            "longitude_path": "Sökvägen till longitudvärdet."
+          },
+          "sections": {
+            "options": {
+              "name": "Entitetsinställningar",
+              "data": {
+                "gps_accuracy_path": "GPS-noggrannhet",
+                "source_type": "Källtyp",
+                "icon": "Ikon",
+                "attributes": "Extra attribut"
+              },
+              "data_description": {
+                "gps_accuracy_path": "Valfritt. Noggrannheten i meter.",
+                "source_type": "Hur positionen fastställs.",
+                "icon": "Ersätter standardikonen.",
+                "attributes": "En per rad, skriven som `Attributnamn: sökväg`."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "Varje attribut måste skrivas som `Attributnamn: sökväg` på egen rad."
+      },
+      "abort": {
+        "reconfigure_successful": "Enhetsspåraren uppdaterades."
+      }
     }
   },
-  "selector": {
-    "sensor_type": {
-      "options": {
-        "sensor": "Sensor",
-        "binary_sensor": "Binär sensor",
-        "number": "Nummer",
-        "device_tracker": "Enhetsspårning"
-      }
+  "exceptions": {
+    "cannot_connect": {
+      "message": "Kunde inte nå slutpunkten: {error}"
     },
-    "tracker_source_type": {
-      "options": {
-        "none": "Ingen (standard)",
-        "gps": "GPS",
-        "router": "Router",
-        "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE"
-      }
+    "invalid_auth": {
+      "message": "Slutpunkten avvisade de sparade uppgifterna."
+    },
+    "bad_status": {
+      "message": "Slutpunkten svarade med HTTP {status}."
+    },
+    "empty_response": {
+      "message": "Slutpunkten svarade med en tom kropp."
     }
   }
 }

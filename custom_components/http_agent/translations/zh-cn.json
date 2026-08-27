@@ -1,223 +1,357 @@
 {
+  "title": "HTTP Agent",
   "config": {
     "step": {
       "user": {
-        "title": "HTTP Agent 配置",
-        "description": "配置 HTTP 端点",
+        "title": "连接到端点",
+        "description": "将 HTTP Agent 指向任意 HTTP 端点。完成后续步骤后会调用端点一次，以便你挑选希望作为实体的值。",
         "data": {
           "url": "URL",
-          "method": "HTTP 方法",
-          "timeout": "超时（秒）",
-          "interval": "更新间隔（秒）",
-          "retries": "出错时重试",
-          "verify_ssl": "验证 SSL 证书"
+          "method": "方法",
+          "auth_type": "身份验证",
+          "name": "名称"
+        },
+        "data_description": {
+          "url": "端点的完整 URL。支持 Home Assistant 模板。",
+          "method": "每次轮询使用的 HTTP 方法。",
+          "auth_type": "选择一个现成的身份验证预设，或选择 'None' 并在下方添加自定义标头。",
+          "name": "可选。默认为 URL 的主机名。"
+        },
+        "sections": {
+          "advanced": {
+            "name": "高级设置",
+            "data": {
+              "scan_interval": "更新间隔",
+              "timeout": "请求超时",
+              "retries": "出错时的重试次数",
+              "extra_headers": "额外标头",
+              "response_format": "响应格式",
+              "verify_ssl": "验证 SSL 证书",
+              "follow_redirects": "跟随重定向"
+            },
+            "data_description": {
+              "scan_interval": "轮询端点的频率（秒）。",
+              "timeout": "等待响应的时长（秒）。",
+              "retries": "轮询失败时额外尝试的次数，两次尝试之间间隔一秒。",
+              "extra_headers": "每行一个标头，格式为 `名称: 值`。支持模板。",
+              "response_format": "保持为 'Auto' 可自动识别 JSON、XML、HTML 或纯文本。",
+              "verify_ssl": "仅在端点使用自签名证书时关闭。",
+              "follow_redirects": "自动跟随 HTTP 3xx 重定向。"
+            }
+          }
         }
       },
-      "headers": {
-        "title": "HTTP 标头",
-        "description": "配置 HTTP 标头\n\n当前标头：\n{headers}",
-        "menu_options": {
-          "add_header": "添加",
-          "headers_done": "完成"
-        }
-      },
-      "add_header": {
-        "title": "添加 HTTP 标头",
-        "description": "添加新的 HTTP 标头",
+      "credentials": {
+        "title": "身份验证",
+        "description": "请输入 \"{auth_type}\" 预设的凭据。凭据会加密保存，且绝不会出现在日志或诊断信息中。",
         "data": {
-          "key": "标头名称",
-          "value": "标头值"
+          "token": "Bearer 令牌",
+          "api_key": "API 密钥",
+          "api_key_header": "API 密钥标头",
+          "username": "用户名",
+          "password": "密码"
+        },
+        "data_description": {
+          "token": "以 `Authorization: Bearer` 标头发送。",
+          "api_key": "密钥值本身。",
+          "api_key_header": "发送密钥所用的标头，例如 `X-API-Key`。",
+          "username": "HTTP basic 身份验证的用户名。",
+          "password": "HTTP basic 身份验证的密码。"
         }
       },
-      "payload": {
-        "title": "HTTP 负载",
-        "description": "配置请求负载",
+      "body": {
+        "title": "请求正文",
+        "description": "{method} 请求可以发送正文。如果端点不需要，请留空。",
         "data": {
           "content_type": "内容类型",
-          "payload": "负载（JSON/XML/文本）"
+          "payload": "正文"
+        },
+        "data_description": {
+          "content_type": "以 `Content-Type` 标头发送。",
+          "payload": "请求的正文。支持 Home Assistant 模板。"
         }
       },
-      "sensors": {
-        "title": "传感器配置",
-        "description": "配置传感器以提取数据\n\n当前传感器：\n{sensors}",
-        "menu_options": {
-          "add_sensor": "添加",
-          "sensors_done": "完成"
-        }
-      },
-      "add_sensor": {
-        "title": "添加传感器",
-        "description": "选择传感器类型并提供名称",
+      "select_values": {
+        "title": "挑选你需要的值",
+        "description": "端点返回了 HTTP {status}，响应被解析为 **{format}**。共找到 {count} 个值。\n\n```\n{preview}\n```\n\n请挑选需要变成实体的值。合理的实体类型、设备类别和单位会自动推断，之后可以随时修改。你也可以跳过此步骤，稍后再添加实体。",
         "data": {
-          "sensor_name": "传感器名称",
-          "sensor_type": "传感器类型"
+          "selected_values": "值"
+        },
+        "data_description": {
+          "selected_values": "在列表中搜索，或手动输入路径以添加未被识别的值。"
         }
       },
-      "sensor_config": {
-        "title": "传感器配置",
-        "description": "配置传感器设置。提取方法（JSON/XPath/CSS/RegEx）将根据响应内容类型自动检测。",
+      "reauth_confirm": {
+        "title": "重新验证身份",
+        "description": "端点拒绝了 \"{auth_type}\" 预设中保存的凭据。请重新输入。",
         "data": {
-          "sensor_state": "状态选择器（JSON/XPath/CSS/RegEx - 自动检测）",
-          "sensor_icon": "图标选择器（JSON/XPath/CSS/RegEx - 自动检测）",
-          "sensor_color": "颜色选择器（JSON/XPath/CSS/RegEx - 自动检测）",
-          "sensor_device_class": "设备类别",
-          "sensor_unit": "计量单位",
-          "tracker_latitude": "纬度选择器（JSON/XPath/CSS/RegEx - 自动检测）",
-          "tracker_longitude": "经度选择器（JSON/XPath/CSS/RegEx - 自动检测）",
-          "tracker_location_name": "位置名称选择器（JSON/XPath/CSS/RegEx - 自动检测）",
-          "tracker_source_type": "来源类型"
+          "token": "Bearer 令牌",
+          "api_key": "API 密钥",
+          "api_key_header": "API 密钥标头",
+          "username": "用户名",
+          "password": "密码"
         }
       }
     },
     "error": {
-      "invalid_url": "无效的 URL 格式",
-      "no_sensors": "必须至少配置一个传感器"
+      "cannot_connect": "无法访问端点。请检查 URL、网络和超时设置。",
+      "invalid_auth": "端点拒绝了凭据 (HTTP 401/403)。",
+      "invalid_url": "请输入包含 http 或 https 协议的完整 URL。",
+      "invalid_headers": "每个标头必须单独一行，格式为 `名称: 值`。",
+      "bad_status": "端点返回了错误状态码。",
+      "no_values": "响应为空，或不包含可读取的值。"
     },
     "abort": {
-      "already_configured": "此 HTTP 端点已配置",
-      "no_sensors": "未配置任何传感器"
+      "already_configured": "此 URL 与方法的组合已配置。",
+      "reauth_successful": "重新验证身份成功。",
+      "reconfigure_successful": "端点已更新。"
     }
   },
-  "options": {
-    "step": {
-      "init": {
-        "title": "HTTP Agent 配置",
-        "description": "选择要编辑的内容",
-        "menu_options": {
-          "basic": "编辑基本设置（URL、方法、超时、间隔、SSL）",
-          "headers": "编辑 HTTP 标头",
-          "payload": "编辑请求负载",
-          "sensors": "编辑传感器配置"
+  "config_subentries": {
+    "sensor": {
+      "initiate_flow": {
+        "user": "添加传感器",
+        "reconfigure": "编辑传感器"
+      },
+      "entry_type": "传感器",
+      "step": {
+        "user": {
+          "title": "添加传感器",
+          "description": "从最近一次响应中挑选一个值，或自行输入路径。",
+          "data": {
+            "name": "名称",
+            "value_path": "值"
+          },
+          "data_description": {
+            "name": "实体的名称。",
+            "value_path": "从响应中读取的路径。"
+          },
+          "sections": {
+            "options": {
+              "name": "实体设置",
+              "data": {
+                "device_class": "设备类别",
+                "unit_of_measurement": "计量单位",
+                "state_class": "状态类别",
+                "icon": "图标",
+                "attributes": "额外属性"
+              },
+              "data_description": {
+                "device_class": "决定 Home Assistant 如何格式化该值并绘制图表。",
+                "unit_of_measurement": "例如 °C、%、kWh。",
+                "state_class": "设为 'Measurement' 或 'Total increasing' 可将传感器纳入长期统计。",
+                "icon": "覆盖由设备类别推导出的图标。",
+                "attributes": "每行一个，格式为 `属性名称: 路径`。"
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "编辑传感器",
+          "description": "从最近一次响应中挑选一个值，或自行输入路径。",
+          "data": {
+            "name": "名称",
+            "value_path": "值"
+          },
+          "data_description": {
+            "name": "实体的名称。",
+            "value_path": "从响应中读取的路径。"
+          },
+          "sections": {
+            "options": {
+              "name": "实体设置",
+              "data": {
+                "device_class": "设备类别",
+                "unit_of_measurement": "计量单位",
+                "state_class": "状态类别",
+                "icon": "图标",
+                "attributes": "额外属性"
+              },
+              "data_description": {
+                "device_class": "决定 Home Assistant 如何格式化该值并绘制图表。",
+                "unit_of_measurement": "例如 °C、%、kWh。",
+                "state_class": "设为 'Measurement' 或 'Total increasing' 可将传感器纳入长期统计。",
+                "icon": "覆盖由设备类别推导出的图标。",
+                "attributes": "每行一个，格式为 `属性名称: 路径`。"
+              }
+            }
+          }
         }
       },
-      "basic": {
-        "title": "基本设置",
-        "description": "编辑 URL、方法、超时、间隔和 SSL 验证",
-        "data": {
-          "url": "URL",
-          "method": "HTTP 方法",
-          "timeout": "超时（秒）",
-          "interval": "更新间隔（秒）",
-          "retries": "出错时重试",
-          "verify_ssl": "验证 SSL 证书"
-        }
+      "error": {
+        "invalid_attributes": "每个属性必须单独一行，格式为 `属性名称: 路径`。"
       },
-      "headers": {
-        "title": "HTTP 标头",
-        "description": "编辑 HTTP 标头\n\n当前标头：\n{headers}",
-        "menu_options": {
-          "add_header": "添加",
-          "clear_headers": "全部清除",
-          "headers_done": "保存更改"
-        }
-      },
-      "add_header": {
-        "title": "添加 HTTP 标头",
-        "description": "添加新的 HTTP 标头",
-        "data": {
-          "key": "标头名称",
-          "value": "标头值"
-        }
-      },
-      "payload": {
-        "title": "HTTP 负载",
-        "description": "编辑请求负载",
-        "data": {
-          "content_type": "内容类型",
-          "payload": "负载（JSON/XML/文本）"
-        }
-      },
-      "sensors": {
-        "title": "传感器配置",
-        "description": "编辑传感器配置\n\n当前传感器：\n{sensors}",
-        "menu_options": {
-          "add_sensor": "添加",
-          "select_sensor": "编辑",
-          "clear_sensors": "全部清除",
-          "sensors_done": "保存更改"
-        }
-      },
-      "select_sensor": {
-        "title": "选择传感器",
-        "description": "选择要编辑或删除的传感器",
-        "data": {
-          "sensor": "传感器"
-        }
-      },
-      "edit_sensor": {
-        "title": "编辑传感器",
-        "description": "选择对此传感器执行的操作：\n\n{sensor_info}",
-        "menu_options": {
-          "modify_sensor": "编辑",
-          "delete_sensor": "删除",
-          "edit_back": "返回"
-        }
-      },
-      "modify_sensor": {
-        "title": "修改传感器",
-        "description": "编辑传感器配置。提取方法（JSON/XPath/CSS/RegEx）将根据响应内容类型自动检测。",
-        "data": {
-          "sensor_name": "传感器名称",
-          "sensor_state": "状态选择器（JSON/XPath/CSS/RegEx - 自动检测）",
-          "sensor_icon": "图标选择器（JSON/XPath/CSS/RegEx - 自动检测）",
-          "sensor_color": "颜色选择器（JSON/XPath/CSS/RegEx - 自动检测）",
-          "sensor_device_class": "设备类别",
-          "sensor_unit": "计量单位",
-          "tracker_latitude": "纬度选择器（JSON/XPath/CSS/RegEx - 自动检测）",
-          "tracker_longitude": "经度选择器（JSON/XPath/CSS/RegEx - 自动检测）",
-          "tracker_location_name": "位置名称选择器（JSON/XPath/CSS/RegEx - 自动检测）",
-          "tracker_source_type": "来源类型"
-        }
-      },
-      "add_sensor": {
-        "title": "添加传感器",
-        "description": "选择传感器类型并提供名称",
-        "data": {
-          "sensor_name": "传感器名称",
-          "sensor_type": "传感器类型"
-        }
-      },
-      "sensor_config": {
-        "title": "传感器配置",
-        "description": "配置传感器设置。提取方法（JSON/XPath/CSS/RegEx）将根据响应内容类型自动检测。",
-        "data": {
-          "sensor_state": "状态选择器（JSON/XPath/CSS/RegEx - 自动检测）",
-          "sensor_icon": "图标选择器（JSON/XPath/CSS/RegEx - 自动检测）",
-          "sensor_color": "颜色选择器（JSON/XPath/CSS/RegEx - 自动检测）",
-          "sensor_device_class": "设备类别",
-          "sensor_unit": "计量单位",
-          "tracker_latitude": "纬度选择器（JSON/XPath/CSS/RegEx - 自动检测）",
-          "tracker_longitude": "经度选择器（JSON/XPath/CSS/RegEx - 自动检测）",
-          "tracker_location_name": "位置名称选择器（JSON/XPath/CSS/RegEx - 自动检测）",
-          "tracker_source_type": "来源类型"
-        }
+      "abort": {
+        "reconfigure_successful": "传感器已更新。"
       }
     },
-    "error": {
-      "invalid_url": "无效的 URL 格式",
-      "no_sensors": "必须至少配置一个传感器"
+    "binary_sensor": {
+      "initiate_flow": {
+        "user": "添加二元传感器",
+        "reconfigure": "编辑二元传感器"
+      },
+      "entry_type": "二元传感器",
+      "step": {
+        "user": {
+          "title": "添加二元传感器",
+          "description": "从最近一次响应中挑选一个值，或自行输入路径。",
+          "data": {
+            "name": "名称",
+            "value_path": "值"
+          },
+          "data_description": {
+            "name": "实体的名称。",
+            "value_path": "从响应中读取的路径。"
+          },
+          "sections": {
+            "options": {
+              "name": "实体设置",
+              "data": {
+                "device_class": "设备类别",
+                "payload_on": "表示开启的值",
+                "payload_off": "表示关闭的值",
+                "icon": "图标",
+                "attributes": "额外属性"
+              },
+              "data_description": {
+                "device_class": "决定开启/关闭的措辞和图标。",
+                "payload_on": "可选。表示 '开启' 的确切值。留空则自动识别 true/1/on/yes。",
+                "payload_off": "可选。表示 '关闭' 的确切值。",
+                "icon": "覆盖由设备类别推导出的图标。",
+                "attributes": "每行一个，格式为 `属性名称: 路径`。"
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "编辑二元传感器",
+          "description": "从最近一次响应中挑选一个值，或自行输入路径。",
+          "data": {
+            "name": "名称",
+            "value_path": "值"
+          },
+          "data_description": {
+            "name": "实体的名称。",
+            "value_path": "从响应中读取的路径。"
+          },
+          "sections": {
+            "options": {
+              "name": "实体设置",
+              "data": {
+                "device_class": "设备类别",
+                "payload_on": "表示开启的值",
+                "payload_off": "表示关闭的值",
+                "icon": "图标",
+                "attributes": "额外属性"
+              },
+              "data_description": {
+                "device_class": "决定开启/关闭的措辞和图标。",
+                "payload_on": "可选。表示 '开启' 的确切值。留空则自动识别 true/1/on/yes。",
+                "payload_off": "可选。表示 '关闭' 的确切值。",
+                "icon": "覆盖由设备类别推导出的图标。",
+                "attributes": "每行一个，格式为 `属性名称: 路径`。"
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "每个属性必须单独一行，格式为 `属性名称: 路径`。"
+      },
+      "abort": {
+        "reconfigure_successful": "二元传感器已更新。"
+      }
     },
-    "abort": {
-      "no_sensors": "未配置任何传感器"
+    "device_tracker": {
+      "initiate_flow": {
+        "user": "添加设备追踪器",
+        "reconfigure": "编辑设备追踪器"
+      },
+      "entry_type": "设备追踪器",
+      "step": {
+        "user": {
+          "title": "添加设备追踪器",
+          "description": "从最近一次响应中挑选纬度和经度的值。",
+          "data": {
+            "name": "名称",
+            "latitude_path": "纬度",
+            "longitude_path": "经度"
+          },
+          "data_description": {
+            "name": "实体的名称。",
+            "latitude_path": "纬度值的路径。",
+            "longitude_path": "经度值的路径。"
+          },
+          "sections": {
+            "options": {
+              "name": "实体设置",
+              "data": {
+                "gps_accuracy_path": "GPS 精度",
+                "source_type": "来源类型",
+                "icon": "图标",
+                "attributes": "额外属性"
+              },
+              "data_description": {
+                "gps_accuracy_path": "可选。以米为单位的精度。",
+                "source_type": "位置的判定方式。",
+                "icon": "覆盖默认图标。",
+                "attributes": "每行一个，格式为 `属性名称: 路径`。"
+              }
+            }
+          }
+        },
+        "reconfigure": {
+          "title": "编辑设备追踪器",
+          "description": "从最近一次响应中挑选纬度和经度的值。",
+          "data": {
+            "name": "名称",
+            "latitude_path": "纬度",
+            "longitude_path": "经度"
+          },
+          "data_description": {
+            "name": "实体的名称。",
+            "latitude_path": "纬度值的路径。",
+            "longitude_path": "经度值的路径。"
+          },
+          "sections": {
+            "options": {
+              "name": "实体设置",
+              "data": {
+                "gps_accuracy_path": "GPS 精度",
+                "source_type": "来源类型",
+                "icon": "图标",
+                "attributes": "额外属性"
+              },
+              "data_description": {
+                "gps_accuracy_path": "可选。以米为单位的精度。",
+                "source_type": "位置的判定方式。",
+                "icon": "覆盖默认图标。",
+                "attributes": "每行一个，格式为 `属性名称: 路径`。"
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "invalid_attributes": "每个属性必须单独一行，格式为 `属性名称: 路径`。"
+      },
+      "abort": {
+        "reconfigure_successful": "设备追踪器已更新。"
+      }
     }
   },
-  "selector": {
-    "sensor_type": {
-      "options": {
-        "sensor": "传感器",
-        "binary_sensor": "二进制传感器",
-        "number": "数值",
-        "device_tracker": "设备追踪器"
-      }
+  "exceptions": {
+    "cannot_connect": {
+      "message": "无法访问端点：{error}"
     },
-    "tracker_source_type": {
-      "options": {
-        "none": "无（默认）",
-        "gps": "GPS",
-        "router": "路由器",
-        "bluetooth": "Bluetooth",
-        "bluetooth_le": "Bluetooth LE"
-      }
+    "invalid_auth": {
+      "message": "端点拒绝了已保存的凭据。"
+    },
+    "bad_status": {
+      "message": "端点返回了 HTTP {status}。"
+    },
+    "empty_response": {
+      "message": "端点返回了空的正文。"
     }
   }
 }

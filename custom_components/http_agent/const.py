@@ -1,210 +1,153 @@
 """Constants for the HTTP Agent integration."""
 
+from __future__ import annotations
+
 from typing import Final
 
 DOMAIN: Final = "http_agent"
 
-# Default values
-DEFAULT_TIMEOUT = 10
-DEFAULT_RETRIES = 0
-DEFAULT_INTERVAL = 60
-DEFAULT_METHOD = "GET"
-DEFAULT_VERIFY_SSL = True
+MANUFACTURER: Final = "HTTP Agent"
 
-# Configuration keys
-CONF_URL = "url"
-CONF_METHOD = "method"
-CONF_TIMEOUT = "timeout"
-CONF_RETRIES = "retries"
-CONF_INTERVAL = "interval"
-CONF_VERIFY_SSL = "verify_ssl"
-CONF_HEADERS = "headers"
-CONF_PAYLOAD = "payload"
-CONF_CONTENT_TYPE = "content_type"
-CONF_SENSORS = "sensors"
-CONF_SENSOR_NAME = "sensor_name"
-CONF_SENSOR_STATE = "sensor_state"
-CONF_SENSOR_ICON = "sensor_icon"
-CONF_SENSOR_COLOR = "sensor_color"
+# Config entry schema version. Version 1 was the pre-subentry layout.
+CONFIG_VERSION: Final = 2
+CONFIG_MINOR_VERSION: Final = 1
 
-# Sensor type configuration
-CONF_SENSOR_TYPE = "sensor_type"
-CONF_SENSOR_DEVICE_CLASS = "sensor_device_class"
-CONF_SENSOR_UNIT = "sensor_unit"
+# --- Config entry keys (integration specific, core keys are imported directly) ---
+CONF_AUTH_TYPE: Final = "auth_type"
+CONF_API_KEY_HEADER: Final = "api_key_header"
+CONF_CONTENT_TYPE: Final = "content_type"
+CONF_RESPONSE_FORMAT: Final = "response_format"
+CONF_FOLLOW_REDIRECTS: Final = "follow_redirects"
+CONF_RETRIES: Final = "retries"
 
-# Sensor Types
-SENSOR_TYPES = {
-    "sensor": "Sensor",
-    "binary_sensor": "Binary Sensor",
-    "number": "Number",
-    "device_tracker": "Device Tracker",
-}
+# --- Subentry (entity) keys ---
+CONF_VALUE_PATH: Final = "value_path"
+CONF_ATTRIBUTES: Final = "attributes"
+CONF_STATE_CLASS: Final = "state_class"
+CONF_PAYLOAD_ON: Final = "payload_on"
+CONF_PAYLOAD_OFF: Final = "payload_off"
+CONF_LATITUDE_PATH: Final = "latitude_path"
+CONF_LONGITUDE_PATH: Final = "longitude_path"
+CONF_GPS_ACCURACY_PATH: Final = "gps_accuracy_path"
+CONF_SOURCE_TYPE: Final = "source_type"
 
-# Sensor Device Classes by type
-SENSOR_DEVICE_CLASSES = {
-    "apparent_power",
-    "aqi",
-    "atmospheric_pressure",
-    "battery",
-    "carbon_dioxide",
-    "carbon_monoxide",
-    "current",
-    "data_rate",
-    "data_size",
-    "date",
-    "distance",
-    "duration",
-    "energy",
-    "energy_storage",
-    "enum",
-    "frequency",
-    "gas",
-    "humidity",
-    "illuminance",
-    "irradiance",
-    "moisture",
-    "monetary",
-    "nitrogen_dioxide",
-    "nitrogen_monoxide",
-    "nitrous_oxide",
-    "ozone",
-    "ph",
-    "pm1",
-    "pm10",
-    "pm25",
-    "power",
-    "power_factor",
-    "precipitation",
-    "precipitation_intensity",
-    "pressure",
-    "reactive_power",
-    "signal_strength",
-    "sound_pressure",
-    "speed",
-    "sulphur_dioxide",
-    "temperature",
-    "timestamp",
-    "volatile_organic_compounds",
-    "volatile_organic_compounds_parts",
-    "voltage",
-    "volume",
-    "volume_flow_rate",
-    "volume_storage",
-    "water",
-    "weight",
-    "wind_speed",
-}
+# Internal key used by the config flow to hand picked values to the entry creation.
+CONF_SELECTED_VALUES: Final = "selected_values"
 
-BINARY_SENSOR_DEVICE_CLASSES = {
-    "battery",
-    "battery_charging",
-    "carbon_monoxide",
-    "cold",
-    "connectivity",
-    "door",
-    "garage_door",
-    "gas",
-    "heat",
-    "light",
-    "lock",
-    "moisture",
-    "motion",
-    "moving",
-    "occupancy",
-    "opening",
-    "plug",
-    "power",
-    "presence",
-    "problem",
-    "running",
-    "safety",
-    "smoke",
-    "sound",
-    "tamper",
-    "update",
-    "vibration",
-    "window",
-}
+# --- Subentry types (one per supported platform) ---
+SUBENTRY_TYPE_SENSOR: Final = "sensor"
+SUBENTRY_TYPE_BINARY_SENSOR: Final = "binary_sensor"
+SUBENTRY_TYPE_DEVICE_TRACKER: Final = "device_tracker"
 
-NUMBER_DEVICE_CLASSES = {
-    "apparent_power",
-    "aqi",
-    "atmospheric_pressure",
-    "battery",
-    "carbon_dioxide",
-    "carbon_monoxide",
-    "current",
-    "data_rate",
-    "data_size",
-    "distance",
-    "duration",
-    "energy",
-    "energy_storage",
-    "frequency",
-    "gas",
-    "humidity",
-    "illuminance",
-    "irradiance",
-    "moisture",
-    "monetary",
-    "nitrogen_dioxide",
-    "nitrogen_monoxide",
-    "nitrous_oxide",
-    "ozone",
-    "ph",
-    "pm1",
-    "pm10",
-    "pm25",
-    "power",
-    "power_factor",
-    "precipitation",
-    "precipitation_intensity",
-    "pressure",
-    "reactive_power",
-    "signal_strength",
-    "sound_pressure",
-    "speed",
-    "sulphur_dioxide",
-    "temperature",
-    "volatile_organic_compounds",
-    "volatile_organic_compounds_parts",
-    "voltage",
-    "volume",
-    "volume_flow_rate",
-    "volume_storage",
-    "water",
-    "weight",
-    "wind_speed",
-}
+# --- Defaults ---
+DEFAULT_METHOD: Final = "GET"
+DEFAULT_TIMEOUT: Final = 10
+DEFAULT_SCAN_INTERVAL: Final = 60
+DEFAULT_VERIFY_SSL: Final = True
+DEFAULT_FOLLOW_REDIRECTS: Final = True
+DEFAULT_RETRIES: Final = 0
+DEFAULT_CONTENT_TYPE: Final = "application/json"
+DEFAULT_API_KEY_HEADER: Final = "X-API-Key"
 
-# Device Tracker specific configuration
-CONF_TRACKER_LATITUDE = "tracker_latitude"
-CONF_TRACKER_LONGITUDE = "tracker_longitude"
-CONF_TRACKER_LOCATION_NAME = "tracker_location_name"
-CONF_TRACKER_SOURCE_TYPE = "tracker_source_type"
+MIN_TIMEOUT: Final = 1
+MAX_TIMEOUT: Final = 300
+MIN_SCAN_INTERVAL: Final = 5
+MAX_SCAN_INTERVAL: Final = 86400
+MAX_RETRIES: Final = 10
 
-# HTTP Methods
-HTTP_METHODS = [
-    "GET",
-    "POST",
-    "PUT",
-    "DELETE",
-    "PATCH",
+# Seconds to wait between two attempts of the same poll.
+RETRY_DELAY: Final = 1
+
+# Guard rails for the value discovery step so huge payloads cannot blow up the UI.
+MAX_DISCOVERED_VALUES: Final = 250
+MAX_DISCOVERY_DEPTH: Final = 8
+MAX_PREVIEW_LENGTH: Final = 1500
+
+# --- HTTP methods ---
+METHOD_GET: Final = "GET"
+METHOD_POST: Final = "POST"
+METHOD_PUT: Final = "PUT"
+METHOD_PATCH: Final = "PATCH"
+METHOD_DELETE: Final = "DELETE"
+METHOD_HEAD: Final = "HEAD"
+
+HTTP_METHODS: Final = [
+    METHOD_GET,
+    METHOD_POST,
+    METHOD_PUT,
+    METHOD_PATCH,
+    METHOD_DELETE,
+    METHOD_HEAD,
 ]
 
-# Methods that support payloads
-HTTP_METHODS_WITH_PAYLOAD = [
-    "POST",
-    "PUT",
-    "DELETE",
-    "PATCH",
-]
+METHODS_WITH_BODY: Final = {METHOD_POST, METHOD_PUT, METHOD_PATCH, METHOD_DELETE}
 
-# Content Types
-CONTENT_TYPES = [
+CONTENT_TYPES: Final = [
     "application/json",
     "application/xml",
-    "text/xml",
     "application/x-www-form-urlencoded",
     "text/plain",
+    "text/xml",
 ]
+
+# --- Authentication presets ---
+AUTH_NONE: Final = "none"
+AUTH_BEARER: Final = "bearer"
+AUTH_API_KEY: Final = "api_key"
+AUTH_BASIC: Final = "basic"
+
+AUTH_TYPES: Final = [AUTH_NONE, AUTH_BEARER, AUTH_API_KEY, AUTH_BASIC]
+
+# --- Response formats ---
+FORMAT_AUTO: Final = "auto"
+FORMAT_JSON: Final = "json"
+FORMAT_XML: Final = "xml"
+FORMAT_HTML: Final = "html"
+FORMAT_TEXT: Final = "text"
+
+RESPONSE_FORMATS: Final = [
+    FORMAT_AUTO,
+    FORMAT_JSON,
+    FORMAT_XML,
+    FORMAT_HTML,
+    FORMAT_TEXT,
+]
+
+# --- Device tracker source types ---
+SOURCE_TYPES: Final = ["gps", "router", "bluetooth", "bluetooth_le"]
+
+# Values that are interpreted as "on" for binary sensors when no explicit
+# payload_on/payload_off is configured.
+TRUTHY_VALUES: Final = frozenset(
+    {
+        "1",
+        "active",
+        "connected",
+        "detected",
+        "enabled",
+        "home",
+        "on",
+        "online",
+        "open",
+        "true",
+        "unlocked",
+        "yes",
+    }
+)
+
+FALSY_VALUES: Final = frozenset(
+    {
+        "0",
+        "closed",
+        "disabled",
+        "disconnected",
+        "false",
+        "inactive",
+        "locked",
+        "no",
+        "not_detected",
+        "not_home",
+        "off",
+        "offline",
+    }
+)
