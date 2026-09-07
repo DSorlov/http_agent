@@ -27,6 +27,6 @@ jobs:
           zip -r ../../http_agent.zip . -x '*__pycache__*'
 
       - name: Attach the archive to the release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: http_agent.zip
